@@ -2,27 +2,7 @@
 
 전체 프로젝트 구조
 
-projectName  
-├── app.js  
-├── package.json  
-├── bin  
-│   └── www  
-├── config  
-|   └── db관련 환경설정 js파일들  
-├── node_modules  
-└── server  
-    ├── dist  
-    |   ├── index.html  
-    |   └── static  
-    |       ├── css  
-    |       └── js  
-    ├── models  
-    │   ├── directory  
-    │   ├── directory  
-    │   └── db생성 js  
-    └── routes  
-        ├── index.js  
-        └── 여러 라우팅 js 파일  
+![directory](./directory.PNG)
 
 * 웹서버 루트 접근시 routes에 index.js를 통해 라우팅을 함
 * index.js에서 projectName/server/dist/index.html을 반환해줌
