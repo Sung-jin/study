@@ -5,6 +5,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var signRouter = require('./routes/signInUp');
+var session = require('express-session');
 
 var app = express();
 
@@ -17,6 +18,12 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use('/public', express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'views')));
+
+app.use(session({
+  secret: 'testSecret',
+  resave: false,
+  saveUninitialized: true
+}));
 
 app.use('/', indexRouter);
 app.use('/signInUp', signRouter);
