@@ -18,9 +18,6 @@ userSchema
     this.salt = this.makeSalt();
     this.password = this.encryptPassword(this.pw);
   })
-  // .get(function(){
-  //   return this.name + ' ' + this.password;
-  // });
 
 userSchema.static('findByName', function(name, callback){
   return this.find({name : name}, callback);

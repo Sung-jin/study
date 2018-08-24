@@ -19,8 +19,6 @@ router.post('/signIn', function(req, res, next) {
         __dirname, '..', 'views', 'fail.html'));
     }
 
-    // let user = new User({'info' : name + ' ' + password});
-
     User.findByName(name, function(err, results){
       if(err){
         console.log(err);
