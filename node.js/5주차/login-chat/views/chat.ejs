@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>개인프로젝트!</title>
+    <!-- 부트스트랩 -->
+    <link href="../public/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { font: 13px Helvetica, Arial; }
+      form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
+      form #m { border: 0; padding: 10px; width: 80%; margin-right: .5%; }
+      form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; margin-right: .5%; }
+      form #b { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
+      #messages { list-style-type: none; margin: 0; padding: 0; }
+      #messages li { padding: 5px 10px; }
+      #messages li:nth-child(odd) { background: #eee; }
+    </style>
+  </head>
+  <body>
+    <div>
+      <div class="chats" style="overflow:auto;">
+        <ul id="messages"></ul>
+      </div>
+      <form action="">
+        <input id="m" autocomplete="off" /><button>Send</button>
+        <input id="b" type="button" value="LogOut" onclick="location.href = '/logout';">
+      </form>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="../public/js/bootstrap.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      let socket = io();
+      let data = <%- data %>;
+      let name = data[data.length - 1].name;
+      let msgData = {
+        name : '',
+        msg : ''
+      };
+
+      for(let i = 0; i < data.length - 1; i++){
+        $('#messages').append($('<li>').text(data[i].name + ' : ' + data[i].msg));
+      }
+
+      $('#messages').append($('<li>').text(data[data.length - 1].name + data[data.length - 1].msg));
+
+      let h = document.querySelector('.chats');
+      window.scrollTo(0, h.scrollHeight);
+
+      $('form').submit(function(){
+        msgData.name = name;
+        msgData.msg = $('#m').val();
+        socket.emit('chat message', msgData);
+        $('#m').val('');
+        return false;
+      });
+
+      socket.on('chat message', function(msgData){
+        $('#messages').append($('<li>').text(msgData.name + ' : ' + msgData.msg));
+        let h = document.querySelector('.chats');
+        window.scrollTo(0, h.scrollHeight);
+      });
+    </script>
+  </body>
+</html>

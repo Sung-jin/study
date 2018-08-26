@@ -5,6 +5,7 @@ const MongoClient = require('mongodb').MongoClient;
 const mongoose = require('mongoose');
 const env = require('../config/env');
 const User = require('../model/user');
+const SocketHandler = require('../socket/chatSocket');
 //User는 몽고디비 스키마를 정의한 것
 
 router.post('/signIn', function(req, res, next) {
@@ -19,7 +20,7 @@ router.post('/signIn', function(req, res, next) {
         __dirname, '..', 'views', 'fail.html'));
     }
 
-    User.findByName(name, function(err, results){
+    User.findByName(name, async function(err, results){
       if(err){
         console.log(err);
         db.close();
@@ -35,8 +36,28 @@ router.post('/signIn', function(req, res, next) {
         if(authenticated){
           db.close();
           req.session.name = name;
-          return res.sendFile(path.join(
-            __dirname, '..', 'views', 'chat.html'));
+
+          socketHandler = new SocketHandler();
+          socketHandler.connect();
+
+          const history = await socketHandler.getMessages();
+
+          const test = await socketHandler.close();
+          test.connection.close;
+
+          let data = new Array();
+
+          for(let i = 0; i < history.length; i++){
+            data.push({
+              name : history[i].name,
+              msg : history[i].msg
+            });
+          }
+
+          data.push({name : name, msg : '님이 입장하였습니다.'});
+          // return res.render(path.join(
+          //   __dirname, '..', 'views', 'chat'), {name : name});
+          return res.render('chat', {data : JSON.stringify(data)});
             //아이디와 비밀번호가 모두 일치시 로그인 성공
         }else{
           db.close();
