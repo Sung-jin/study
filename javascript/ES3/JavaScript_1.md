@@ -99,7 +99,7 @@ let foobar = 1; //전역 변수
 C-family 언어는 Static Typing 언어이므로 변수 선언시 자료형을 지정하여서 그 자료형에 맞는 크기의 메모리 영역을 확보
 
 자바스크립트는 Dynamic Typing 언어이므로 Type annotation이 필요없다(loosely typed, 느슨한 타입 언어)
-> 값이 할당되는 과정에서 자동으로 변수의 자료형이 타입 추롭을 통해 결정된다<br>
+> 값이 할당되는 과정에서 자동으로 변수의 자료형이 타입 추을 통해 결정된다<br>
 즉, 같은 변수에 여러 자료형의 값을 할당할 수 있다
 
 ```javascript
