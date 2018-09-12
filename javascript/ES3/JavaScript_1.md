@@ -11,10 +11,10 @@ HTML파일 내부에 <script></script>태그로 자바스크립트를 사용 할
 > 브라우저의 주요 기능은 client가 웹페이지를 서버에 요청하고 응답을 받아 브라우저에 표시
 
 HTML파서는 script 태그를 만나면 DOM 생성 프로세스를 중지하고 자바스크립트 엔진에 제어 권한을 넘긴다
-> 자바 스크립트 코드를 상단에 올릴 시 렌더가 완료되지 않고 스크립트가 실생될 수 있다. -> alert등과 같은게 먼저 자바스크립트로 인해 실행된다면 렌더가 완료되기전에 알람이 표시되고 렌더는 멈춘다
-고로  대부분 HTML구조는 헤드에 css를, 바디 하단에 script를 넣는다
-이를 방지하고자 HTML5에서는 script 태그에 asnyc와 defer 어트리뷰트가 추가되었다
-> asnyc - 웹페이지 파싱과 외부 스크립트 파일의 다운로드가 동시에 진행, 스크립트는 다운로드 완료 직후 실행 / IE9이상
+> 자바 스크립트 코드를 상단에 올릴 시 렌더가 완료되지 않고 스크립트가 실생될 수 있다. -> alert등과 같은게 먼저 자바스크립트로 인해 실행된다면 렌더가 완료되기전에 알람이 표시되고 렌더는 멈춘다<br>
+고로  대부분 HTML구조는 헤드에 css를, 바디 하단에 script를 넣는다<br>
+이를 방지하고자 HTML5에서는 script 태그에 asnyc와 defer 어트리뷰트가 추가되었다<br>
+> asnyc - 웹페이지 파싱과 외부 스크립트 파일의 다운로드가 동시에 진행, 스크립트는 다운로드 완료 직후 실행 / IE9이상<br>
 defer - 웹페이지 파싱과 외부 스크립트 파일의 다운로드가 동시에 진행, 스크립트는 웹페이지 파싱 완료 직후 실행 / IE9이하에서는 정상 작동 안할 수 있음
 
 ![javascript_execution](../images/javascript_execution.jpg)
@@ -28,14 +28,14 @@ defer - 웹페이지 파싱과 외부 스크립트 파일의 다운로드가 동
 ```
 
 자바스크립트에서 변수는 var라는 키워드를 사용한다.
-> 이 var가 모든 변수 타입을 넣을 수 있지만 그렇다고 자바스크립트에 String, int 등등이 없는 것은 아님
-자바스크립트의 자료형에는 Boolean, null, undefined, Number, String, Symbol(ES6), Object가 존재
-null은 값이 비어있다 / undefined는 할당되지 않았다
-또한 var없이 그냥 변수명 사용하면 전역변수가 되고 var를 사용하면 그 scope안에서 참조할 수 있는 값이 된다 -> function scope
-var는 hoisting, 같은 변수이름 재선언 등등 다 허용되는 등 코드가 복잡해지면 꼬일 수 있다
-이래서 es6에서 let, const라는 block-scope 키워드가 생김
-let과 const는 변수 재선언 불가능 및 const는 재할당 불가
-또한 const는 변수 선언과 동시에 초기화해야 한다. 상수라고 생각하면 쉬울 듯
+> 이 var가 모든 변수 타입을 넣을 수 있지만 그렇다고 자바스크립트에 String, int 등등이 없는 것은 아님<br>
+자바스크립트의 자료형에는 Boolean, null, undefined, Number, String, Symbol(ES6), Object가 존재<br>
+null은 값이 비어있다 / undefined는 할당되지 않았다<br>
+또한 var없이 그냥 변수명 사용하면 전역변수가 되고 var를 사용하면 그 scope안에서 참조할 수 있는 값이 된다 -> function scope<br>
+var는 hoisting, 같은 변수이름 재선언 등등 다 허용되는 등 코드가 복잡해지면 꼬일 수 있다<br>
+이래서 es6에서 let, const라는 block-scope 키워드가 생김<br>
+let과 const는 변수 재선언 불가능 및 const는 재할당 불가<br>
+또한 const는 변수 선언과 동시에 초기화해야 한다. 상수라고 생각하면 쉬울 듯<br>
 
 변수는 3단계에 걸쳐 생성
 * 선언 단계
@@ -99,7 +99,7 @@ let foobar = 1; //전역 변수
 C-family 언어는 Static Typing 언어이므로 변수 선언시 자료형을 지정하여서 그 자료형에 맞는 크기의 메모리 영역을 확보
 
 자바스크립트는 Dynamic Typing 언어이므로 Type annotation이 필요없다(loosely typed, 느슨한 타입 언어)
-> 값이 할당되는 과정에서 자동으로 변수의 자료형이 타입 추롭을 통해 결정된다
+> 값이 할당되는 과정에서 자동으로 변수의 자료형이 타입 추롭을 통해 결정된다<br>
 즉, 같은 변수에 여러 자료형의 값을 할당할 수 있다
 
 ```javascript
@@ -156,6 +156,7 @@ console.log(typeof foo);  // boolean
   * 0개 이상의 유니코드 문자들의 집합
   * 문자열은 ''/"" 안에 넣어서 생성한다
   * 문자열은 유사 배열이다
+  
 ```JavaScript
 var str = 'string';
 console.log(str[0], str[1], str[2], str[3], str[4], str[5]); //string
@@ -174,6 +175,7 @@ console.log(str);//string <- s가 S로 변경되지 않았다.
   * 애플리케이션 전체에서 유일하며 변경 불가능한 기본 자료형
   * 주로 객체의 프로퍼티 키를 생성할 때 사용
   * Symbol은 전역에서 유일하기 때문에 Symbol 값을 키로 갖는 프로퍼티는 다른 어떠한 프로퍼티와 충돌하지 않는다
+  
 ```javascript
 var key = Symbol('key');
 
