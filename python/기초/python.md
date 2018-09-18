@@ -222,7 +222,7 @@ odd_comprehension = [number for number in numbers if number % 2 == 1]
 산술 연산자 +, -, \*, /, \*\*, //, %<br>
 문자열 연산자 +, \*<br>
 비교 연산자 ==, !=, >, <, >=, <=<br>
-논리 연산자 &&, ||, !<br>
+논리 연산자 and(&&가 아니다), or(||가 아니다), !<br>
 멤버십 연산자 in, not in<br>
 >>  name = ['철수', '영희', '바둑이']<br>
 '철수' in name -> true<br>
