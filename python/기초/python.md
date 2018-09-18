@@ -1,9 +1,18 @@
-# Python 1
+# Python
 
 python은 3.~ 버전과 2.~버전이 있으며, 버전에 따라 호환되는게 다르다
 ```python
 print('Hello Python!')
 ```
+
+PEP8
+* [링크1](https://spoqa.github.io/2012/08/03/about-python-coding-convention.html) [링크2](https://b.luavis.kr/python/python-convention) [링크3](https://wayhome25.github.io/python/2017/05/04/pep8/) [공식문서](https://www.python.org/dev/peps/pep-0008/)
+* Python Enhance Proposal
+* 파이썬을 개선하기 위한 개선 제안서
+  * 새로운 기능이나 구현을 제안하는 Standard Track
+  * 파이썬의 디자인 이슈나 일반적인 지침, 혹은 커뮤니티에 정보를 제안하는 Informational
+  * 파이썬 개발 과정의 개선을 제안하는 Process
+* 파이썬 언어의 컨벤션을 이러한 제안서로 나타내고 있는 것을 PEP8
 
 python의 3.~와 2.~에서의 차이를 한번 알아봅시다
 ```python
@@ -130,6 +139,34 @@ tuple_Num = (1, 2, 3)
 #(1, 2, 3)
 tuple_Num2 = 1, 2, 3
 #(1, 2, 3)
+
+my_dict = {}
+type(my_dict) #<class 'dict'>
+#dictionary를 만들때는 중광호로 만들면 된다
+my_dict[0] = 'a'
+my_dict
+#{0: 'a'}
+my_dict['b'] = 2
+my_dict
+#{0: 'a', 'b': 2}
+print(my_dict['b'])
+#2
+del my_dict['1']
+my_dict
+#{'b': 2}
+my_dict['c'] = 3
+my_dict['d'] = 4
+
+#Dictionary의 메서드 values(), keys(), items()
+for std in my_dict.values():
+  print(std)
+#2 3 4
+for std in my_dict.keys():
+  print(std)
+#b c d
+for key, val in my_dict.items():
+  print(key + ' : ' + val)
+#b : 2 c : 3 d : 4
 ```
 
 Packing / Unpacking
@@ -146,6 +183,15 @@ num1, num2 = num2, num1 -> num1 = 2 / num2 = 1<br>
   코드 블럭<br>
 들여쓰기 부분에서 띄어쓰기, 탭 다 상관없으나 코드 블럭에서 사용한게 다르다면 에러가 출력된다<br>
 그리고 탭과 띄어쓰기 둘다 가능하지만 띄어쓰기 4개를 권장한다<br>
+while 조건: 코드 블럭<br>
+
+continue / break
+> continue를 만나면 만난 지점 이후의 코드 블럭은 실행하지 않고 조건문으로 돌아간다<br>
+break를 만나면 그 반복문에서 빠져나온다
+
+조건문 - if ... elif ... else
+> if(조건): 코드 블럭<br>
+조건이 참일 시 코드 블럭이 실행됨<br>
 
 range() - 범위를 지정하여 그 범위만큼 정수 리턴 내장 함수
 
@@ -170,3 +216,52 @@ for number in numbers:
 #크으.. 파이썬 이런게 겁나 신기하단말야
 odd_comprehension = [number for number in numbers if number % 2 == 1]
 ```
+
+연산자
+> 할당 연산자 =, +=, -=, \*=, /=<br>
+산술 연산자 +, -, \*, /, \*\*, //, %<br>
+문자열 연산자 +, \*<br>
+비교 연산자 ==, !=, >, <, >=, <=<br>
+논리 연산자 &&, ||, !<br>
+멤버십 연산자 in, not in<br>
+>>  name = ['철수', '영희', '바둑이']<br>
+'철수' in name -> true<br>
+'짱꾸' in name -> false<br>
+'짱구' not in name => true<br>
+
+함수
+* 내장함수         - 기본으로 내장되어 있는 함수
+* 모듈의 함수      - import를 해서 쓸 수 있는 함수
+* 사용자 정의 함수 - 사용자가 직접 정의해서 만든 함수
+> def 사용자 정의 함수이름(인자...):<br>
+    코드블럭<br>
+    return val... (필수는 아님)<br>
+함수의 리턴값을 여러개로 할 수 있으며, 이때는 자동으로 패킹과 언팩킹이 된다<br>
+
+```python
+import random
+#random 모듈사용
+
+name = ['철수', '영희', '바둑이']
+
+def Sum_Mul(num1, num2):
+  return num1 + num2, num1 * num2;
+
+my_Sum, my_Mul = Sum_Mul(1, 2)
+#my_Sum = 3 / my_Mul = 2
+#리턴으로 넘겨줄 때는 튜플로 자동으로 패킹이 되어지고 my_Sum과 my_Mul에 대입할 때는 자동으로 언패킹이 된다
+
+print(random.choice(name))
+#철수, 영희, 바둑이 중에 랜덤으로 하나가 출력됨
+print(random.sample(name, 2))
+#철수, 영희, 바둑이 중에 랜덤으로 2개가 출력됨
+#두번째로 들어간 인자값 수 만큼 램덤으로 출력되는 모듈함수
+print(random.randint(8,10))
+#첫번째 인자와 두번째 인자 사이에 랜덤으로 하나 출력됨
+```
+
+객체
+
+파이썬에서는 대부분의 모든 것들이 객체이다
+
+함수와 데이로 구성되어 있다
