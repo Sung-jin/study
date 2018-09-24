@@ -1,6 +1,6 @@
 # JavaScript 2
 
-##산술 연산자
+##  산술 연산자
 
 |<cneter>Operator</center>|<center>Description</center>|<center>Example</center>|
 |---|---|---|
@@ -32,7 +32,7 @@
 |<center>typeof</center>|<center>데이터 타입을 문자열로 반환</center>|<center>typeof 1 (number)</center>|
 |<center>!!</center>|<center>피연산자를 불린값으로 변환</center>|<center>!!1 = true / !!0 = false</center>|
 
-##제어문
+##  제어문
 
 블록 구문 - 구문들의 집합으로 중관호로 범위를 정함
 > if{} / for{} / while{}에서 {}안에 있는 것들을 블록 구문이라 함
@@ -104,7 +104,7 @@ do{
 do while은 무조건 구문을 1번은 실행한다
 break는 코드 블럭을 탈출, continue는 continue 이후 구문의 실행을 스킵하고 다시 반복문의 조건식으로 이동한다
 
-#형변환
+# 형변환
 
 1. 암묵적 타입 강제 변환
 
