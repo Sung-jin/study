@@ -3,6 +3,7 @@
 ##산술 연산자
 
 |<cneter>Operator</center>|<center>Description</center>|<center>Example</center>|
+|---|---|---|
 |<center>+</center>|<center>덧셈</center>|<center>c = a + b</center>|
 |<center>-</center>|<center>뺄셈</center>|<center>c = a - b</center>|
 |<center>*</center>|<center>곱셈</center>|<center>c = a * b</center>|
