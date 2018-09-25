@@ -114,3 +114,112 @@ var square = function(number){
 **함수 선언문으로 함수를 정의하면 대규모 애플리케이션의 경우 인터프리터가 너무 많은 코드를 변수 객체에 저장하므로 애플리케이션의 응답속도는 현저히 떨어질 수 있다**
 
 이렇게 한가지를 더 배웠네!! 평소에 함수 선언문으로 ~~편해서~~ 그리고 습관되서 사용했는데, 함수 표현식으로 바꿔야 겠다
+
+##  First-class object 일급 객체
+
+일급 객체란 생성/대입/연산/인자 또는 반환값으로서의 전달 등 프로그래밍 언어의 기본적 조작을 제한없이 사용할 수 있는 대상
+
+함수와 객체를 구분짓는 특징은 호출할 수 있다는 점
+
+```JavaScript
+// 1. 무명의 리터럴로 표현이 가능하다.
+var increase = function(num) {
+  return num + 1;
+};
+
+var decrease = function(num){
+  return num - 1;
+};
+// 2. 변수나 데이터 구조안에 담을 수 있다.
+var obj = {
+  increase: increase,
+  decrease: decrease
+};
+
+// 3. 함수의 파라미터로 전달 할 수 있다.
+function calc(func, num){
+  return func(num);
+}
+
+console.log(calc(increase, 1)); //2
+console.log(calc(decrease, 1)); //0
+
+// 3. 반환값(return value)으로 사용할 수 있다.
+function calc(mode){
+  var funcs = {
+    plus:  function(left, right){ return left + right; },
+    minus: function(left, right){ return left - right; }
+  };
+  return funcs[mode];
+}
+console.log(calc('plus')(2,1));   //3
+console.log(calc('minus')(2,1));  //1
+```
+
+##  매개변수 - 인자
+* parameter와 argument
+  * parameter는 함수 내에서 변수와 동일하게 메모리 공간을 확보
+  * 함수에 전달된 argument는 매개변수에 할당
+  * argument를 전달하지 않을 시 undefined로 초기화가 된다
+* Call-by-value
+  * 원시 타입 argument는 값에 의한 호출로 동작된다
+  * 함수 호출시 원시 타입 argument는 parameter에 값을 복사하여 함수로 전달한다
+  * 함수 내에 parameter를 통해 값이 변경되어도 원시 타입 값은 값이 변하지 않는다
+* Call-by-reference
+  * 객체형 argument는 참조에 의한 호출로 동작된다
+  * 객체를 함수에 전달할 때는 parameter를 복사하지 않고 이 값을 참조한다
+  * 참조하므로 함수 내부에서 값을 변경할 시 함수가 끝이 나고 전달한 parameter도 값이 변경되어 있다
+* Impure function / Pure function
+  * 함수 내부에서 변경되어도 외부에서는 변경되지 않는 함수를 Pure function
+  * 그 반대로 함수 내부에서 변경되면 외부도 영향을 받는 것을 Impure function이라 한다
+
+```javascript
+var foo = function (p1, p2) {
+  console.log(p1, p2);
+};
+
+foo(1); // 1 undefined
+
+//Call-by-value
+function bar(primitive) {
+  primitive += 1;
+  return primitive;
+}
+
+var x = 0;
+
+console.log(bar(x)); // 1
+console.log(x);      // 0
+//함수 외부의 값이 변경되지 않는다
+
+//Call-by-reference
+function changeVal(primitive, obj) {
+  primitive += 100;
+  obj.name = 'Kim';
+  obj.gender = 'female';
+}
+
+var num = 100;
+var obj = {
+  name: 'Lee',
+  gender: 'male'
+};
+
+console.log(num); // 100
+console.log(obj); // Object {name: 'Lee', gender: 'male'}
+
+changeVal(num, obj);
+
+console.log(num); // 100
+console.log(obj); // Object {name: 'Kim', gender: 'female'}
+//객체는 함수에 parameter로 전달이 되면 Call-by-reference로 전달된다
+//즉, 함수 내부에서 값이 변경된다면 외부에도 같이 변경되어진다
+```
+
+## 반환값
+* return 키워드로 함수에서 반환값을 반환할 수 있다
+* return으로 함수를 호출한 caller에게 값을 반환할 수 있다
+* 배열 등을 이용하여 한번에 여러개의 값을 리턴할 수 있다
+* 함수는 반환을 생략할 수 있으며, 생략하면 자동으로 undefined를 반환한다
+* return을 만나면 함수의 실행을 종료하고 호출한 코드로 되돌아 간다
+* 즉, 함수안에 return 이후 코드가 더 존재하더라도 함수는 종료가 된다

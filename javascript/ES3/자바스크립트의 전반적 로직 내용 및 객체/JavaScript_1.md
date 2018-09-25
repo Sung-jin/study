@@ -17,7 +17,7 @@ HTML파서는 script 태그를 만나면 DOM 생성 프로세스를 중지하고
 > asnyc - 웹페이지 파싱과 외부 스크립트 파일의 다운로드가 동시에 진행, 스크립트는 다운로드 완료 직후 실행 / IE9이상<br>
 defer - 웹페이지 파싱과 외부 스크립트 파일의 다운로드가 동시에 진행, 스크립트는 웹페이지 파싱 완료 직후 실행 / IE9이하에서는 정상 작동 안할 수 있음
 
-![javascript_execution](../images/javascript_execution.jpg)
+![javascript_execution](../../images/javascript_execution.jpg)
 
 자바스크립도 다른 c, python, java 등등과 같이 for / if / function / while 등등등 사용할 수 있다!
 
@@ -156,7 +156,7 @@ console.log(typeof foo);  // boolean
   * 0개 이상의 유니코드 문자들의 집합
   * 문자열은 ''/"" 안에 넣어서 생성한다
   * 문자열은 유사 배열이다
-  
+
 ```JavaScript
 var str = 'string';
 console.log(str[0], str[1], str[2], str[3], str[4], str[5]); //string
@@ -175,7 +175,7 @@ console.log(str);//string <- s가 S로 변경되지 않았다.
   * 애플리케이션 전체에서 유일하며 변경 불가능한 기본 자료형
   * 주로 객체의 프로퍼티 키를 생성할 때 사용
   * Symbol은 전역에서 유일하기 때문에 Symbol 값을 키로 갖는 프로퍼티는 다른 어떠한 프로퍼티와 충돌하지 않는다
-  
+
 ```javascript
 var key = Symbol('key');
 
