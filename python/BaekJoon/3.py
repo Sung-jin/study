@@ -1,46 +1,46 @@
-#3-1
+#3-1 https://www.acmicpc.net/problem/2741
 N = int(input())
 
 for i in range(1, N+1):
     print(i)
 
-#3-2
+#3-2 https://www.acmicpc.net/problem/2742
 N = int(input())
 
 for i in range(N, 0, -1):
     print(i)
 
-#3-3
+#3-3 https://www.acmicpc.net/problem/2739
 N = int(input())
 
 for i in range(1, 10):
     print('{} * {} = {}'.format(N, i, N*i))
 
-#3-4
+#3-4 https://www.acmicpc.net/problem/2438
 N = int(input())
 
 for i in range(1, N+1):
     print('*'*i)
 
-#3-5
+#3-5 https://www.acmicpc.net/problem/2439
 N = int(input())
 
 for i in range(1, N+1):
     print(' '*(N-i) + '*'*i)
 
-#3-6
+#3-6 https://www.acmicpc.net/problem/2440
 N = int(input())
 
 for i in range(N, 0, -1):
     print('*'*i)
 
-#3-7
+#3-7 https://www.acmicpc.net/problem/2441
 N = int(input())
 
 for i in range(N, 0, -1):
     print(' '*(N-i) + '*'*i)
 
-#3-8
+#3-8 https://www.acmicpc.net/problem/1924
 import datetime
 
 month, day = map(int, input().split())
@@ -49,7 +49,7 @@ date_Data = datetime.datetime(2007, month, day)
 
 print(date_Data.strftime("%a").upper())
 
-#3-9
+#3-9 https://www.acmicpc.net/problem/8393
 num = int(input())
 sum = 0
 
@@ -58,7 +58,7 @@ for i in range(1, num+1):
 
 print(sum)
 
-#3-10
+#3-10 https://www.acmicpc.net/problem/11720
 N = int(input())
 nums = list(input())
 sum = 0
@@ -68,13 +68,13 @@ for i in range(0, N):
 
 print(sum)
 
-#3-11
+#3-11 https://www.acmicpc.net/problem/11721
 str = input()
 for std in [str[i:i+10] for i in range(0, len(str), 10)]:
     print(std)
 #1차적으로 str로 받아온 문자열에서 10개씩 잘라내어 리스트로 만든 후 그 리스트의 데이터들을 하나씩 불러와 하나씩 출력
 
-#3-12
+#3-12 https://www.acmicpc.net/problem/15552
 import sys
 T = int(sys.stdin.readline())
 

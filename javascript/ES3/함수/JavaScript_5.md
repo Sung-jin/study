@@ -97,7 +97,7 @@ var square = function(number){
 ```
 위와 같이 함수 선언문의 경우 함수 선언 위치와 상관없이 함수 호출이 가능하다
 
-**자바스크립트는 EB6의 let, const를 포함하여 모든 선언(var, let, const, function, function*, class)을 호이스팅 한다!!!**
+**자바스크립트는 EB6의 let, const를 포함하여 모든 선언(var, let, const, function, function*, class)을 호이스팅 한다!**
 
 함수 선언무으로 정의된 함수는 자바스크립트 엔진이 스크립트가 로딩되는 시점에 초기화하고 이를 variable object에 저장한다
 
