@@ -85,7 +85,7 @@ console.log(Object.getPrototypeOf(foo) === Function.prototype); //true
     * 함수가 생성될 때 만들어 지며 constructor 프로퍼티를 가지는 객체를 가리킨다
     * constructor 프로퍼티는 함수 객체 자신을 가리킨다
 
-![function_prototype](../../images/function_prototype.PNG "https://poiemaweb.com/js-function#66-prototype-%ED%94%84%EB%A1%9C%ED%8D%BC%ED%8B%B0")
+![function_prototype](../../images/function_prototype.png "https://poiemaweb.com/js-function#66-prototype-%ED%94%84%EB%A1%9C%ED%8D%BC%ED%8B%B0")
 
 ##  다양한 함수 형태
 * Immediately Invoke Function Expression, 즉시 실행 함수
