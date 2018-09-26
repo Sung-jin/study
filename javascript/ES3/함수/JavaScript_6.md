@@ -58,9 +58,9 @@ console.log(bar());    // null (browser에서의 실행 결과)
 * name 프로퍼티
   * 함수명이며 기명함수일 경우 함수명, 익명함수일 경우 빈문자열을 가진다
 
-* \__proto__ 프로퍼티
+* \___proto__ 프로퍼티
   * **ECMAScript spec에서 모든 객체는 자신의 프로토타입을 가리키는 [[Prototype]]이라는 숨겨진 프로퍼티를 가진다**
-  * 크롬, 파폭 등등에서 [[Prototype]]을 \__proto__라고 정의되어 있다
+  * 크롬, 파폭 등등에서 [[Prototype]]을 \___proto__라고 정의되어 있다
   * 함수의 프로토타입 객체는 Function.prototype 이며 이도 함수이다
 
 ```JavaScript
@@ -74,7 +74,7 @@ console.log(Object.getPrototypeOf(foo) === Function.prototype); //true
 
 * prototype 프로퍼티
   * 함수만 가지고 있는 프로퍼티이며 자바스크립트 객체지향의 근간이다
-  * 이 'prototype'은 '\__proto__'와 다르다
+  * 이 'prototype'은 '\___proto__'와 다르다
   * 두가지 모두 프로토타입 객체를 가리키지만 다른 관점이 있다
   * [[Prototype]]
     * 모든 객체가 가지고 있는 프로퍼티
@@ -85,7 +85,7 @@ console.log(Object.getPrototypeOf(foo) === Function.prototype); //true
     * 함수가 생성될 때 만들어 지며 constructor 프로퍼티를 가지는 객체를 가리킨다
     * constructor 프로퍼티는 함수 객체 자신을 가리킨다
 
-![function_prototype](../../images/function_prototype.png "https://poiemaweb.com/js-function#66-prototype-%ED%94%84%EB%A1%9C%ED%8D%BC%ED%8B%B0")
+[![function_prototype](../../images/function_prototype.png)](https://poiemaweb.com/js-function#66-prototype-%ED%94%84%EB%A1%9C%ED%8D%BC%ED%8B%B0)
 
 ##  다양한 함수 형태
 * Immediately Invoke Function Expression, 즉시 실행 함수
