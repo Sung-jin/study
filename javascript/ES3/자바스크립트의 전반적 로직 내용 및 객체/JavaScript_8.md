@@ -14,9 +14,10 @@ C, Java 등과 같은 클래스 기반 객체지향 프로그래밍 언어는 �
 * Prototype 객체는 생성자 함수에 의해 생성된 각각의 객체에 공유 프로퍼티를 제공하기 위해 사용한다
 
 ![foo_prototype](../../images/foo_prototype.png)
+
 foo에 hasOwnProperty라는 메소드는 없지만 사용가능하다
 
-* foo 객체의 \___proto__는 자신의 부모 객체인 Object.prototype을 가리키고 있다
+* foo 객체의 \__proto__는 자신의 부모 객체인 Object.prototype을 가리키고 있다
 * 객체를 생성할 때 프로토타입은 결정된다
   * 이렇게 결정된 프로토타입 객체는 다른 임의의 객체로 변경할 수 있다
   * 부모 객체인 프로토타입을 동적으로 변경할 수 있다
@@ -28,7 +29,7 @@ console.log(foo.__proto__ === Object.prototype);//true
 
 * [[Prototype]] vs prototype
   * [[Prototype]]은 자신의 프로토타입 객체를 가리키는 숨겨진 프로퍼티
-  * [[Prototype]] === \___proto__
+  * [[Prototype]] === \__proto__
   * 함수도 객체이므로 [[Prototype]]을 가지고 있으며, 일반 객체와 다르게 prototype 프로퍼티도 소유한다
   * 즉, 함수에서 [[Prototype]]과 prototype 모두 프로토타입 객체를 가리키지만 관점의 차이가 존재한다
 
@@ -109,7 +110,7 @@ console.log(Object.__proto__ === Function.prototype); // ③ true
 console.log(Function.prototype.__proto__ === Object.prototype); // ④ true
 ```
 
-[![boject_literal_prototype_chaining](../../images/boject_literal_prototype_chaining.png)](https://poiemaweb.com/js-prototype#41-%EA%B0%9D%EC%B2%B4-%EB%A6%AC%ED%84%B0%EB%9F%B4-%EB%B0%A9%EC%8B%9D%EC%9C%BC%EB%A1%9C-%EC%83%9D%EC%84%B1%EB%90%9C-%EA%B0%9D%EC%B2%B4%EC%9D%98-%ED%94%84%EB%A1%9C%ED%86%A0%ED%83%80%EC%9E%85-%EC%B2%B4%EC%9D%B8)
+[![object_literal_prototype_chaining](../../images/object_literal_prototype_chaining.png)](https://poiemaweb.com/js-prototype#41-%EA%B0%9D%EC%B2%B4-%EB%A6%AC%ED%84%B0%EB%9F%B4-%EB%B0%A9%EC%8B%9D%EC%9C%BC%EB%A1%9C-%EC%83%9D%EC%84%B1%EB%90%9C-%EA%B0%9D%EC%B2%B4%EC%9D%98-%ED%94%84%EB%A1%9C%ED%86%A0%ED%83%80%EC%9E%85-%EC%B2%B4%EC%9D%B8)
 
   * 함수를 정의 방식
   > 함수선언식<br>

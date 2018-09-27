@@ -74,7 +74,7 @@ console.log(Object.getPrototypeOf(foo) === Function.prototype); //true
 
 * prototype 프로퍼티
   * 함수만 가지고 있는 프로퍼티이며 자바스크립트 객체지향의 근간이다
-  * 이 'prototype'은 '\___proto__'와 다르다
+  * 이 'prototype'은 '\__proto__'와 다르다
   * 두가지 모두 프로토타입 객체를 가리키지만 다른 관점이 있다
   * [[Prototype]]
     * 모든 객체가 가지고 있는 프로퍼티
