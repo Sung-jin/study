@@ -1,4 +1,4 @@
-# JavaScript 4
+# 객체 - Im/Mutable
 
 ##  Immutability - 변경불가성
 객체가 생성된 이후 그 상태를 변경할 수 없는 디자인 패턴이며 함수형 프로그래밍의 핵심 원리

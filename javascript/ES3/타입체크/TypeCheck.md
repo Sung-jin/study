@@ -1,4 +1,4 @@
-# JavaScript 7
+# Type Check
 ```JavaScript
 function sum(a, b){
   return a + b;
