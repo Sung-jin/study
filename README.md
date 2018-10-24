@@ -10,6 +10,8 @@
 
 [코딩을 하거나 다른이들의 코드, 또는 배움을 받고 깨달음을 얻어 기뻐서 두고두고 기록하고 다짐을 정리하는 폴더](https://github.com/Sung-jin/study/tree/master/realize)
 
+[기타 분류하기 애매한 것들을 정리하는 폴더](https://github.com/Sung-jin/study/tree/master/ETC)
+
 ##  앞으로 공부를 하며 정리를 하고자 할 것들 목록
 
 * css, scss 등 레이아웃
