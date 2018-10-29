@@ -124,7 +124,7 @@ console.log(you); // Person { name: 'Kim' }
 console.log(him); // Person { name: 'choi' }
 ```
 
-[![prototype](https://poiemaweb.com/js-object-oriented-programming#4-%ED%94%84%EB%A1%9C%ED%86%A0%ED%83%80%EC%9E%85-%EC%B2%B4%EC%9D%B8%EA%B3%BC-%EB%A9%94%EC%86%8C%EB%93%9C%EC%9D%98-%EC%A0%95%EC%9D%98)](../../images/prototype.png)
+[![prototype](../../images/prototype.png)](https://poiemaweb.com/js-object-oriented-programming#4-%ED%94%84%EB%A1%9C%ED%86%A0%ED%83%80%EC%9E%85-%EC%B2%B4%EC%9D%B8%EA%B3%BC-%EB%A9%94%EC%86%8C%EB%93%9C%EC%9D%98-%EC%A0%95%EC%9D%98)
 
 * 위의 사진처럼 Person 생성자 함수의 prototype 프로퍼티에 메소드를 정의한 후, 생성 된 객체는 프로토타입 체인에 의해 메소드를 참조할 수 있게 된다
 * 즉, 프로토타입 객체는 상속할 것들의 저장되는 장소이다
