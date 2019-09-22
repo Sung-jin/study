@@ -1,12 +1,19 @@
 package DAO;
 
+import Config.SimpleConnectionMaker;
 import DTO.User;
 
 import java.sql.*;
 
 public class UserDAO {
+    private SimpleConnectionMaker simpleConnectionMaker;
+
+    public UserDAO() {
+        this.simpleConnectionMaker = new SimpleConnectionMaker();
+    }
+
     public void add(User user) throws ClassNotFoundException, SQLException {
-        Connection c = getConnection();
+        Connection c = simpleConnectionMaker.makeNewConnection();
 
         PreparedStatement ps = c.prepareStatement("insert into users(id, name, password) values(?,?,?)");
 
@@ -22,7 +29,7 @@ public class UserDAO {
 
     public User get(String id) throws ClassNotFoundException, SQLException {
 
-        Connection c = getConnection();
+        Connection c = simpleConnectionMaker.makeNewConnection();
 
         PreparedStatement ps = c.prepareStatement("select * from users where id = ?");
 
@@ -41,11 +48,5 @@ public class UserDAO {
         c.close();
 
         return user;
-    }
-
-    private Connection getConnection() throws ClassNotFoundException, SQLException {
-        Class.forName("com.mysql.cj.jdbc.Driver");;
-        Connection c = DriverManager.getConnection("jdbc:mysql://localhost/study?characterEncoding=UTF-8&serverTimezone=UTC", "root", "1234");
-        return c;
     }
 }
