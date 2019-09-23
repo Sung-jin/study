@@ -1,6 +1,7 @@
 import Config.AConnectionMaker;
 import Config.BConnectionMaker;
 import Config.SimpleConnectionMaker;
+import DAO.DaoFactory;
 import DAO.UserDAO;
 import DTO.User;
 
@@ -8,11 +9,8 @@ import java.sql.SQLException;
 
 public class main {
     public static void main(String[] args) throws ClassNotFoundException, SQLException {
-        SimpleConnectionMaker aConnection = new AConnectionMaker();
-        SimpleConnectionMaker bConnection = new BConnectionMaker();
-
-        UserDAO aDAO = new UserDAO(aConnection);
-        UserDAO bDAO = new UserDAO(bConnection);
+        UserDAO aDAO = new DaoFactory().aUserDao();
+        UserDAO bDAO = new DaoFactory().bUserDao();
 
         User aUser = new User();
         aUser.setId("fonnie");
