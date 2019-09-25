@@ -17,3 +17,13 @@
 * 스프링에서 빈의 생성과 관계설정 같은 제어를 담당하는 IoC 오브젝트를 Bean Factory라고 함
     * 보통 Bean Factory 보다 좀더 확장한 application context를 주로 사용
     * application context는 IoC 방식을 따라 만들어진 일종의 Bean Facotry
+* ApplicationContext는 BeanFactory 인터페이스를 상속하여 구현됨
+* Spring Bean을 이용하여 IoC 기능을 이용할 경우
+    1. 클라이언트는 구체적인 팩토리 클래스를 알 필요 없다
+    2. 애플리케이션 컨텍스트는 종합 IoC 서비스를 제공한다
+    3. 애플리케이션 컨텍스트는 빈을 검색하는 다양한 방법을 제공한다
+
+## configuration metadata
+* 애플리케이션 컨텍스트 또는 빈 팩토리가 IoC를 적용하기 위해 사용하는 메타정보를 의미
+* 컨테이너에 어떤 기능을 세팅하거나 조정하는 경우에도 사용함
+* 하지만, 대부분 IoC 컨테이너에 의해 관리되는 애플리케이션 오브젝트를 생성하고 구성할 때 사용

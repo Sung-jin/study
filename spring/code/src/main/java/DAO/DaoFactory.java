@@ -14,20 +14,11 @@ import org.springframework.context.annotation.Configuration;
 public class DaoFactory {
 
     @Bean
-    public UserDAO aUserDao() {
-        return new UserDAO(aConnectionMaker());
+    public UserDAO studyUserDao() {
+        return new UserDAO(StudyConnectionMaker());
     }
 
-    @Bean
-    public UserDAO bUserDao() {
-        return  new UserDAO(bConnectionMaker());
-    }
-
-    private SimpleConnectionMaker aConnectionMaker() {
+    private SimpleConnectionMaker StudyConnectionMaker() {
         return new studyConnectionMaker();
-    }
-
-    private SimpleConnectionMaker bConnectionMaker() {
-        return new otherConnectionMaker();
     }
 }

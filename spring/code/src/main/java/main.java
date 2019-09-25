@@ -10,7 +10,7 @@ public class main {
     public static void main(String[] args) throws ClassNotFoundException, SQLException {
         ApplicationContext context = new AnnotationConfigApplicationContext(DaoFactory.class);
 
-        UserDAO aDAO = context.getBean("aUserDao", UserDAO.class);
+        UserDAO aDAO = context.getBean("studyUserDao", UserDAO.class);
 
         User aUser = new User();
         aUser.setId("fonnie");
