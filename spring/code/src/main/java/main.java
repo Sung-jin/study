@@ -1,16 +1,16 @@
-import Config.AConnectionMaker;
-import Config.BConnectionMaker;
-import Config.SimpleConnectionMaker;
 import DAO.DaoFactory;
 import DAO.UserDAO;
 import DTO.User;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.sql.SQLException;
 
 public class main {
     public static void main(String[] args) throws ClassNotFoundException, SQLException {
-        UserDAO aDAO = new DaoFactory().aUserDao();
-        UserDAO bDAO = new DaoFactory().bUserDao();
+        ApplicationContext context = new AnnotationConfigApplicationContext(DaoFactory.class);
+
+        UserDAO aDAO = context.getBean("aUserDao", UserDAO.class);
 
         User aUser = new User();
         aUser.setId("fonnie");
@@ -24,18 +24,5 @@ public class main {
         User aUser2 = aDAO.get(aUser.getId());
         System.out.println(aUser2.getName());
         System.out.println(aUser2.getPassword());
-
-        User bUser = new User();
-        bUser.setId("fonnie");
-        bUser.setName("오성진");
-        bUser.setPassword("1234");
-
-        bDAO.add(bUser);
-
-        System.out.println("b 설정 DB에 등록성공");
-
-        User bUser2 = aDAO.get(aUser.getId());
-        System.out.println(bUser2.getName());
-        System.out.println(bUser2.getPassword());
     }
 }
