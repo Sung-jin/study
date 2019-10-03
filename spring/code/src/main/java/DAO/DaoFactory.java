@@ -13,9 +13,16 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class DaoFactory {
 
+//    @Bean
+//    public UserDAO studyUserDao() {
+//        return new UserDAO(StudyConnectionMaker());
+//    }
+
     @Bean
     public UserDAO studyUserDao() {
-        return new UserDAO(StudyConnectionMaker());
+        UserDAO userDAO = new UserDAO();
+        userDAO.setSimpleConnectionMaker(StudyConnectionMaker());
+        return userDAO;
     }
 
     private SimpleConnectionMaker StudyConnectionMaker() {

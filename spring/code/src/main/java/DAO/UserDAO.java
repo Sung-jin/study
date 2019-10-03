@@ -8,7 +8,11 @@ import java.sql.*;
 public class UserDAO {
     private SimpleConnectionMaker simpleConnectionMaker;
 
-    public UserDAO(SimpleConnectionMaker simpleConnectionMaker) {
+//    UserDAO(SimpleConnectionMaker simpleConnectionMaker) {
+//        this.simpleConnectionMaker = simpleConnectionMaker;
+//    }
+
+    public void setSimpleConnectionMaker(SimpleConnectionMaker simpleConnectionMaker) {
         this.simpleConnectionMaker = simpleConnectionMaker;
     }
 
