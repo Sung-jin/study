@@ -1,6 +1,7 @@
 package DAO;
 
 import DTO.User;
+import Domain.Level;
 import Exceptions.DuplicateUserIdException;
 import org.junit.Before;
 import org.junit.Test;
@@ -36,9 +37,9 @@ public class UserDaoJdbcTest {
 
     @Before
     public void setUp() {
-        this.user1 = new User("abc", "비실이", "1234");
-        this.user2 = new User("xyz", "이슬이", "qwer");
-        this.user3 = new User("hey", "퉁퉁이", "abcd");
+        this.user1 = new User("abc", "비실이", "1234", Level.BASIC, 1, 0);
+        this.user2 = new User("xyz", "이슬이", "qwer", Level.SILVER, 55, 10);
+        this.user3 = new User("hey", "퉁퉁이", "abcd", Level.GOLD, 100, 40);
     }
 
     @Test
@@ -51,12 +52,10 @@ public class UserDaoJdbcTest {
         assertThat(dao.getCount(), is(2));
 
         User userget1 = dao.get(user1.getId());
-        assertThat(userget1.getName(), is(user1.getName()));
-        assertThat(userget1.getPassword(), is(user1.getPassword()));
+        checkSameUser(userget1, user1);
 
         User userget2 = dao.get(user2.getId());
-        assertThat(userget2.getName(), is(user2.getName()));
-        assertThat(userget2.getPassword(), is(user2.getPassword()));
+        checkSameUser(userget2, user2);
     }
 
     @Test
@@ -83,6 +82,27 @@ public class UserDaoJdbcTest {
         checkSameUser(user1, users3.get(0));
         checkSameUser(user3, users3.get(1));
         checkSameUser(user2, users3.get(2));
+    }
+
+    @Test
+    public void update() {
+        dao.deleteAll();
+
+        dao.add(user1);
+        dao.add(user2);
+
+        user1.setName("노진구");
+        user1.setPassword("foo");
+        user1.setLevel(Level.GOLD);
+        user1.setLogin(1000);
+        user1.setRecommend(999);
+
+        dao.update(user1);
+
+        User user1Update = dao.get(user1.getId());
+        checkSameUser(user1, user1Update);
+        User user2same = dao.get(user2.getId());
+        checkSameUser(user2, user2same);
     }
 
     @Test
@@ -136,5 +156,8 @@ public class UserDaoJdbcTest {
         assertThat(user1.getId(), is(user2.getId()));
         assertThat(user1.getName(), is(user2.getName()));
         assertThat(user1.getPassword(), is(user2.getPassword()));
+        assertThat(user1.getLevel(), is(user2.getLevel()));
+        assertThat(user1.getLogin(), is(user2.getLogin()));
+        assertThat(user1.getRecommend(), is(user1.getRecommend()));
     }
 }
