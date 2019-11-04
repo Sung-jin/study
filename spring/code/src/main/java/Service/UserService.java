@@ -3,6 +3,9 @@ package Service;
 import DAO.UserDao;
 import DTO.User;
 import Domain.Level;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import java.util.List;
 
@@ -11,17 +14,31 @@ public class UserService implements UserLevelUpgradePolicy {
     static final int MIN_RECOOMEND_FOR_GOLD = 30;
 
     private UserDao userDao;
+    private PlatformTransactionManager transactionManager;
 
     public void setUserDao(UserDao userDao) {
         this.userDao = userDao;
     }
 
-    void upgradeLevels() {
-        List<User> users = userDao.getAll();
-        for(User user : users) {
-            if (canUpgradeLevel(user)) {
-                upgradeLevel(user);
+    public void setTransactionManager(PlatformTransactionManager transactionManager) {
+        this.transactionManager = transactionManager;
+    }
+
+    void upgradeLevels() throws Exception {
+        TransactionStatus status = this.transactionManager.getTransaction(new DefaultTransactionDefinition());
+
+        try {
+            List<User> users = userDao.getAll();
+            for(User user : users) {
+                if (canUpgradeLevel(user)) {
+                    upgradeLevel(user);
+                }
             }
+
+            transactionManager.commit(status);
+        } catch (Exception e) {
+            transactionManager.rollback(status);
+            throw e;
         }
     }
 
