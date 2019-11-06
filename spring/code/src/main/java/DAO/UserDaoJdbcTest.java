@@ -37,9 +37,9 @@ public class UserDaoJdbcTest {
 
     @Before
     public void setUp() {
-        this.user1 = new User("abc", "비실이", "1234", Level.BASIC, 1, 0);
-        this.user2 = new User("xyz", "이슬이", "qwer", Level.SILVER, 55, 10);
-        this.user3 = new User("hey", "퉁퉁이", "abcd", Level.GOLD, 100, 40);
+        this.user1 = new User("abc", "비실이", "1234", Level.BASIC, 1, 0, "abc@example.com");
+        this.user2 = new User("xyz", "이슬이", "qwer", Level.SILVER, 55, 10, "xyz@example.com");
+        this.user3 = new User("hey", "퉁퉁이", "abcd", Level.GOLD, 100, 40, "hey@example.com");
     }
 
     @Test
@@ -96,6 +96,7 @@ public class UserDaoJdbcTest {
         user1.setLevel(Level.GOLD);
         user1.setLogin(1000);
         user1.setRecommend(999);
+        user1.setEmail("foo@example.com");
 
         dao.update(user1);
 
