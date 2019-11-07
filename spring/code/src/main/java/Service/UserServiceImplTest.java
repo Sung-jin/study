@@ -20,19 +20,21 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsNull.notNullValue;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations="/test-applicationContext.xml")
-public class UserServiceTest extends UserService {
+public class UserServiceImplTest extends UserServiceImpl {
 
     @Autowired
     private UserDaoJdbc userDao;
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private UserServiceImpl userServiceImpl;
 
     @Autowired
     private PlatformTransactionManager transactionManager;
@@ -55,14 +57,14 @@ public class UserServiceTest extends UserService {
 
     @Test
     @DirtiesContext
-    public void upgradeLevels() throws Exception {
+    public void upgradeLevels() {
         userDao.deleteAll();
         for(User user : users) userDao.add(user);
 
         MockMailSender mockMailSender = new MockMailSender();
-        userService.setMailSender(mockMailSender);
+        userServiceImpl.setMailSender(mockMailSender);
 
-        userService.upgradeLevels();
+        userServiceImpl.upgradeLevels();
 
         checkLevelUpgraded(users.get(0), false);
         checkLevelUpgraded(users.get(1), true);
@@ -87,8 +89,8 @@ public class UserServiceTest extends UserService {
         User userWithoutLevel = users.get(0);
         userWithoutLevel.setLevel(null);
 
-        userService.add(userWithLevel);
-        userService.add(userWithoutLevel);
+        userServiceImpl.add(userWithLevel);
+        userServiceImpl.add(userWithoutLevel);
 
         User userWithLevelRead = userDao.get(userWithLevel.getId());
         User userWithoutLevelRead = userDao.get(userWithoutLevel.getId());
@@ -98,17 +100,20 @@ public class UserServiceTest extends UserService {
     }
 
     @Test
-    public void upgradeAllOrNothing() throws Exception {
-        UserService testUserService = new TestUserService(users.get(3).getId());
-        testUserService.setUserDao(this.userDao);
-        testUserService.setTransactionManager(transactionManager);
-        testUserService.setMailSender(this.mailSender);
+    public void upgradeAllOrNothing() {
+        TestUserServiceImpl testUserServiceImpl = new TestUserServiceImpl(users.get(3).getId());
+        testUserServiceImpl.setUserDao(this.userDao);
+        testUserServiceImpl.setMailSender(this.mailSender);
+
+        UserServiceTx txUserService = new UserServiceTx();
+        txUserService.setTransactionManager(transactionManager);
+        txUserService.setUserService(testUserServiceImpl);
 
         userDao.deleteAll();
         for(User user : users) userDao.add(user);
 
         try {
-            testUserService.upgradeLevels();
+            txUserService.upgradeLevels();
             fail("TestUserServiceException expected");
         } catch (TestUserServiceException e) {}
 
@@ -126,10 +131,10 @@ public class UserServiceTest extends UserService {
 
     }
 
-    static class TestUserService extends UserService {
+    static class TestUserServiceImpl extends UserServiceImpl {
         private String id;
 
-        private TestUserService(String id) {
+        private TestUserServiceImpl(String id) {
             this.id = id;
         }
 
@@ -147,7 +152,7 @@ public class UserServiceTest extends UserService {
     static class MockMailSender implements MailSender {
         private List<String> requests = new ArrayList<String>();
 
-        public List<String> getRequests() {
+        private List<String> getRequests() {
             return requests;
         }
 

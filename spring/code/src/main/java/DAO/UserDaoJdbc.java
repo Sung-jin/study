@@ -33,7 +33,7 @@ public class UserDaoJdbc implements UserDao {
         }
     };
 
-    public void add(final User user) throws DuplicateKeyException {
+    public void add(User user) throws DuplicateKeyException {
         try {
             this.jdbcTemplate.update("insert into users(id, name, password, level, login, recommend, email) values(?,?,?,?,?,?,?)",
                     user.getId(), user.getName(), user.getPassword(), user.getLevel().intValue(), user.getLogin(), user.getRecommend(), user.getEmail());
