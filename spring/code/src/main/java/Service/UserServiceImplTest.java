@@ -1,5 +1,6 @@
 package Service;
 
+import DAO.UserDao;
 import DAO.UserDaoJdbc;
 import DTO.User;
 import Domain.Level;
@@ -31,9 +32,6 @@ public class UserServiceImplTest extends UserServiceImpl {
     private UserDaoJdbc userDao;
 
     @Autowired
-    private UserService userService;
-
-    @Autowired
     private UserServiceImpl userServiceImpl;
 
     @Autowired
@@ -56,29 +54,51 @@ public class UserServiceImplTest extends UserServiceImpl {
     }
 
     @Test
-    @DirtiesContext
     public void upgradeLevels() {
-        userDao.deleteAll();
-        for(User user : users) userDao.add(user);
+//        UserServiceImpl userService = new UserServiceImpl();
+//
+//        UserDao mockUserDao = mock(UserDao.class);
+//        when(mockUserDao.getAll()).thenReturn(this.users);
+//        userService.setUserDao(mockUserDao);
+//
+//        MailSender mockMailSender = mock(MailSender.class);
+//        userService.setMailSender(mockMailSender);
+//
+//        userService.upgradeLevels();
+//
+//        verify(mockUserDao, time(2)).update(any(User.class));
+//        verify(mockUserDao, time(2)).update(any(User.class));
+//        verify(mockUserDao).update(users.get(1));
+//        assertThat(users.get(1).getLevel(), is(Level.SILVER));
+//        verify(mockUserDao).update(users.get(3));
+//        assertThat(users.get(3).getLevel(), is(Level.GOLD));
+//
+//        ArgumentCaptor<SimpleMailMessage> mailMessageArg = ArgumentCaptor.forClass(SimpleMailMessage.class);
+//
+//        verify(mockMailSender, time(2)).send(mailMessageArg.capture());
+//        List<SimpleMailMessage> mailMessages = mailMessageArg.getAllValues();
+//        assertThat(users.get(1).getLevel(), is(Level.SILVER));
+//        mockito를 이용하여 테스트하는 예제
+
+        UserServiceImpl userService = new UserServiceImpl();
+
+        MockUserDao mockUserDao = new MockUserDao(this.users);
+        userService.setUserDao(mockUserDao);
 
         MockMailSender mockMailSender = new MockMailSender();
-        userServiceImpl.setMailSender(mockMailSender);
+        userService.setMailSender(mockMailSender);
 
-        userServiceImpl.upgradeLevels();
+        userService.upgradeLevels();
 
-        checkLevelUpgraded(users.get(0), false);
-        checkLevelUpgraded(users.get(1), true);
-        checkLevelUpgraded(users.get(2), false);
-        checkLevelUpgraded(users.get(3), true);
-        checkLevelUpgraded(users.get(4), false);
-        // 유저 레벨 업그레이드 확인 테스트
+        List<User> updated = mockUserDao.getUpdated();
+        assertThat(updated.size(), is(2));
+        checkUserAndLevel(updated.get(0), "foo", Level.SILVER);
+        checkUserAndLevel(updated.get(1), "xyz", Level.GOLD);
 
         List<String> request = mockMailSender.getRequests();
-
         assertThat(request.size(), is(2));
         assertThat(request.get(0), is(users.get(1).getEmail()));
         assertThat(request.get(1), is(users.get(3).getEmail()));
-        // 메일 전송 기능 확인 테스트
     }
 
     @Test
@@ -128,7 +148,11 @@ public class UserServiceImplTest extends UserServiceImpl {
         } else {
             assertThat(userUpdate.getLevel(), is(user.getLevel()));
         }
+    }
 
+    private void checkUserAndLevel(User updated, String expectedId, Level expectedLevel) {
+        assertThat(updated.getId(), is(expectedId));
+        assertThat(updated.getLevel(), is(expectedLevel));
     }
 
     static class TestUserServiceImpl extends UserServiceImpl {
@@ -147,6 +171,33 @@ public class UserServiceImplTest extends UserServiceImpl {
 
     static class TestUserServiceException extends RuntimeException {
 
+    }
+
+    static class MockUserDao implements UserDao {
+        private List<User> users;
+        private List<User> updated = new ArrayList<User>();
+
+        private MockUserDao(List<User> users) {
+            this.users = users;
+        }
+
+        List<User> getUpdated() {
+            return this.updated;
+        }
+
+        public List<User> getAll() {
+            return this.users;
+        }
+
+        public void update(User user) {
+            updated.add(user);
+        }
+
+        public void add(User user) { throw new UnsupportedOperationException(); }
+        public void deleteAll() { throw new UnsupportedOperationException(); }
+        public User get(String id) { throw new UnsupportedOperationException(); }
+        public int getCount() { throw new UnsupportedOperationException(); }
+        // 사용되지 않는 메소드
     }
 
     static class MockMailSender implements MailSender {
