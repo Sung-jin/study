@@ -16,6 +16,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.PlatformTransactionManager;
 
+import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -125,9 +126,21 @@ public class UserServiceImplTest extends UserServiceImpl {
         testUserServiceImpl.setUserDao(this.userDao);
         testUserServiceImpl.setMailSender(this.mailSender);
 
-        UserServiceTx txUserService = new UserServiceTx();
-        txUserService.setTransactionManager(transactionManager);
-        txUserService.setUserService(testUserServiceImpl);
+        TransactionHandler txHandler = new TransactionHandler();
+        txHandler.setTarget(testUserServiceImpl);
+        txHandler.setTransactionManager(transactionManager);
+        txHandler.setPattern("upgradeLevels");
+
+        UserService txUserService = (UserService) Proxy.newProxyInstance(
+                getClass().getClassLoader(),
+                new Class[] { UserService.class },
+                txHandler
+        );
+
+//        UserServiceTx txUserService = new UserServiceTx();
+//        txUserService.setTransactionManager(transactionManager);
+//        txUserService.setUserService(testUserServiceImpl);
+//        proxy로 구현하기 전, 모두 구현 한 클래스를 이용한 방법
 
         userDao.deleteAll();
         for(User user : users) userDao.add(user);
