@@ -34,3 +34,6 @@ public class UserServiceTx implements UserService {
         }
     }
 }
+
+
+// 다이나믹 프록시 생성으로 인해 사용 X
