@@ -13,15 +13,15 @@ public class TransactionHandler implements InvocationHandler {
     private PlatformTransactionManager transactionManager;
     private String pattern;
 
-    public void setTarget(Object target) {
+    void setTarget(Object target) {
         this.target = target;
     }
 
-    public void setTransactionManager(PlatformTransactionManager transactionManager) {
+    void setTransactionManager(PlatformTransactionManager transactionManager) {
         this.transactionManager = transactionManager;
     }
 
-    public void setPattern(String pattern) {
+    void setPattern(String pattern) {
         this.pattern = pattern;
     }
 

@@ -8,6 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.mail.MailException;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
@@ -40,6 +41,9 @@ public class UserServiceImplTest extends UserServiceImpl {
 
     @Autowired
     private MailSender mailSender;
+
+    @Autowired
+    private ApplicationContext context;
 
     private List<User> users;
 
@@ -121,21 +125,28 @@ public class UserServiceImplTest extends UserServiceImpl {
     }
 
     @Test
-    public void upgradeAllOrNothing() {
+    @DirtiesContext
+    public void upgradeAllOrNothing() throws Exception {
         TestUserServiceImpl testUserServiceImpl = new TestUserServiceImpl(users.get(3).getId());
         testUserServiceImpl.setUserDao(this.userDao);
         testUserServiceImpl.setMailSender(this.mailSender);
 
-        TransactionHandler txHandler = new TransactionHandler();
-        txHandler.setTarget(testUserServiceImpl);
-        txHandler.setTransactionManager(transactionManager);
-        txHandler.setPattern("upgradeLevels");
+        TxProxyFactoryBean txProxyFactoryBean = context.getBean("&userService", TxProxyFactoryBean.class);
+        txProxyFactoryBean.setTarget(testUserServiceImpl);
+        UserService txUserService = (UserService) txProxyFactoryBean.getObject();
+        // 프록시 팩토리 빈을 적용한 방법
 
-        UserService txUserService = (UserService) Proxy.newProxyInstance(
-                getClass().getClassLoader(),
-                new Class[] { UserService.class },
-                txHandler
-        );
+//        TransactionHandler txHandler = new TransactionHandler();
+//        txHandler.setTarget(testUserServiceImpl);
+//        txHandler.setTransactionManager(transactionManager);
+//        txHandler.setPattern("upgradeLevels");
+//
+//        UserService txUserService = (UserService) Proxy.newProxyInstance(
+//                getClass().getClassLoader(),
+//                new Class[] { UserService.class },
+//                txHandler
+//        );
+//        proxy를 구현한 방법
 
 //        UserServiceTx txUserService = new UserServiceTx();
 //        txUserService.setTransactionManager(transactionManager);
