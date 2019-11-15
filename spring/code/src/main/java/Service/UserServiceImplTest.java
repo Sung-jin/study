@@ -7,6 +7,7 @@ import Domain.Level;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.aop.framework.ProxyFactoryBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.mail.MailException;
@@ -131,7 +132,7 @@ public class UserServiceImplTest extends UserServiceImpl {
         testUserServiceImpl.setUserDao(this.userDao);
         testUserServiceImpl.setMailSender(this.mailSender);
 
-        TxProxyFactoryBean txProxyFactoryBean = context.getBean("&userService", TxProxyFactoryBean.class);
+        ProxyFactoryBean txProxyFactoryBean = context.getBean("&userService", ProxyFactoryBean.class);
         txProxyFactoryBean.setTarget(testUserServiceImpl);
         UserService txUserService = (UserService) txProxyFactoryBean.getObject();
         // 프록시 팩토리 빈을 적용한 방법
