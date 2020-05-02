@@ -23,7 +23,7 @@
 * 자바 바이트 코드는 모든 JVM에서 동일한 실행 결과를 보장하지만, JVM은 운영체제에 종속적이다.
 
 ![JVM](http://files.itworld.co.kr/archive/image/2018/09/jw_jvm_overview_3x2_1200x800-100758586-large(1).jpg)
-<br/>출처 [IT WORLD](!http://www.itworld.co.kr/news/110837)
+<br/>출처 [IT WORLD](http://www.itworld.co.kr/news/110837)
 
 * 이미지처럼 애플리케이션과 JVM 사이에서 동작되며, JVM이 각 운영체제별로 종속적이다.
 * 개발자가 작성하는 자바 파일은 .JAVA 이고, 이를 javac를 통해 컴파일 하면 .class 확장자인 바이트 코드 파일이 된다.
