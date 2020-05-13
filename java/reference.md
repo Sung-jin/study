@@ -13,8 +13,8 @@
 
 # Memory Area
 
-![Memory Area](https://www.google.com/imgres?imgurl=https%3A%2F%2Fi.imgur.com%2FpAh5gIZ.png&i mgrefurl=https%3A%2F%2Fminwan1.github.io%2F2018%2F06%2F06%2F2018-06-06-Java%2CJVM%2F&tbnid=WK6PFCE2fHCL_M&vet=12ahUKEwig-53krabpAhUEc5QKHXreB3EQMygLegUIARDoAQ..i&docid=DD7xv7xVvbT9YM&w=739&h=678&q=java%20runtime%20area&ved=2ahUKEwig-53krabpAhUEc5QKHXreB3EQMygLegUIARDoAQ)
-<br/>출처 [세바의 코딩교실](https://programmer-seva.tistory.com/72)
+![Memory Area](https://i.imgur.com/pAh5gIZ.png)
+<br/>출처 [Wan Blog](https://minwan1.github.io/2018/06/06/2018-06-06-Java,JVM/)
 
 ## Method Area
 
