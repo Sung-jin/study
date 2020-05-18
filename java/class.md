@@ -245,8 +245,31 @@ public static void main(String[] args) {
 | LOCAL_VARIABLE  | 로컬 변수                    |
 | PACKAGE         | 패키지                       |
 
+* 유지할 범위를 지정하는 어노테이션 유지 정책은 java.lang.annotation.RetentionPolicy 열거 상수에 정의되어 있다.
+* @Retention 을 사용하여 설정한다.
+
+| 열거 상수 | 설명                                                                                                    |
+|-----------|---------------------------------------------------------------------------------------------------------|
+| SOURCE    | 소스상에서만 어노테이션 정보를 유지한다. 바이트 코드 파일에 정보가 남지 않는다.                         |
+| CLASS     | 바이트 코드 파일까지 어노테이션의 정보를 유지하지만 리플렉션을 이용해서 어노테이션 정보를 얻을 수 없다. |
+| RUNTIME   | 바이트 코드 파일에 어노테이션 정보를 유지하며, 리플렉션을 이용해 런타임 중에도 정보를 얻을 수 있다.     |
+
+* 런타임 시에 어노테이션이 적용되었는지 확인 및 엘리먼트 값을 이용해 특정 작업이 가능하다.
+* java.lang.Class 의 아래 표 메소드를 통해 java.lang.reflect 패키지의 타입의 배열을 얻어야 한다.
+    * isAnnotationPresent(Class<? extends Annotation> annoationClass) - 지정한 어노테이션이 적용되었는지 여부. Class 에서 호출했을 경우 상위 클래스에 적용된 경우에도 true (boolean)
+    * getAnnotation(Class<T> annotationClass) - 지정한 어노테이션이 적용되어 있으면 어노테이션을, 아니면 null 을 리턴한다. Class 에서 호출했을 경우 상위클래스에 적용된 경우에도 어노테이션을 리턴한다. (Annotation)
+    * getAnnotations() - 적용된 모든 어노테이션을 리턴한다. Class 에서 호출했을 경우 상위 클래스에 적용된 어노테이션 모두 포함되며, 적용된 어노테이션이 없으면 []을 리턴한다. (Annotation[])
+    * getDeclaredAnnotations() - 직접 적용된 모든 어노테이션을 리턴하며, Class 에서 호출하고 상위 클래스에 적용 된 어노테이션이 있더라도 **직접 적용 된** 어노테이션만 리턴한다. (Annotation[])
+
+| 리턴 타입     | 메소드명 (매개변수)  | 설명                                  |
+|---------------|----------------------|---------------------------------------|
+| Field[]       | getFields()          | 필드 정보를 Field 배열로 리턴         |
+| Construcotr[] | getConstructors()    | 생성자 정보를 Constructor 배열로 리턴 |
+| Method[]      | getDeclaredMethods() | 메소드 정보를 Method 배열로 리턴      |
+
 ```JAVA
 @Target(ElementType.BLABLA..., ElementType.BLABLA..., ElementType.BLABLA...)
+@Retention(RetentionPolicy.RUNTIME)
 public @interface Annotation {
     String arg1(); // 기본값이 없으므로 위 어노테이션을 사용할 경우 반드시 arg1 에 대한 값을 지정해줘야 한다.
     Int arg2() defualt 1;
@@ -255,3 +278,11 @@ public @interface Annotation {
 
 @Annotation(arg = "", ....)
 ```
+
+## Reflection
+
+* 런타임 시에 클래스의 메타 정보를 얻는 기능
+    * 필드의 정보
+    * 생성자 정보
+    * 메소드 정보
+    * 어노테이션 정보
