@@ -105,3 +105,67 @@ public static void main(String[] args) {
     ...
 }
 ```
+
+## 중첩 인터페이스
+
+* 클래스의 멤버로 선언된 인터페이스를 말하며, 내부에 인터페이스를 구현하는 이유는 해당 클래스와의 긴밀한 관계를 맺는 구현 클래스를 만들기 위해서이다. (특히, UI 프로그래밍에서 이벤트 처리를 목적으로 많이 활용된다.)
+    * 예를들어 Button 의 클릭 이벤트를 처리하기 위한 중첩 인터페이스를 구현.
+    * 외부에서 그 버튼을 사용하고, 그 버튼의 클릭 이벤트를 처리하기 위해서는 내부에 구현 된 클릭 이벤트를 구현하여 사용한다.
+
+## 익명 객체
+
+* 이름 없는 객체를 말하며, 익명 객체는 단독으로 사용될 수 없고 클래스를 상속하거나 인터페이스를 구현해야만 생성할 수 있다.
+* 익명 객체는 필드의 초기값이나 로컬 변수의 초기값, 매개 변수의 매개값으로 주로 대입되며, UI 이벤트 처리 객체나 스레드 객체를 생성할 목적으로 많이 사용된다.
+* 구현 클래스나 객체를 다시 재사용 하지 않을 경우 사용할 때 좋다.
+* 익명 자식 객체에 새롭게 정의된 필드와 메소드는 익명 자식 객체 내부에서만 사용되므로, 외부에서는 익명 자식 객체의 필드와 메소드를 사용할 수 없다.
+
+### 로컬 클래스와 익명 클래스와의 차이점은 클래스 이름의 존재 여부일 뿐이며 동작 방식은 동일하다.
+
+```JAVA
+public class Button() {
+    OnClickListener listener;
+
+    void setOnClickListener(OnClickListener listener) {
+        this.listener =
+    }
+
+    void touch() {
+        listenr.onClick();
+    }
+
+    interface OnClickListener {
+        void onClick();
+    }
+}
+
+public class showButton implements Button.OnclickListner {
+    @Override
+    public void onClick() {
+        print("클릭 됨");
+    }
+}
+
+public static void main(String[] args) {
+    Button btn1 = new Button();
+    Button btn2 = new Button();
+
+    btn1.setOnClickListener(new showButton());
+    btn1.touch(); // 클릭 됨
+
+    btn2 = new Button() {
+        @Override
+        public void onClick() {
+            print("익명 자식 구현체 클릭 됨");
+        }
+    }
+    btn2.touch(); // 익명 자식 구현체 클릭 됨
+
+    Button btn3 = new Button.OnClickListener() {
+        @Override
+        public void onClick() {
+            print("익명 구현 객체 클릭 됨");
+        }
+    }
+    btn3.touch(); // 익명 구현 객체 클릭 됨
+}
+```
