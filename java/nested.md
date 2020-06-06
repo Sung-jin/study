@@ -98,6 +98,9 @@ class A {
 public static void main(String[] args) {
     A.C c = new A.C();
     // 정적 내부 클래스는 외부 클래스를 생성하지 않아도 생성이 가능하다.
+    static {
+        
+    }
 
     A a = new A();
     A.C c = a.new C();
