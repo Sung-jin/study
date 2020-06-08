@@ -717,6 +717,21 @@ CompletionHandler<V, A> callback = new CompletionHandler<V, A>() {
 }
 
 // A 는 첨부값의 타입인데, 콜백 메소드에 결과값 이외에 추가적으로 전달하는 객체이다.
+
+...
+
+Runnable task = new Runnable() {
+    @Override
+    public void run() {
+        try {
+            ...
+            V result = ...;
+            callback.completed(result, null);
+        } catch(Exception e) {
+            callback.failed(e, null);
+        }
+    }
+}
 ```
 
 
