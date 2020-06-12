@@ -228,18 +228,18 @@ public static void main(String args[]) {
 - Consumer 함수적 인터페이스의 특징은 리턴값이 없는 accept() 메소드를 가지고 있다.
 - aceept() 메소드는 단지 매개값을 소비하는 역할만 한다.
 
-| 인터페이스명         | 추상 메소드                    | 설명                       |
-| -------------------- | ------------------------------ | -------------------------- |
-| Consumer<T>          | void accept(T t)               | 객체 T 를 받아 소비        |
-| BiConsumer<T, U>     | void accept(T t, U u)          | 객체 T 와 U 를 받아 소비   |
-| DoubleConsumer       | void accept(double value)      | double 값을 받아 소비      |
-| IntConsumer          | void accept(int value)         | int 값을 받아 소비         |
-| LongConsumer         | void accept(long value)        | long 값을 받아 소비        |
-| ObjDoubleConsumer<T> | void accept(T t, double value) | 객체 T 와 double 값을 소비 |
-| ObjIntConsumer<T>    | void accept(T t, int value)    | 객체 T 와 int 값을 소비    |
-| ObjLongConsumer<T>   | void accept(T t, long value)   | 객체 T 와 long 값을 소비   |
+| 인터페이스명          | 추상 메소드                    | 설명                       |
+| --------------------- | ------------------------------ | -------------------------- |
+| Consumer\<T>          | void accept(T t)               | 객체 T 를 받아 소비        |
+| BiConsumer<T, U>      | void accept(T t, U u)          | 객체 T 와 U 를 받아 소비   |
+| DoubleConsumer        | void accept(double value)      | double 값을 받아 소비      |
+| IntConsumer           | void accept(int value)         | int 값을 받아 소비         |
+| LongConsumer          | void accept(long value)        | long 값을 받아 소비        |
+| ObjDoubleConsumer\<T> | void accept(T t, double value) | 객체 T 와 double 값을 소비 |
+| ObjIntConsumer\<T>    | void accept(T t, int value)    | 객체 T 와 int 값을 소비    |
+| ObjLongConsumer\<T>   | void accept(T t, long value)   | 객체 T 와 long 값을 소비   |
 
-- Consumer<T>
+- Consumer\<T>
   - T 라는 매개 객체를 이용하여 람다식도 한개의 매개 변수를 사용한다.
 - BiConsumer<T, U>
   - T 와 U 라는 객체를 이용하여 람다식도 두개의 매개 변수를 사용한다.
@@ -249,11 +249,11 @@ public static void main(String args[]) {
   - int 타입의 매개변수를 고정으로 사용하며, 람다식도 int 을 사용하게 된다.
 - LongConsumer
   - long 타입의 매개변수를 고정으로 사용하며, 람다식도 long 을 사용하게 된다.
-- ObjDoubleConsumer<T>
+- ObjDoubleConsumer\<T>
   - T 라는 객체와 double 타입을 고정으로 사용하며, 람다식도 T 객체와 double 을 사용하게 된다.
-- ObjIntConsumer<T>
+- ObjIntConsumer\<T>
   - T 라는 객체와 int 타입을 고정으로 사용하며, 람다식도 T 객체와 int 을 사용하게 된다.
-- ObjLongConsumer<T>
+- ObjLongConsumer\<T>
   - T 라는 객체와 long 타입을 고정으로 사용하며, 람다식도 T 객체와 long 을 사용하게 된다.
 
 ```JAVA
@@ -277,7 +277,7 @@ consumer.accept(arg...); // 위에 선언된 방식이면 타입에 따라 arg �
 
 | 인터페이스명    | 추상 메소드            | 설명              |
 | --------------- | ---------------------- | ----------------- |
-| Supplier<T>     | void get()             | T 객체를 리턴     |
+| Supplier\<T>    | void get()             | T 객체를 리턴     |
 | BooleanSupplier | boolean getAsBoolean() | boolean 값을 리턴 |
 | DoubleSupplier  | double getAsDouble()   | double 값을 리턴  |
 | IntSupplier     | int getAsInt()         | int 값을 리턴     |
@@ -291,5 +291,69 @@ IntSupplier supplier = () -> { ... return 2; } // int 타입을 리턴
 LoingSupplier supplier = () -> { ... return 3L; } // long 타입을 리턴
 // supplier 를 선언하는 방법
 supplier.getXXX(); // 위에 타입에 따라 get 에 맞는 메소드를 사용하면, 정위된 리턴값이 리턴된다.
-// consumer 를 사용하는 방법
+// supplier 를 사용하는 방법
+```
+
+### Function 함수적 인터페이스
+
+- Function 함수적 인터페이스의 특징은 매개값과 리턴값이 있는 applyXXX() 메소드를 가지고 있다.
+- applyXXX() 는 매개값을 리턴값으로 매핑(타입 변환) 하는 역할을 한다.
+
+| 인터페이스명             | 추상 메소드                      | 설명                          |
+| ------------------------ | -------------------------------- | ----------------------------- |
+| Function<T, R>           | R apply(T t)                     | 객체 T 를 객체 R 로 매핑      |
+| BiFunction<T, U, R>      | R apply(T t, U u)                | 객체 T 와 U 를 객체 R 로 매핑 |
+| DoubleFunction\<R>       | R apply(double value)            | double 을 객체 R 로 매핑      |
+| IntFunction\<R>          | R apply(int value)               | int 를 객체 R 로 매핑         |
+| IntToDoubleFunction      | double applyAsDouble(int value)  | int 를 double 로 매핑         |
+| IntToLongFunction        | long applyAsDouble(int value)    | int 를 long 로 매핑           |
+| LongToDoubleFunction     | double applyAsDouble(long value) | long 을 double 로 매핑        |
+| LongToIntFunction        | int applyAsDouble(long value)    | long 을 int 로 매핑           |
+| ToDoubleBiFunction<T, U> | double applyAsDouble(T t, U u)   | 객체 T 와 U 를 double 로 매핑 |
+| ToDoubleFunction\<T>     | double applyAsDouble(T t)        | 객체 T 를 double 로 매핑      |
+| ToIntBiFunction<T, U>    | int applyAsInt(T t, U u)         | 객체 T 와 U 를 int 로 매핑    |
+| ToIntFunction\<T>        | int applyAsInt(T t)              | 객체 T 를 int 로 매핑         |
+| ToLongBiFunction<T, U>   | long applyAsLong(T t, U u)       | 객체 T 와 U 를 long 로 매핑   |
+| ToLongFunction\<T>       | long applyAsLong(T t)            | 객체 T 를 long 으로 매핑      |
+
+```JAVA
+Function<Person, String> function = t -> {... return t.getName(); }
+BiFunction<Person, Person, Int> function = (t, u) -> {... return t.getAge() + u.getAge(); }
+DoubleFunction<Zimbabwe> function = t -> {... zim.saveMoney(t); return zim; }
+IntFunction<Person> function = t -> {... person.saveAge(t); return person; }
+IntToDoubleFunction function = t -> {... return Double.valueOf(t); }
+IntToLongFunction function = t -> return Long.valueOf(t);
+LongToDoubleFunction function = t -> {... return Double.valueOf(t); }
+LongToIntFunction function = t -> return Integer.valueOf(t);
+ToDoubleBiFunction<Zimbabwe, Zimbabwe> function = (t, u) -> {... return t.getZ$() + u.getZ$(); }
+ToDoubleFunction<Zimbabwe> function = t -> return t.getZ$();
+ToIntBiFunction<Grade, Grade> function = (t, u) -> {... return t.getGrade() + u.getGrade(); }
+ToIntFunction<Grade> function = t -> return t.getGrade();
+ToLongBiFunction<EntityObject, EntityObject> function = (t, u) -> {... return t.getLongValue() + u.getLongValue(); }
+ToLongFunction<EntityObject> function = t -> return t.getId();
+// function 을 선언하는 방법
+print(function.apply(person)); // 오성진
+// function 을 사용하는 방법
+// 각 메소드별 정의되어 있는 추상 메소드를 알맞게 사용하면 된다.
+
+///////////////////////////////
+
+public class ZimbabweAcount {
+    public double balance;
+
+    public double getBalance() { return this.balance; }
+    public void setBalance(double balance) { this.balance = balance; }
+}
+
+public static void main(String args[]) {
+    ZimbabweAcount acount1 = new ZimbabweAcount();
+    ZimbabweAcount acount2 = new ZimbabweAcount();
+
+    acount1.setBalance(대략 겁나 큰 숫자1);
+    acount2.setBalance(대략 겁나 큰 숫자2);
+
+    ToDoubleBiFunction<ZimbabweAcount, ZimbabweAcount> function = (a1, a2) -> return a1.getBalance() + a2.getBalance();
+
+    Double totalBalance = function.applyAsDouble(acount1, acount2); // 대략 엄청 큰게 2개가 되어버린 숫자
+}
 ```
