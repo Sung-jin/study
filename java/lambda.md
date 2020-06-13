@@ -215,26 +215,26 @@ public static void main(String args[]) {
   - 함수적 인터페이스는 Consumer, Supplier, Function, Operator, Predicate 로 구분된다.
     - 위의 구분 기준은 인터페이스에 선언된 추상 메소드의 매개값과 리턴값의 유무이다.
 
-| 종류      | 추상 메소드 특징                                                                 |                                       |
-| --------- | -------------------------------------------------------------------------------- | ------------------------------------- |
-| Consumer  | - 매개값은 있고, 리턴값은 없음                                                   | (arg) -> (Consumer)                   |
-| Supplier  | - 매개값은 없고, 리턴값은 있음                                                   | (Supplier) -> (return value)          |
-| Function  | - 매개값도 있고, 리턴값도 있음 <br/> - 주로 매개값을 리턴값으로 매핑 (타입 변환) | (arg) -> (Function) -> (return value) |
-| Operator  | - 매개값도 있고, 리턴값도 있음 <br/> - 주로 매개값을 연산하고 결과를 리턴        | (arg) -> (Function) -> (return value) |
-| Predicate | - 매개값은 있고, 리턴 타입은 boolean <br/> - 매가값을 조사해서 true/false 리턴   | (arg) -> (Predicate) -> boolean       |
+| 종류        | 추상 메소드 특징                                                 |                                       |
+| --------- | --------------------------------------------------------- | ------------------------------------- |
+| Consumer  | - 매개값은 있고, 리턴값은 없음                                        | (arg) -> (Consumer)                   |
+| Supplier  | - 매개값은 없고, 리턴값은 있음                                        | (Supplier) -> (return value)          |
+| Function  | - 매개값도 있고, 리턴값도 있음 <br/> - 주로 매개값을 리턴값으로 매핑 (타입 변환)       | (arg) -> (Function) -> (return value) |
+| Operator  | - 매개값도 있고, 리턴값도 있음 <br/> - 주로 매개값을 연산하고 결과를 리턴            | (arg) -> (Function) -> (return value) |
+| Predicate | - 매개값은 있고, 리턴 타입은 boolean <br/> - 매가값을 조사해서 true/false 리턴 | (arg) -> (Predicate) -> boolean       |
 
 ### Consumer 함수적 인터페이스
 
 - Consumer 함수적 인터페이스의 특징은 리턴값이 없는 accept() 메소드를 가지고 있다.
 - aceept() 메소드는 단지 매개값을 소비하는 역할만 한다.
 
-| 인터페이스명          | 추상 메소드                    | 설명                       |
-| --------------------- | ------------------------------ | -------------------------- |
+| 인터페이스명                | 추상 메소드                         | 설명                  |
+| --------------------- | ------------------------------ | ------------------- |
 | Consumer\<T>          | void accept(T t)               | 객체 T 를 받아 소비        |
-| BiConsumer<T, U>      | void accept(T t, U u)          | 객체 T 와 U 를 받아 소비   |
-| DoubleConsumer        | void accept(double value)      | double 값을 받아 소비      |
-| IntConsumer           | void accept(int value)         | int 값을 받아 소비         |
-| LongConsumer          | void accept(long value)        | long 값을 받아 소비        |
+| BiConsumer<T, U>      | void accept(T t, U u)          | 객체 T 와 U 를 받아 소비    |
+| DoubleConsumer        | void accept(double value)      | double 값을 받아 소비     |
+| IntConsumer           | void accept(int value)         | int 값을 받아 소비        |
+| LongConsumer          | void accept(long value)        | long 값을 받아 소비       |
 | ObjDoubleConsumer\<T> | void accept(T t, double value) | 객체 T 와 double 값을 소비 |
 | ObjIntConsumer\<T>    | void accept(T t, int value)    | 객체 T 와 int 값을 소비    |
 | ObjLongConsumer\<T>   | void accept(T t, long value)   | 객체 T 와 long 값을 소비   |
@@ -275,9 +275,9 @@ consumer.accept(arg...); // 위에 선언된 방식이면 타입에 따라 arg �
 - Consumer 함수적 인터페이스의 특징은 매개 변수가 없고 리턴값이 있는 getXXX 메소드를 가지고 있다.
 - getXXX() 는 실행 후 호출한 곳으로 데이터를 리턴하는 역할을 한다.
 
-| 인터페이스명    | 추상 메소드            | 설명              |
-| --------------- | ---------------------- | ----------------- |
-| Supplier\<T>    | void get()             | T 객체를 리턴     |
+| 인터페이스명          | 추상 메소드                 | 설명            |
+| --------------- | ---------------------- | ------------- |
+| Supplier\<T>    | void get()             | T 객체를 리턴      |
 | BooleanSupplier | boolean getAsBoolean() | boolean 값을 리턴 |
 | DoubleSupplier  | double getAsDouble()   | double 값을 리턴  |
 | IntSupplier     | int getAsInt()         | int 값을 리턴     |
@@ -299,20 +299,20 @@ supplier.getXXX(); // 위에 타입에 따라 get 에 맞는 메소드를 사용
 - Function 함수적 인터페이스의 특징은 매개값과 리턴값이 있는 applyXXX() 메소드를 가지고 있다.
 - applyXXX() 는 매개값을 리턴값으로 매핑(타입 변환) 하는 역할을 한다.
 
-| 인터페이스명             | 추상 메소드                      | 설명                          |
-| ------------------------ | -------------------------------- | ----------------------------- |
-| Function<T, R>           | R apply(T t)                     | 객체 T 를 객체 R 로 매핑      |
-| BiFunction<T, U, R>      | R apply(T t, U u)                | 객체 T 와 U 를 객체 R 로 매핑 |
-| DoubleFunction\<R>       | R apply(double value)            | double 을 객체 R 로 매핑      |
-| IntFunction\<R>          | R apply(int value)               | int 를 객체 R 로 매핑         |
-| IntToDoubleFunction      | double applyAsDouble(int value)  | int 를 double 로 매핑         |
-| IntToLongFunction        | long applyAsDouble(int value)    | int 를 long 로 매핑           |
-| LongToDoubleFunction     | double applyAsDouble(long value) | long 을 double 로 매핑        |
-| LongToIntFunction        | int applyAsDouble(long value)    | long 을 int 로 매핑           |
+| 인터페이스명                   | 추상 메소드                           | 설명                     |
+| ------------------------ | -------------------------------- | ---------------------- |
+| Function<T, R>           | R apply(T t)                     | 객체 T 를 객체 R 로 매핑       |
+| BiFunction<T, U, R>      | R apply(T t, U u)                | 객체 T 와 U 를 객체 R 로 매핑   |
+| DoubleFunction\<R>       | R apply(double value)            | double 을 객체 R 로 매핑     |
+| IntFunction\<R>          | R apply(int value)               | int 를 객체 R 로 매핑        |
+| IntToDoubleFunction      | double applyAsDouble(int value)  | int 를 double 로 매핑      |
+| IntToLongFunction        | long applyAsDouble(int value)    | int 를 long 로 매핑        |
+| LongToDoubleFunction     | double applyAsDouble(long value) | long 을 double 로 매핑     |
+| LongToIntFunction        | int applyAsDouble(long value)    | long 을 int 로 매핑        |
 | ToDoubleBiFunction<T, U> | double applyAsDouble(T t, U u)   | 객체 T 와 U 를 double 로 매핑 |
-| ToDoubleFunction\<T>     | double applyAsDouble(T t)        | 객체 T 를 double 로 매핑      |
+| ToDoubleFunction\<T>     | double applyAsDouble(T t)        | 객체 T 를 double 로 매핑     |
 | ToIntBiFunction<T, U>    | int applyAsInt(T t, U u)         | 객체 T 와 U 를 int 로 매핑    |
-| ToIntFunction\<T>        | int applyAsInt(T t)              | 객체 T 를 int 로 매핑         |
+| ToIntFunction\<T>        | int applyAsInt(T t)              | 객체 T 를 int 로 매핑        |
 | ToLongBiFunction<T, U>   | long applyAsLong(T t, U u)       | 객체 T 와 U 를 long 로 매핑   |
 | ToLongFunction\<T>       | long applyAsLong(T t)            | 객체 T 를 long 으로 매핑      |
 
@@ -357,3 +357,298 @@ public static void main(String args[]) {
     Double totalBalance = function.applyAsDouble(acount1, acount2); // 대략 엄청 큰게 2개가 되어버린 숫자
 }
 ```
+
+### operator 함수적 인터페이스
+
+* Function 함수적 인터페이스와 똑같이 매개 변수와 리턴값이 있는 applyXXX() 메소드를 가지고 있다.
+* 매개값을 리턴값으로 매핑(타입 변환) 역할을 하는 Fuction 과 다르게, 매개값을 이용해서 연산을 수행한 후 동일한 타입으로 리턴값을 제공하는 역할을 한다.
+
+| 인터페이스명               | 추상 메소드                                     | 설명                 |
+| -------------------- | ------------------------------------------ | ------------------ |
+| BinaryOperator\<T>   | T apply(T t, T t)                          | T 와 T 를 연산한 후 T 리턴 |
+| UnaryOperator\<T>    | T apply(T t)                               | T 를 연산한 후 T 리턴     |
+| DoubleBinaryOperator | double applyAsDouble(Double d1, Double d2) | 두 개의 double 연산     |
+| DoubleUnaryOperator  | double applyAsDouble(Double d)             | 한 개의 double 연산     |
+| IntBinaryOperator    | int applyAsInt(Int i1, Int i2)             | 두 개의 int 연산        |
+| IntUnaryOperator     | int applyAsInt(Int d)                      | 한 개의 int 연산        |
+| LongBinaryOperator   | long applyAsLong(Long i1, Long i2)         | 두 개의 long 연산       |
+| LongUnaryOperator    | long applyAsLong(Long d)                   | 한 개의 long 연산       |
+
+```JAVA
+BinaryOperator<Person> operator = (t, u) -> {... return new Person(t, u); }
+UnaryOperator<Person> operator = t -> {... return t; }
+DoubleBinaryOperator operator = (t, u) -> {... return t + u; }
+DoubleUnaryOperator operator = t -> {... return t; }
+IntBinaryOperator operator = (t, u) -> {... return t + u; }
+IntUnaryOperator operator = t -> return t;
+LongBinaryOperator operator = (t, u) -> { return t * u; }
+LongUnaryOperator operator = t -> return t;
+// operator 을 선언하는 방법
+print(operator.applyAsDouble(1.0, 2.0)); // 3.0
+// operator 을 사용하는 방법
+// 각 메소드별 정의되어 있는 추상 메소드를 알맞게 사용하면 된다.
+
+///////////////////////////////
+public static void main(String args[]) {
+    ...
+
+    DoubleBinaryOperator doubleSumOperator = (a1, a2) -> return a1 + a2;
+
+    Double sumValue = doubleSumOperator.applyAsDouble(1.0, 2.0); // 3.0
+}
+```
+
+## Predicate 함수적 인터페이스
+
+* 매개 변수와 boolean 리턴값이 있는 testXXX() 메소드를 가지고 있다.
+* 매개값을 이용해서 boolean 을 리턴한다.
+
+| 인터페이스명            | 추상 메소드                 | 설명           |
+| ----------------- | ---------------------- | ------------ |
+| Predicate\<T>     | boolean test(T t)      | 객체 T 를 조사    |
+| BiPredicate<T, U> | boolean test(T t, U u) | 객체 T, U 를 조사 |
+| DoublePredicate   | boolean test(double d) | double 값을 조사 |
+| IntPredicate      | boolean test(int d)    | int 값을 조사    |
+| LongPredicate     | boolean test(long d)   | long 값을 조사   |
+
+
+```JAVA
+Predicate<Person> predicate = t -> {... return t.getSex() === SEX.MAIL }
+BiPredicate<Person, Int> operator = (t, u) -> {... return t.getAge > u; }
+DoublePredicate operator = t -> {... return t > 100;  }
+IntPredicate operator = t -> {... return t < 100; }
+LongPredicate operator = t -> {... return t === 100; }
+// predicate 을 선언하는 방법
+print(operator.test(person, 20)); // true or false
+// operator 을 사용하는 방법
+// 각 메소드별 정의되어 있는 추상 메소드를 알맞게 사용하면 된다.
+
+///////////////////////////////
+public static void main(String args[]) {
+    ...
+
+    Predicate predicate = (p) -> return p.getSex() === SEX.MAIL
+
+    if (predicate.test(person)) { print("남자입니다."); }
+    else { print("여자입니다."); }
+}
+```
+
+### andThen() | compose() 디폴트 메소드
+
+* 디폴트 및 정적 메소드는 추상 메소드가 아니기 때문에 함수적 인터페이스에 선언되어도 여전히 함수적 인터페이스의 성질을 잃지 않는다.
+    * 함수적 인터페이스 성질이란, 하나의 추상 메소드를 가지고 있고, 람다식으로 익명 구현 객체를 생성할 수 있는 것을 말한다.
+* java.util.function 패키지의 함수적 인터페이스는 하나 이상의 디폴트 및 정적 메소드를 가지고 있다.
+* Consumer, Function, Operator 종류의 함수적 인터페이스는 andThen(), compose() 디폴트 메소드를 가지고 있다.
+* andThen(), compose() 는 두 개의 함수적 인터페이스를 순차적으로 연결하고, 첫 번째 처리 결과를 두 번째 매개값으로 제공해서 최종 결과값을 얻을 때 사용한다.
+    * andThen() : 앞의 인터페이스 부터 처리한 후, 결과를 뒤의 매개변수로 들어가 있는 인터페이스에 넘겨준다.
+      - Consumer
+        1. Consumer\<T>
+        2. BiConsumer<T, U>
+        3. DoubleConsumer
+        4. IntConsumer
+        5. LongConsumer
+      - Function
+        1. Function<T, R>
+        2. BiFunction<T, U, R>
+      - Operator
+        1. BinaryOperator\<T>
+        2. DoubleUnaryOperator
+        3. IntUnaryOperator
+        4. LongUnaryOperator
+    * compose() : 매개 변수의 인터페이스를 처리하고, 그 결과를 호출한 인터페이스의 매개값으로 넘겨준다.
+      - Consumer
+        1. LongConsumer
+      - Function
+        1. Function<T, R>
+      - Operator
+        1. DoubleUnaryOperator
+        2. IntUnaryOperator
+        3. LongUnaryOperator
+
+```JAVA
+...
+andThenInterface = A.andThen(B);
+...
+
+result1 = andThenInterface.method();
+// andThenInterface 메소드 호출 -> A 람다식 결과를 B 의 매개변수로 실행 -> 최종 결과 리턴
+
+...
+composeInterface = A.compose(B);
+...
+
+result2 = composeInterface.method();
+// andThenInterface 메소드 호출 -> B 람다식 결과를 A 의 매개변수로 실행 -> 최종 결과 리턴
+
+///////////////////////////////////////////////////////////////
+// consumer
+// 처리 결과를 리턴하지 않기 때문에, andThen() 디폴트 메소드는 함수적 인터페이스의 호출 순서만 정한다.
+
+// function, operator
+// 먼저 실행한 함수적 인터페이스의 결과를 다음 함수적 인터페이스의 매개값으로 넘겨주고, 최종 처리 결과를 리턴한다.
+// 두 함수적 인터페이스를 연결할 때, 연결당시에 넘겨지는 값은 전달데이터 이다.
+
+public enum GENDER {
+    MALE, FEMALE
+}
+
+@Getter
+@Setter
+@AllArgsConstructor
+public class Member {
+    private String name;
+    private String id;
+    private int sex;
+}
+
+public static void main(String args[]) {
+    Member member = new Member("오성진", "test", 1);
+
+    Consumer<Member> consumerA = (m) -> { print(m.getName();) }
+    Consumer<Member> consumerB = (m) -> { print(m.getId();) }
+
+    Consumer<Member> consumerAB = consumerA.andThen(consumerB);
+    consumerAB.accept(member);
+    // 오성진test
+
+    Function<Member, Int> functionA = m -> return m.getSex;
+    Function<Int, GENDER> functionB = i -> return GENDER.valueOf(i);
+
+    Function functionAB = functionA.andThen(functionB);
+    GENGER gender = functionAB.apply(member); // MALE
+}
+```
+
+### 디폴트 메소드 - and(), or(), negate() | 정적 메소드 - isEqual()
+
+* 위의 메소드는 Predicate 종류의 함수적 인터페이스에 가지고 있다.
+    * negate() : ! 연산자랑 같다. (결과값이 ture 면 false 로, false 면 true)
+* and(), or(), negate(), isEqual() 의 경우 모든 Predicate 함수적 인터페이스에서 제공된다.
+    * isEqual() 메소드는 test() 매개값인 sourceObject 와 isEqual() 의 매개값인 targetObject 를 java.util.Objects 클래스의 equals() 의 매개값으로 제공하고, Objects.equals(sourceObject, targetObject) 의 리턴값을 얻어 새로운 Predicate\<T> 를 생성한다.
+
+> Predicate\<Object> predicate = Predicate.isEqual(targetObject); <br/>
+> boolean result = predicate.test(sourceObject); <br/>
+> 위처럼 isEqual() 객체를 생성할 때 들어간 매개변수와 비교되는 객체를 만들고, test() 메소드를 사용할 때 객체를 생성할때 생성한 targetObject 와 비교하여 결과를 리턴한다.
+
+| sourceObject | targetObject | 리턴값                  |
+| ------------ | ------------ | -------------------- |
+| null         | null         | true                 |
+| not null     | null         | false                |
+| null         | not null     | false                |
+| not null     | not null     | isEqual().test() 리턴값 |
+
+### minBy(), maxBy()
+
+* operator 의 BinaryOperator\<T> 에 minBy(), maxBy() 정적 메소드가 제공한다.
+
+
+| 리턴 타입              | 정적 메소드                                  |
+| ------------------ | --------------------------------------- |
+| BinaryOperator\<T> | minBy(Comparator<? super T> comparator) |
+| BinaryOperator\<T> | maxBy(Comparator<? super T> comparator) |
+
+```JAVA
+@Getter
+@Setter
+@AllArgsConstructor
+public class person {
+    private String name;
+    private int age;
+}
+
+public static void main(String args[]) {
+    Person p1 = new Person("foo", 20);
+    Person p2 = new Person("bar", 25);
+
+    BinaryOperator<Person> binaryOperator = BinaryOperator.minBy( (p1, p2) -> Integer.compare(p1.age, p2.age) );
+    Person young = binaryOperator.apply(p1, p2);
+}    
+```
+
+## Method References (메소드 참조)
+
+* 메소드를 참조해서 매개 변수의 정보 및 리턴 타입을 알아내어, 람다식에서 불필요한 매개 변수를 제거하는 것이 목적.
+* 람다식은 종종 기존 메소드를 단순히 호출만 하는 경우가 많다.
+* 정적 또는 인터스턴스 메소드, 생성자 참조 모두 가능하다.
+
+```JAVA
+(left, right) -> Math.MAX(left, right);
+Math::MAX; // 메소드 참조
+IntBinaryOperator intBinaryOperator = Math::MAX;
+// IntBinaryOperator 의 경우 2개의 int 를 받아서 int 를 리턴하므로, 위처럼 메소드 참조로 표현할 수 있다.
+```
+
+### 정적 메소드와 인턴스 메소드 참조
+
+* 정적 메소드 참조일 경우, **클래스::메소드** 형태로 기술한다.
+* 인스턴스 메소드 참조일 경우, **참조변수::메소드** 형태로 기술한다.
+
+### 매개 변수의 메소드 참조
+
+* 메소드는 람다식 외부의 클래스 멤버일 수도 있고, 람다식에서 제공되는 매개 변수의 멤버일 수도 있다.
+
+> 람다식에서 제공되는 매개 변수의 멤버인 경우 <br/>
+> (a, b) -> { a.instanceMethod(b); }
+
+* 위의 경우 **a::instanceMethod** 향태로 표현하면 된다.
+    * 정적 메소드 참조와 동일하지만, 실질적으로는 a 의 인스턴스 메소드가 참조되어 실행된다.
+
+### 생성자 참조
+
+* 단순히 객체를 생성하고 리턴하도록 구성된 람다식은 생성자 참조로 대치할 수 있다.
+* 생성자가 오버로딩 되어 있다면, 컴파일러는 함수적 인터페이스의 추상 메소드와 동일한 매개 변수 타입과 개수를 가지고 있는 생성자를 찾아서 실행한다.
+    * 해당 생성자가 없을 경우, 컴파일 오류가 발생한다.
+
+> (a, b) -> return new Foo(a, b); <br/>
+> Foo::new
+
+```JAVA
+public class Calculator {
+    public static int staticMethod(int x, int y) {
+        return x + y;
+    }
+    public in t instanceMethod(int x, int y) {
+        return x + y;
+    }
+}
+
+@Getter
+@Setter
+public class Member {
+    private String name;
+    private int age;
+
+    public Member(String name) {
+        this.name = name;
+    }
+
+    public Member(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+}
+
+public static void main(String args[]) {
+    Calculator calc = new Calculator();
+    IntBinaryOperator staticOperator = (x, y) -> Calculator::staticMethod;
+    IntBinaryOperator instanceOperator = (x, y) -> calc::staticMethod;
+
+    /////////////////////////////////////////////////
+
+    // ToIntBiFunction<String, String> function = (a, b) -> a.compareToIgnoreCase(b);
+    ToIntBiFunction<String, String> function = String::compareToIgnoreCase;
+    int result = function.applyAsInt("Foo", "FOO"); // 0
+
+    /////////////////////////////////////////////////
+    
+    Function<String, Member> function1 = Memeber::new;
+    // Member(String name)
+    Function<String, int, Member> function1 = Memeber::new;
+    // Member(String name, int age)
+
+    Member member1 = function1.apply("foo");
+    Member member2 = function2.apply("foo", 20);
+}
+```
+
