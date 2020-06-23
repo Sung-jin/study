@@ -651,4 +651,3 @@ public static void main(String args[]) {
     Member member2 = function2.apply("foo", 20);
 }
 ```
-

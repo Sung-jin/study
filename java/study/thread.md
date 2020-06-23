@@ -496,7 +496,7 @@ Map<Thread, StatckTraceElement[]> threadInfomation = Thread.getAllStackTraces();
 
 ## Thread Pool
 
-- 스레드의 수가 많아질 수록, 그 스레드들을 처리하기 위해 CPU 의 사용량은 늘어나고 그로인해 CPU 의 성능을 나빠지게 된다.
+- 스레드의 수가 많아질 수록, 스레드 생성과 스케쥴링에 의해 CPU 의 사용량은 늘어나고 그로인해 CPU 의 성능을 나빠지게 된다.
 - 스레드의 병렬 작업을 조절하기 위해 Thread Pool 이 존재한다.
   - Thread Pool 은 작업 처리에 사용되는 스레드의 제한된 개수만큼 정해 놓고 Queue 에 들어오는 작업들을 하나씩 스레드가 맡아 처리하는 것을 말한다.
 - 스레드 풀을 생성하기 위해서 java.util.concurrent 패키지의 ExecutorService 인터페이스와 Executors 클래스를 제공한다.
@@ -532,7 +532,7 @@ ExecutorService threadPool = new ThreadPoolExecutor(
 | 리턴 타입      | 메소드명 \(매개변수\)                           | 설명                                                                                                                                                                                              |
 | -------------- | ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | void           | shudown\(\)                                     | 현재 처리 중인 작업뿐만 아니라 작업 큐에 대기하고 있는 모든 작업을 처리한 뒤 스레드 풀을 종료 (일반적으로 스레드풀을 종료할 때 사용된다.)                                                         |
-| List<Runnable> | shutdownNow\(\)                                 | 현재 작업 처리 중인 스레드를 interrupt 하여 작업 중지를 시도하고 스레드풀을 종료시킨다\. 리턴 값은 작업 큐에 있는 미처리된 작업 \(Runnable\) 목록이다\. (남아있는 작업과 상관없이 강제 종료할 때) |
+| List\<Runnable> | shutdownNow\(\)                                 | 현재 작업 처리 중인 스레드를 interrupt 하여 작업 중지를 시도하고 스레드풀을 종료시킨다\. 리턴 값은 작업 큐에 있는 미처리된 작업 \(Runnable\) 목록이다\. (남아있는 작업과 상관없이 강제 종료할 때) |
 | boolean        | awaitTermination\(long timeout, TimeUnit unit\) | shutdown\(\) 메소드 호출 이후, 모든 작업 처리를 timeout 시간 내에 완료되면 true, 시간내에 완료하지 못하면 처리를 못한 스레드를 interrupt 하고 false 를 리턴한다\.                                 |
 
 ## 작업 생성과 처리 요청
@@ -591,8 +591,8 @@ Callable<T> task = new Callable<T>() {
 | 메소드                         | 작업 처리 완료 후 리턴 타입 | 작업 처리 도중 예외 발생      |
 | ------------------------------ | --------------------------- | ----------------------------- |
 | submit\(Runnable task\)        | future\.get\(\) \-> null    | future\.get\(\) \-> 예외 발생 |
-| submit\(Callable<String> task> | future\.get\(\) \-> String  | future\.get\(\) \-> 예외 발생 |
-| submit\(Callable<String> task> | future\.get\(\) \-> String  | future\.get\(\) \-> 예외 발생 |
+| submit\(Callable\<String> task> | future\.get\(\) \-> String  | future\.get\(\) \-> 예외 발생 |
+| submit\(Callable\<String> task> | future\.get\(\) \-> String  | future\.get\(\) \-> 예외 발생 |
 
 - Future 의 get 이외의 다른 메소드
 
@@ -658,11 +658,11 @@ result = future.get();
 
 | 리턴 타입 | 매소드명 \(매개변수\)               | 설명                                                                                   |
 | --------- | ----------------------------------- | -------------------------------------------------------------------------------------- |
-| Future<V> | poll\(\)                            | 완료된 작업의 Future 를 가져온다\. <br/> 완료된 작업이 없다면 즉시 null을 리턴함\.     |
-| Future<V> | poll\(long timeout, TimeUnit unit\) | 완료된 작업의 Future 를 가져온다\. <br/> 완료된 작업이 없다면 timeout 까지 블록킹 함\. |
-| Future<V> | submit\(Callable<V> task>           | 스레드풀에 Callable 작업 처리 요청                                                     |
-| Future<V> | submit\(Callable<V> task>           | 스레드풀에 Callable 작업 처리 요청                                                     |
-| Future<V> | submit\(Runnable task, V result\)   | 스레드풀에 Runnable 작업 처리 요청                                                     |
+| Future\<V> | poll\(\)                            | 완료된 작업의 Future 를 가져온다\. <br/> 완료된 작업이 없다면 즉시 null을 리턴함\.     |
+| Future\<V> | poll\(long timeout, TimeUnit unit\) | 완료된 작업의 Future 를 가져온다\. <br/> 완료된 작업이 없다면 timeout 까지 블록킹 함\. |
+| Future\<V> | submit\(Callable\<V> task>           | 스레드풀에 Callable 작업 처리 요청                                                     |
+| Future\<V> | submit\(Callable\<V> task>           | 스레드풀에 Callable 작업 처리 요청                                                     |
+| Future\<V> | submit\(Runnable task, V result\)   | 스레드풀에 Runnable 작업 처리 요청                                                     |
 
 ```JAVA
 ExecutorService executorService = Executors.newFixedThreadPool(
