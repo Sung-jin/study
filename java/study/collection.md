@@ -173,3 +173,102 @@ public class Main {
 | LinkedList | 느리다         | 빠르다      | 느리다 |
 
 * ~~위 표와 같이 된다고는 하는데.. 막상 해보니 표대로 동작하지 않네..~~
+
+## Set Collection
+
+* 저장 순서를 유지하지 않으며, 같은 객체, null 을 중복해서 저장할 수 없다.
+* Set 의 공통으로 사용 가능한 인터페이스 메소드
+
+| 기능    | 메소드                        | 설명                                                  |
+| ----- | -------------------------- | --------------------------------------------------- |
+| 객체 추가 | boolean add(E e)           | 주어진 객체를 저장 <br/> 객체가 성공적으로 저장되면 true, 중복 저장이면 false |
+| 객체 검색 | boolean contains(Object o) | 주어진 객체가 저장되어 있는지 여부                                 |
+|       | boolean isEmpty()          | 컬렉션이 비어 있는지 조사                                      |
+|       | Iterator<E> iterator()     | 저장된 객체를 한 번씩 가져오는 반복자 리턴                            |
+|       | int size()                 | 저장되어 있는 전체 객체 수 리턴                                  |
+| 객체 삭제 | void clear()               | 저장된 모든 객체를 삭제                                       |
+|       | boolean remove(Object o)   | 주어진 객체를 삭제                                          |
+
+* Set 에는 인덱스로 객체를 검색하는 메소드가 없고, 모든 저장된 객체를 한번씩 반복해서 가져오는 Iterator 를 제공한다.
+
+> Iterator<E> iterator = set.iterator();
+
+* Iterator 인터페이스에 선언된 메소드
+
+| 리턴 타입   | 메소드명      | 설명                                       |
+| ------- | --------- | ---------------------------------------- |
+| boolean | hasNext() | 가져올 객체가 있으면 true <br/> 가져올 객체가 없으면 false |
+| E       | next()    | 컬렉션에서 하나의 객체를 가져온다.                      |
+| void    | remove()  | Set 컬렉션에서 객체를 제거한다.                      |
+
+* 즉, Set 은 특정 데이터나 인덱스를 통해 데이터에 접근하지 않고 전체 데이터를 사용하고 순서의 보장이 필요없을 때 사용한다.
+
+### HashSet
+
+> Set\<E> set = new HashSet\<E>(); <br/>
+> HashSet set = new HashSet\<E>();
+
+* HashSet 에 저장될 때 동일한 객체는 저장하지 않는다.
+  * 동일한 객체란, 똑같은 객체를 뜻하지 않는다.
+  * HashSet 저장 방식
+    1. hashCode() 메소드를 호출해서 저장된 객체중 같은 해쉬값을 가진 객체를 확인한다.
+    2. 같은 해쉬값이 있으면, 그 객체와 저장하려는 객체를 equal() 메소드로 비교한다.
+    3. 위 과정이 true 이면 중복 객체로 처리되어 저장되지 않는다.
+
+### LinkedHashSet
+
+* 추가된 순서, 또는 가장 최근에 접근한 순서대로 접근 가능
+
+### TreeSet
+
+* 정렬된 순서대로 보관하며 정렬 방법을 지정할 수 있음
+* Red-Black Tree 에 데이터가 담기며, HashSet 보다 성능상 느리다.
+
+## Map Collection
+
+* Key 와 Value 로 구성된 Entry 객체를 저장하는 구조를 가지고 있다.
+  * Key, Value 모두 객체이다.
+  * Key 는 중복 저장이 불가능, Value 는 중복 저장이 가능하다.
+  * 중복된 Key 로 다시 객체 저장이 되면, 기존 값은 새로 넣는 값으로 덮어써진다.
+* Map 에서 공통적으로 사용 가능한 메소드
+
+| 기능    | 메소드                                 | 설명                                                                     |
+| ----- | ----------------------------------- | ---------------------------------------------------------------------- |
+| 객체 추가 | V put(K key, V value)               | 주어진 키로 값을 저장 <br/> 새로운 키일 경우 null 리턴 <br/> 동일한 키일 경우 값을 변경하고, 이전 값을 리턴 |
+| 객체 검색 | boolean containsKey(Object key)     | 주어진 키가 있는지 확인                                                          |
+|       | boolean containsValue(Object value) | 주어진 값이 있는지 확인                                                          |
+|       | Set<Map.Entry<K,V>> entrySet()      | 키와 값의 쌍으로 구성된 모든 Map.Entry 객체를 Set 에 담아서 리턴                            |
+|       | V get(Object key)                   | 주어진 키가 가지고 있는 값을 리턴                                                    |
+|       | boolean isEmpty()                   | 컬렉션이 비어 있는지 여부                                                         |
+|       | Set\<K> keySet()                    | 모든 키를 Set 객체에 담아서 리턴                                                   |
+|       | int size()                          | 저장된 키의 총 수를 리턴                                                         |
+|       | collection\<V> values()              | 저장된 모든 값을 Collection 에 담아서 리턴                                          |
+| 객체 삭제 | void clear()                        | 모든 Map.Entry(키와 값)를 삭제                                                 |
+|       | V remove(Object key)                | 주어진 키와 일치하는 Map.Entry 를 삭제하고 값을 리턴                                     |
+
+* 키를 알면, 키를 통해 값을 찾아서 사용 할 수도 있고, entrySet() 이나 keySet, collection\<V> 등을 이용해서 전체 데이터를 사용할 수 있다.
+
+### HashMap
+
+> Map<K, V> map = new HashMap<K, V>(); <br/>
+> HashMap map = new HashMap<K, V>();
+
+* HashMap 의 키로 사용될 객체는 hashCode() 와 equals() 메소드를 재정의하여 동등 객체가 될 조건을 정해야 한다.
+  * 대부분 Key 로 String 타입을 많이 사용한다.
+
+### HashTable
+
+> Map<K, V> map = new HashTable<K, V>(); <br/>
+> HashTable map = new HashTable<K, V>();
+
+* HashMap 과 동일한 내부 구조를 가지고 있다.
+* Vector 처럼 동기화된 메소드로 구성되어 있어서 멀티 스레드가 동시에 접근하여 실행할 수 없다.
+  * 즉, thread safe 하다.
+
+### Properties
+
+* HashTable 의 하위 클래스이다.
+* HashTable 의 모든 특징을 그대로 가져가지만, Properties 의 키와 값은 String 으로 제한된다.
+* 주로 .properties 파일을 읽을 떄 주로 사용된다.
+  * 프로퍼티 파일은 ISO 8859-1 문자셋으로 **KEY=VALUE** 형태로 저장된 파일이다.
+  * ISO 8859-1 의 경우 한글과 같이 직접 표현될 수 없는 문자셋은 유니코드로 변환되어 저장된다.
