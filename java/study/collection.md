@@ -375,7 +375,7 @@ Properties.load(new FileReader("file 위치"));
 | NavigableSet\<K> | descendingKeySet() | 내림차순으로 정렬된 키의 NavigableSet 을 리턴 |
 | NavigableMap\<K, V> | descendingMap() | 내림차순으로 정렬된 Map.Entry 의 NavigableMap 을 리턴 |
 
-* [위 TreeMap 에 제공되는 정렬 관련 메소드들은 TreeSet 과 똑같다.]()
+* [위 TreeMap 에 제공되는 정렬 관련 메소드들은 TreeSet 과 똑같다.](https://github.com/Sung-jin/study/blob/master/java/study/collection.md#treeset-1)
 * TreeMap 이 가지고 있는 범위 검색과 관련된 메소드
 
 | 리턴 타입 | 메소드 | 설명 |
