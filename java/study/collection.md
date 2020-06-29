@@ -242,7 +242,7 @@ public class Main {
 |       | boolean isEmpty()                   | 컬렉션이 비어 있는지 여부                                                         |
 |       | Set\<K> keySet()                    | 모든 키를 Set 객체에 담아서 리턴                                                   |
 |       | int size()                          | 저장된 키의 총 수를 리턴                                                         |
-|       | collection\<V> values()              | 저장된 모든 값을 Collection 에 담아서 리턴                                          |
+|       | collection\<V> values()             | 저장된 모든 값을 Collection 에 담아서 리턴                                          |
 | 객체 삭제 | void clear()                        | 모든 Map.Entry(키와 값)를 삭제                                                 |
 |       | V remove(Object key)                | 주어진 키와 일치하는 Map.Entry 를 삭제하고 값을 리턴                                     |
 
@@ -272,3 +272,160 @@ public class Main {
 * 주로 .properties 파일을 읽을 떄 주로 사용된다.
   * 프로퍼티 파일은 ISO 8859-1 문자셋으로 **KEY=VALUE** 형태로 저장된 파일이다.
   * ISO 8859-1 의 경우 한글과 같이 직접 표현될 수 없는 문자셋은 유니코드로 변환되어 저장된다.
+* 프로퍼티 파일은 일반적으로 클래스 파일과 함께 저장된다.
+* 프로퍼티 메소드
+  * getResource() : 클래스 파일을 기준으로 상대 경로를 이용하여 프로퍼티 경로를 얻는다.
+  * getProperty() : Properties 객체에서 해당 키의 값을 읽는다.
+    * get() 을 통해 값을 얻을 수 있지만, get() 으로 얻어낸 객체는 Object 이다.
+
+```JAVA
+Properties properties = new Properties();
+Properties.load(new FileReader("file 위치"));
+```
+
+## 검색 특화 컬렉션
+
+* TreeSet, treeMap 이 존재하며 이진 트리를 이용해서 계층적 구조를 가지면서 객체를 저장한다.
+* 트리가 검색에 특화된 이유는 값들이 정렬되어 있으며, 그 값들을 그룹핑 하기도 쉽기 때문이다.
+
+### BinaryTree (이진트리)
+
+* 처음 시작되는 최상단 노드를 Root Node 라고 한다.
+* root node 에서 시작되어 최대 2개의 자식 노드를 가질 수 있는 형태의 트리이다.
+* 알고리즘을 구현하기에 따라서 여러 종류의 트리들이 존재한다.
+  1. 완전 이진 트리
+  2. 포화 이진 트리
+  3. 정 이진 트리
+  4. 편향 이진 트리
+* 저장되는 위치에 따라 다양한 종류가 있다.
+  1. 큰 값을 어디에 저장하는지
+  2. 레벨 또는 깊이를 어떤식으로 할것인지...
+* 자바에서의 트리는 루투를 기준으로 마지막 리프 노드까지 비교하면서 왼쪽에는 작은 값을, 오른쪽에는 큰 값을 저장한다.
+  * 숫자가 아닌 문자의 경우 유니코드 값으로 비교한다.
+  * 왼쪽 -> 부모 -> 오른쪽 노드 순으로 읽으면, 내림차순이 된 값을 얻는다.
+  * 오른쪽 -> 부모 -> 왼쪽 노드 순으로 읽으면, 오름차순이 된 값을 얻는다.
+
+### TreeSet
+
+* 이진트리 기반 Set 컬렉션이다.
+* TreeSet 에는 값을 저장하는 value 와 왼쪽과 오른쪽 노드를 가르키는 Set 데이터들을 트리 형태로 저장한다.
+* TreeSet 에 값을 저장하면, 루트의 value 부터 비교하며 왼쪽 또는 오른쪽에 정렬되어 저장된다.
+
+> TreeSet\<E> treeSet = new TreeSet\<String>();
+
+* Set 인터페이스에 없는 다음과 같은 메소드들을 TreeSet 에서 제공한다.
+
+| 리턴 타입 | 메소드          | 설명                                                |
+| ----- | ------------ | ------------------------------------------------- |
+| E     | first()      | 제일 낮은 객체를 리턴                                      |
+| E     | last()       | 제일 큰 객체를 리턴                                       |
+| E     | lower(E e)   | 주어진 객체보다 바로 아래 객체를 리턴                             |
+| E     | higher(E e)  | 주어진 객체보다 바로 위 객체를 리턴                              |
+| E     | floor(E e)   | 주어진 객체와 동등한 객체가 있으면 리턴, 없다면 주어진 객체의 바로 아래의 객체를 리턴 |
+| E     | ceiling(E e) | 주어진 객체와 동등한 객체가 있으면 리턴, 없다면 주어진 객체의 바로 위 객체를 리턴   |
+| E     | pollFirst()  | 제일 낮은 객체를 꺼내오고 컬렉션에서 제거함                          |
+| E     | pollLast()   | 제일 큰 객체를 꺼내오고 컬렉션에서 제거함                           |
+
+* TreeSet 에 제공되는 정렬과 관련된 메소드
+
+| 리턴 타입            | 메소드                  | 설명                           |
+| ---------------- | -------------------- | ---------------------------- |
+| Iterator\<E>     | descendingIterator() | 내림차순으로 정렬된 Iterator 를 리턴     |
+| NavigableSet\<E> | descendingSet()      | 내림차순으로 정렬된 NavigableSet 을 리턴 |
+
+* NavigableSet 은 TreeSet 과 마찬가지로 first(), last(), lower(), higher(), floor(), ceiling() 및 정렬 순서를 바꾸는 descendingSet() 을 제공한다.
+* TreeSet 을 오름차순으로 얻고 싶다면 다음과 같이 하면 된다.
+
+> NavigableSet\<E> ascendingSet = treeSetObject.descendingSet().descendingSet();
+
+* TreeSet 이 가지고 있는 범위 검색과 관련된 메소드
+
+| 리턴 타입 | 메소드 | 설명 |
+| ---- | ---- | ---- |
+| NavigableSet\<E> | headSet(E toElement, boolean inclusive) | 주어진 객체보다 낮은 객체들을 NavigableSet 으로 리턴 <br/> 주어진 객체 포함 여부는 두 번째 매개값에 따라 달라짐 |
+| NavigableSet\<E> | tailSet(E fromElement, boolean inclusive) | 주어진 객체보다 높은 객체들을 NavigableSet 으로 리턴 <br/> 주어진 객체 포함 여부는 두 번째 매가값에 따라 달라짐 |
+| NavigableSet\<E> | subSet(E fromElement, boolean fromInclusive, E toElement, boolean toInclusive) | 시작과 끝으로 주어진 객체 사이의 객체들을 NavigableSet 으로 리턴 <br/> 시작과 끝 객체의 포함 여부는 두 번째, 네 번째 매개값에 따라 달라짐 |
+
+### TreeMap
+
+* 이진트리 기반 Map 컬렉션이다.
+* 키와 값이 저장된 Map.Entry 를 저장한다.
+* 이때 값을 비교하는게 아닌, key 의 값들을 비교하여 정렬하고 저장한다.
+
+> TreeMap\<K, V> treeMap = new TreeMap\<K, V>();
+
+* Map 인터페이스에 없는 TreeMap 클래스에서 제공되는 메소드
+
+| 리턴 타입 | 메소드 | 설명 |
+| ---- | ---- | ---- |
+| Map.Entry<K, V> | firstEntry() | 제일 낮은 Map.Entry 를 리턴 |
+| Map.Entry<K, V> | lastEntry() | 제일 높은 Map.Entry 를 리턴 |
+| Map.Entry<K, V> | lowerEntry(K key) | 주어진 키보다 바로 아래 Map.Entry 를 리턴 |
+| Map.Entry<K, V> | higherEntry(K key) | 주어진 키보다 바로 위 Map.Entry 를 리턴 |
+| Map.Entry<K, V> | floorrEntry(K key) | 주어진 키와 동등한 키가 있으면 해당 Map.Entry 를 리턴 <br/> 없다면 주어진 키 바로 아래의 Map.Entry 를 리턴 |
+| Map.Entry<K, V> | ceilingEntry(K key) | 주어진 키와 동등한 키가 있으면 해당 Map.Entry 를 리턴 <br/> 없다면 주어진 키 바로 위의 Map.Entry 를 리턴 |
+| Map.Entry<K, V> | pollFirstEntry() | 제일 낮은 Map.Entry 를 꺼내오고 컬렉션에서 제거 |
+| Map.Entry<K, V> | pollLastEntry() | 제일 큰 Map.Entry 를 꺼내오고 컬렉션에서 제거 |
+
+* TreeMap 에 제공되는 정렬과 관련된 메소드
+
+| 리턴 타입 | 메소드 | 설명 |
+| ---- | ---- | ---- |
+| 리턴 타입 | 메소드 | 설명 |
+| NavigableSet\<K> | descendingKeySet() | 내림차순으로 정렬된 키의 NavigableSet 을 리턴 |
+| NavigableMap\<K, V> | descendingMap() | 내림차순으로 정렬된 Map.Entry 의 NavigableMap 을 리턴 |
+
+* [위 TreeMap 에 제공되는 정렬 관련 메소드들은 TreeSet 과 똑같다.]()
+* TreeMap 이 가지고 있는 범위 검색과 관련된 메소드
+
+| 리턴 타입 | 메소드 | 설명 |
+| ---- | ---- | ---- |
+| NavigableMap\<K, V> | headMap(K toKEy, boolean inclusive) | TreeSet 의 NavigableSet 범위 검색 메소드 설명과 같다. |
+| NavigableMap\<K, V> | tailMap(K fromKey, boolean inclusive) | TreeSet 의 NavigableSet 범위 검색 메소드 설명과 같다. |
+| NavigableMap\<K, V> | subMap(K fromKey, boolean fromInclusive, K toKey, boolean toInclusive) | TreeSet 의 NavigableSet 범위 검색 메소드 설명과 같다. |
+
+### Comparable 과 Comparator
+
+* TreeSet, TreeMap 은 저장과 동시에 오름차순으로 저장된다.
+  * number type : 값으로 비교
+  * string type : 유니코드로 비교
+* 자동 정렬은 java.lang.Comparable 을 구현한 객체가 있으면 그 구현부를 바탕으로 저장할 수 있다.
+  * 기본으로 Comparable 이 구현되어 있는 Integer, Double, String 외에 Ciomparable 을 직접 구현하면 트리에 저장할 수 있다.
+* Comparable 의 compareTo() 메소드를 오버라이딩 하면 된다.
+
+| 리턴 타입 | 메소드 | 설명 |
+| ---- | ---- | ---- |
+| int | compareTo(T o) | 주어진 객체와 같으면 0 <br/> 주어진 객체보다 작으면 음수 <br/> 주어진 객체보다 크면 양수 |
+
+```JAVA
+@Construcotr
+public class Person implements Compareable<Person> {
+    public String name;
+    public Integer age;
+
+    @Override
+    public int compareTo(Person o) {
+        return age.compareTo(o.age);
+        /*
+        if (age < o.age) return -1;
+        else if(age == o.age) return 0;
+        else return 1;
+        */
+    }
+    // 내림 차순으로 정렬된 Tree 를 얻고 싶다면, compareTo 를 반대로 해도 되겠.. 지만.. 일반적인 compareTo 가 아니기 때문에 좋은 방법은 아니다.
+}
+
+public static void main(String[] args) {
+    TreeSet<Person> treeSet = new TreeSet<Person>();
+
+    treeSet.add(new Person("Foo", 30));
+    treeSet.add(new Person("Bar", 20));
+    treeSet.add(new Person("FooBar", 45));
+    // Bar -> Foo -> FooBar 순으로 저장됨
+
+    // TreeSet<Foo> invalidTreeSet = new TreeSet<Foo>();
+    // comparable 을 구현하지 않은 클래스를 저장하면 ClassCastException 발생
+    TreeSet<Foo> validTreeSet = new TreeSet<Foo>(new DescendingComparator());
+    // 내림|오름 차순 정렬자로 제공해도 가능하다.
+}
+```
