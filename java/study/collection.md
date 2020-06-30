@@ -429,3 +429,48 @@ public static void main(String[] args) {
     // 내림|오름 차순 정렬자로 제공해도 가능하다.
 }
 ```
+
+## LIFO(Last In First Out) & FIFO(First In First Out)
+
+* LIFO
+  * 후입선출
+  * 나중에 넣은 객체가 먼저 빠져나가는 자료구조
+  * LIFO 의 대표적인 자료구조 - Stack
+* FIFO
+  * 선입선출
+  * 먼저 넣은 객체가 먼저 빠져나가는 자료구조
+  * FIFO 의 대표적인 자료구조 - Queue
+
+### Stack
+
+* 대표적인 예로는 JVM 스택 메모리가 있다.
+* 스택 메모리에 저장된 변수는 나중에 저장된 것부터 제거된다.
+* Stack 의 주요 메소드
+
+| 리턴 타입 | 메소드 | 설명 |
+| ---- | ---- | ---- |
+| E | push(E item) | 주어진 객체를 스택에 넣는다. |
+| E | peek() | 스택의 맨 위 객체를 가져온다. <br/> 객체를 스택에서 제거하지 않는다. |
+| E | pop() | 스택의 맨 위 객체를 가져온다. <br/> 객체를 스택에서 제거한다. |
+
+> Stack\<E> stack = new Stack\<E>()
+
+
+
+### Queue
+
+* 대표적인 예로는 ExecutorService(스레드 풀) 의 작업 큐가 존재한다.
+* 먼저 들어온 작업부터 처리한다.
+  * 위 특성으로 메시지 처리에 많이 사용된다.
+* Queue 의 주요 메소드
+
+| 리턴 타입 | 메소드 | 설명 |
+| ---- | ---- | ---- |
+| boolean | offer(E e) | 주어진 객체를 넣는다. |
+| E | peek() | 객체 하나를 가져온다. <br/> 객체를 큐에서 제거하지 않는다. |
+| E | poll() | 객체 하나를 가져온다. <br/> 객체를 큐에서 제거한다. |
+
+* LinkedList 는 List 구현체이면서 Queue 의 구현체이다
+
+> Queue\<E> queue = new LinkedList\<E>();
+
