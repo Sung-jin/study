@@ -277,18 +277,18 @@ consumer.accept(arg...); // 위에 선언된 방식이면 타입에 따라 arg �
 
 | 인터페이스명          | 추상 메소드                 | 설명            |
 | --------------- | ---------------------- | ------------- |
-| Supplier\<T>    | void get()             | T 객체를 리턴      |
+| Supplier\<T>    | T get()                | T 객체를 리턴      |
 | BooleanSupplier | boolean getAsBoolean() | boolean 값을 리턴 |
 | DoubleSupplier  | double getAsDouble()   | double 값을 리턴  |
 | IntSupplier     | int getAsInt()         | int 값을 리턴     |
-| LoingSupplier   | long getAsLong()       | long 값을 리턴    |
+| LongSupplier    | long getAsLong()       | long 값을 리턴    |
 
 ```JAVA
 Supplier<String> supplier = () -> { ... return "hello"; } // t 타입을 리턴, 여기에서는 t 타입이 string 이다
 BooleanSupplier supplier = () -> { ... return true; } // boolean 타입을 리턴
 DoubleSupplier supplier = () -> { ... return 1.0; } // double 타입을 리턴
 IntSupplier supplier = () -> { ... return 2; } // int 타입을 리턴
-LoingSupplier supplier = () -> { ... return 3L; } // long 타입을 리턴
+LongSupplier supplier = () -> { ... return 3L; } // long 타입을 리턴
 // supplier 를 선언하는 방법
 supplier.getXXX(); // 위에 타입에 따라 get 에 맞는 메소드를 사용하면, 정위된 리턴값이 리턴된다.
 // supplier 를 사용하는 방법
@@ -479,7 +479,7 @@ composeInterface = A.compose(B);
 ...
 
 result2 = composeInterface.method();
-// andThenInterface 메소드 호출 -> B 람다식 결과를 A 의 매개변수로 실행 -> 최종 결과 리턴
+// composeInterface 메소드 호출 -> B 람다식 결과를 A 의 매개변수로 실행 -> 최종 결과 리턴
 
 ///////////////////////////////////////////////////////////////
 // consumer
@@ -632,7 +632,7 @@ public class Member {
 public static void main(String args[]) {
     Calculator calc = new Calculator();
     IntBinaryOperator staticOperator = (x, y) -> Calculator::staticMethod;
-    IntBinaryOperator instanceOperator = (x, y) -> calc::staticMethod;
+    IntBinaryOperator instanceOperator = (x, y) -> calc::instanceMethod;
 
     /////////////////////////////////////////////////
 

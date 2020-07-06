@@ -461,7 +461,7 @@ public static void main(String[] args) {
 
 * 대표적인 예로는 ExecutorService(스레드 풀) 의 작업 큐가 존재한다.
 * 먼저 들어온 작업부터 처리한다.
-  * 위 특성으로 메시지 처리에 많이 사용된다.
+  * 위 특성으로 메시지 처리에 사용된다.
 * Queue 의 주요 메소드
 
 | 리턴 타입 | 메소드 | 설명 |
@@ -474,3 +474,40 @@ public static void main(String[] args) {
 
 > Queue\<E> queue = new LinkedList\<E>();
 
+## 동기화된 컬렉션
+
+* 컬렉션 프레임워크의 대부분은 싱글 스레드 환경에서 사용할 수 있도록 설계되어 있다.
+  * 즉, 멀티 스레드 환경에서 동시에 컬렉션에 접근하면 의도하지 않은 값 변경이 이뤄질 가능성이 크다.
+* 동기화된 컬렉션 클래스
+  1. Vector
+  2. Hashtable
+* 동기화되지 않은 컬렉션 클래스
+  1. ArrayList
+  2. HashSet
+  3. HashMap
+* 위와 같이 동기화되지 않은 컬렉션 클래스를 사용하다가, synchronized 메소드가 필요할 경우 비동기 메소드 -> 동기화 메소드로 래핑하는 Collections 의 synchronizedXXX() 메소드를 제공한다.
+
+| 리턴 타입 | 메소드(매개 변수) | 설명 |
+| ---- | ---- | ---- |
+| List\<T> | synchronizedList(List\<T> list) | List 를 동기화된 List 로 리턴 |
+| Map\<K, V> | synchronizedMap(Map\<K, V> set) | Map 을 동기화된 Map 으로 리턴 |
+| Set\<E> | synchronizedSet(Set\<E> set) | Set 을 동기화된 Set 으로 리턴 |
+
+> List\<T> list = Collections.synchronizedList(new ArrayList\<T>) <br/>
+> Map\<K, V> map = Collections.synchronizedMap(new HashMap\<K, V>) <br/>
+> Set\<T> set = Collections.synchronizedSet(new HashSet\<E>) <br/>
+
+## 병렬 처리를 위한 컬렉션
+
+* synchronized 컬렉션은 멀티 스레드 환경에서 하나의 스레드가 요소를 안전하게 처리하도록 도와주지만, 전체 요소를 빠르게 처리하지 못한다.
+* 하나의 스레드가 요소를 처리할 떄, 객체 전체가 잠금이 발생하여 그 객체에 접근하는 다른 스레드는 대기 상태가 된다.
+* 멀티 스레드가 컬렉션의 요소를 병렬적으로 처리할 수 있도록 특별한 컬렉션을 제공한다.
+  * java.util.concurrent
+    1. ConcurrentHashMap
+    2. ConcurrentLinkedQueue
+       * lock-free 알고르짐을 구현한 컬렉션이다.
+       * 여러 개의 스레드가 동시에 접근할 경우, 잠금을 사용하지 않고 최소한 하나의 스레드가 안전하게 요소를 저장하거나 얻도록 해준다.
+* 병렬적으로 멀티 스레드에서 동작할 수 있는 이유는, 전체 객체가 아닌 현재 접근하고 있는 그 요소 한개만 lock 을 걸고 그 외의 다른 요소들은 사용할 수 있기 때문이다.
+
+> Map\<K, V> map = new ConcurrentHashMap\<K, V>(); <br/>
+> Queue\<E> queue = new ConcurrentLinkedQueue\<E>();
