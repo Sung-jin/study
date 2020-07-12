@@ -120,3 +120,184 @@ Path path = Paths.get("some/direcory/path");
 Stream<Path> stream = Files.list(path);
 // 디렉토리 스트림 얻기
 ```
+
+## Stream Pipeline
+
+* 대량의 데이터를 가공하여 축소하는 것을 일반적으로 리덕션이라 한다.
+* 컬렉션의 요소를 리덕션의 결과물로 바로 잡계할 수 없을 경우에 집계하기 좋도록 필터링, 매핑, 정렬, 그룹핑 등의 중간 처리가 필요하다.
+
+### 중간 처리와 최종 처리
+
+* 데이터의 필터링, 매핑, 정렬, 그룹핑 등의 중간 처리와 합계, 평균, 카운팅, 최대값, 최소값 등의 최종 처리를 파이프라인으로 해결한다.
+  * 파이프라인은 여러개의 스트림이 연결되어 있는 구조를 말한다.
+  * 최정 처리를 제외하고 모든 스트림은 중간 처리 스트림이다.
+* 중간 스트림이 생성될 떄 요소들이 바로 중간 처리되는 것이 아니라 최종 처리가 시작되기 전까지 중간 처리는 지연된다.
+* 최종 처리가 시작되면 컬렉션의 요소가 하나씩 중간 스트림에서 처리되고 최종 처리까지 오게 된다.
+* 파이프라인 스트림 처리 방식
+  1. 스트림 인터페이스에는 많은 중간처리 메소드가 있는데, 이 메소드들은 중간 처리된 스트림을 리턴한다.
+  2. 이 스트림에서 다시 중간 처리 메소드를 호출해서 파이프라인을 형성한다.
+  3. 최종 스트림까지 1,2 를 반복하고 최종 스트림에 의해 처리된 값을 리턴한다.
+
+```JAVA
+double ageAve = list1.stream()
+                    .filter(m -> m.getSex() == Member.MALE)
+                    .mapToInt(Member::getAge)
+                    .average()
+                    .getAsDouble();
+
+// average() 메소드는 스트림의 평균을 OptionalDouble 에 저장한다.
+// OptionalDouble 에서 값을 읽으려면 getAsDouble() 메소드를 호출해야 한다.
+```
+
+### 중간 처리 메소드와 최종 처리 메소드
+
+| 종류 | | 리턴 타입 | 메소드(매개 변수) | 소속된 인터페이스 |
+| ---- | ---- | ---- | ---- | ---- |
+| 중간 처리 | 필터링 | Stream | distinct() | 공통 |
+|  |  | IntStream | filter(...) | 공통 |
+|  | 매핑 | LongStream | flatMap(...) | 공통 |
+|  |  | DoubleStream | flatMapToDouble(...) | Stream |
+|  |  |  | flatMapToInt(...) | Stream |
+|  |  |  | flatMapToLong(...) | Stream |
+|  |  |  | map(...) | 공통 |
+|  |  |  | mapToDouble(...) | Stream, IntStream, LongStream |
+|  |  |  | mapToInt(...) | Stream, LongStream, DoubleStream |
+|  |  |  | mapToLong(...) | Stream, IntStream, DoubleStream |
+|  |  |  | mapToObj(...) | IntStream, LongStream, DoubleStream |
+|  |  |  | asDoubleStream() | IntStream, LongStream |
+|  |  |  | asLongStream() | IntStream |
+|  | 정렬 |  | sorted(...) | 공통 |
+|  | 루핑 |  | peek(...) | 공통 |
+| 최종 처리 | 매칭 | boolean | allMatch(...) | 공통 |
+|  |  | boolean | anyMatch(...) | 공통 |
+|  |  | boolean | noneMatch(...) | 공통 |
+|  | 집계 | long | count() | 공통 |
+|  |  | long | count() | 공통 |
+|  |  | OptionalXXX | findFirst() | 공통 |
+|  |  | OptionalXXX | mat() | 공통 |
+|  |  | OptionalXXX | min() | 공통 |
+|  |  | OptionalDouble | average() | IntStream, LongStream, DoubleStream |
+|  |  | OptionalXXX | reduce() | 공통 |
+|  |  | int, long, double | sum() | IntStream, LongStream, DoubleStream |
+|  | 루핑 | void | forEach(...) | 공통 |
+|  | 수집 | R | collect(...) | 공통 |
+
+### 필터링 (distinct(), filter())
+
+* 모든 스트림이 가지고 있는 공통 메소드이다.
+* distinct() 메소드는 Object.equal(object) 가 true 이면 동일한 객체로 판단하여 제거한다.
+* filter() 는 메소드의 매개값으로 주어진 Predicate 가 true 를 리턴하는 요소만 필터링한다.
+
+| 리턴 타입 | 메소드(매개 변수) | 설명 |
+| ---- | ---- | ---- |
+| Stream | distinct() | 중복 제거 |
+| IntStream | filter(Predicate) | 조건 필터링 |
+| LongStream | filter(IntPredicate) |  |
+| DoubleStream | filter(LongPredicate) |  |
+|  | filter(DoublePredicate) |  |
+
+```JAVA
+List<String> list = Arrays.asList("Foo", "Bar", "Foo", "FooBar");
+list.stream()
+    .distinct()
+    .filter(s -> s.startWith("F"))
+    .forEach(s -> print(s));
+// Foo Bar FooBar
+```
+
+### 매핑 (flatMapXXX(), mapXXX(), asXXXStream(), boxed())
+
+* 중간 처리 기능으로 스트림의 요소를 다른 요소로 대체하는 작업을 말한다.
+
+#### flatMapXXX()
+
+* 요소를 대체하는 복수 개의 요소들로 구성된 새로운 스트림을 리턴한다.
+
+| 리턴 타입 | 메소드(매개 변수) | 요소 -> 대체 요소 |
+| ---- | ---- | ---- |
+| Stream\<R> | flatMap(Function<T, Stream\<R>>) | T -> Stream\<R> |
+| DoubleStream | flatMap(DoubleFunction\<DoubleStream>) | double -> DoubleStream |
+| IntStream | flatMap(IntFunction\<IntStream>) | int -> IntStream |
+| LongStream | flatMap(LongFunction\<LongStream>) | long -> LongStream |
+| DoubleStream | flatMapToDouble(Function<T, DoubleStream>) | T -> DoubleStream |
+| IntStream | flatMapToInt(Function<T, IntStream>) | T -> IntStream |
+| LongStream | flatMapToLong(Function<T, LongStream>) | T -> LongStream |
+
+```JAVA
+List<String> list = Arrays.asList("ABC DEF", "GHI JKL");
+list.stream()
+    .flatMap(data -> Arrays.stream(data.splt(" ")))
+    .forEach(data -> print(data));
+// ABC DEF GHI JKL
+```
+
+#### mapXXX()
+
+* 요소를 대체하는 요소로 구성된 새로운 스트림을 리턴한다.
+
+| 리턴 타입 | 메소드(매배 변수) | 요소 -> 대체 요소 |
+| ---- | ---- | ---- |
+| Stream\<R> | map(FUnction<T, R>) | T -> R |
+| DoubleStream | mapToDouble(ToDoubleFunction\<T>) | T -> double |
+| IntStream | mapToInt(ToIntFunction\<T>) | T -> int |
+| LongStream | mapToLong(ToLongFunction\<T>) | T -> long |
+| DoubleStream | map(DoubleUnaryOperator) | double -> double |
+| IntStream | mapToInt(DoubleToIntFunction) | double -> int |
+| LongStream | mapToLong(DoubleToLongFunction) | double -> long |
+| Stream\<U> | mapToObj(DOubleFunction\<U>) | double -> U |
+| IntStream | map(IntUnaryOperator) | int -> int |
+| DoubleStream | mapToDouble(IntToDoubleFunction) | int -> double |
+| LongStream | mapToLong(IntToLongFunction) | int -> long |
+| Stream\<U> | mapToObj(IntFunction\<U>) | int -> U |
+| LongStream | map(LongUnaryOperator) | long -> long |
+| IntStream | mapToInt(LongToIntFunction) | long -> int |
+| DoubleStream | mapToDouble(LongToLongFunction) | long -> double |
+| Stream\<U> | mapToObj(LongFunction\<U>) | long -> U |
+
+```JAVA
+List<String> list = Arrays.asList("1", "2", "3", "4");
+int result = list.stream()
+    .map(data -> Integer.parseInt(data)))
+    .sum();
+print(result); // 10
+```
+
+#### asDoubleStream(), asLongStream(), boxed()
+
+* 각 메소드에 적혀있는 숫자타입 외의 스트림을 메소드에 적혀있는 숫자 타입 스트림으로 타입 변환을 한다.
+* boxed() 메소드는 int, long, double -> Integer, Long, Double 요소로 박싱하여 stream 을 생성한다.
+
+| 리턴 타입 | 메소드(매개 변수) | 설명 |
+| --- | ---- | ---- |
+| DoubleStream | asDoubleStream | int -> double <br/> long -> double |
+| LongStream | asLongStream() | int -> long |
+| Stream\<Integer> <br/> Stream\<Long> <br/> Stream\<Double> | boxed() | int -> Integer <br/> long -> Long <br/> double -> Double |
+
+```JAVA
+int[] intArray = {1, 2, 3, ,4, 5};
+IntStream intStream = Arrays.stream(intArray);
+
+intStream.asDoubleStream().forEach(d -> print(d));
+// 1.0 2.0 3.0 4.0 5.0
+```
+
+#### 정렬 (sorted())
+
+* 중간 단계에서 요소를 정렬하여 요소들의 위치를 변경할 수 있다.
+* 객체 요소를 정렬할 때는 Comparable 을 구현하지 않으면 ClassCastException 예외가 발생한다.
+* 기본 정렬은 오름차순 이므로, 내림차순을 위한 Comparator 가 존재한다.
+
+| 리턴 타입 | 메소드(매개 변수) | 설명 |
+| ---- | ---- | ---- |
+| Stream\<T> | sorted() | 객체를 Comparable 구현 방법에 따라 정렬 |
+| Stream\<T> | sorted(Comparator\<T>) | 객체를 주어진 Comparator 에 따라 정렬 |
+| DoubleStream | sorted() | double 요소를 오름차순으로 정렬 |
+| IntStream | sorted() | int 요소를 오름차순으로 정렬 |
+| LongStream | sorted() | long 요소를 오름차순으로 정렬 |
+
+> sorted(); <br/>
+> sorted( (a,b) -> a.compareTo(b) ); <br/>
+> sorted( Comparator.naturalOrder() ); <br/>
+> sorted( (a,b) -> b.compareTo(a) ); <br/>
+> sorted( Comparator.reverseOrder() ); <br/>
+> sorted( (a,b) -> { ... } ); <br/>
