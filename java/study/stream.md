@@ -151,36 +151,36 @@ double ageAve = list1.stream()
 
 ### 중간 처리 메소드와 최종 처리 메소드
 
-| 종류 | | 리턴 타입 | 메소드(매개 변수) | 소속된 인터페이스 |
-| ---- | ---- | ---- | ---- | ---- |
-| 중간 처리 | 필터링 | Stream | distinct() | 공통 |
-|  |  | IntStream | filter(...) | 공통 |
-|  | 매핑 | LongStream | flatMap(...) | 공통 |
-|  |  | DoubleStream | flatMapToDouble(...) | Stream |
-|  |  |  | flatMapToInt(...) | Stream |
-|  |  |  | flatMapToLong(...) | Stream |
-|  |  |  | map(...) | 공통 |
-|  |  |  | mapToDouble(...) | Stream, IntStream, LongStream |
-|  |  |  | mapToInt(...) | Stream, LongStream, DoubleStream |
-|  |  |  | mapToLong(...) | Stream, IntStream, DoubleStream |
-|  |  |  | mapToObj(...) | IntStream, LongStream, DoubleStream |
-|  |  |  | asDoubleStream() | IntStream, LongStream |
-|  |  |  | asLongStream() | IntStream |
-|  | 정렬 |  | sorted(...) | 공통 |
-|  | 루핑 |  | peek(...) | 공통 |
-| 최종 처리 | 매칭 | boolean | allMatch(...) | 공통 |
-|  |  | boolean | anyMatch(...) | 공통 |
-|  |  | boolean | noneMatch(...) | 공통 |
-|  | 집계 | long | count() | 공통 |
-|  |  | long | count() | 공통 |
-|  |  | OptionalXXX | findFirst() | 공통 |
-|  |  | OptionalXXX | mat() | 공통 |
-|  |  | OptionalXXX | min() | 공통 |
-|  |  | OptionalDouble | average() | IntStream, LongStream, DoubleStream |
-|  |  | OptionalXXX | reduce() | 공통 |
-|  |  | int, long, double | sum() | IntStream, LongStream, DoubleStream |
-|  | 루핑 | void | forEach(...) | 공통 |
-|  | 수집 | R | collect(...) | 공통 |
+| 종류    |     | 리턴 타입             | 메소드(매개 변수)           | 소속된 인터페이스                           |
+| ----- | --- | ----------------- | -------------------- | ----------------------------------- |
+| 중간 처리 | 필터링 | Stream            | distinct()           | 공통                                  |
+|       |     | IntStream         | filter(...)          | 공통                                  |
+|       | 매핑  | LongStream        | flatMap(...)         | 공통                                  |
+|       |     | DoubleStream      | flatMapToDouble(...) | Stream                              |
+|       |     |                   | flatMapToInt(...)    | Stream                              |
+|       |     |                   | flatMapToLong(...)   | Stream                              |
+|       |     |                   | map(...)             | 공통                                  |
+|       |     |                   | mapToDouble(...)     | Stream, IntStream, LongStream       |
+|       |     |                   | mapToInt(...)        | Stream, LongStream, DoubleStream    |
+|       |     |                   | mapToLong(...)       | Stream, IntStream, DoubleStream     |
+|       |     |                   | mapToObj(...)        | IntStream, LongStream, DoubleStream |
+|       |     |                   | asDoubleStream()     | IntStream, LongStream               |
+|       |     |                   | asLongStream()       | IntStream                           |
+|       | 정렬  |                   | sorted(...)          | 공통                                  |
+|       | 루핑  |                   | peek(...)            | 공통                                  |
+| 최종 처리 | 매칭  | boolean           | allMatch(...)        | 공통                                  |
+|       |     | boolean           | anyMatch(...)        | 공통                                  |
+|       |     | boolean           | noneMatch(...)       | 공통                                  |
+|       | 집계  | long              | count()              | 공통                                  |
+|       |     | long              | count()              | 공통                                  |
+|       |     | OptionalXXX       | findFirst()          | 공통                                  |
+|       |     | OptionalXXX       | mat()                | 공통                                  |
+|       |     | OptionalXXX       | min()                | 공통                                  |
+|       |     | OptionalDouble    | average()            | IntStream, LongStream, DoubleStream |
+|       |     | OptionalXXX       | reduce()             | 공통                                  |
+|       |     | int, long, double | sum()                | IntStream, LongStream, DoubleStream |
+|       | 루핑  | void              | forEach(...)         | 공통                                  |
+|       | 수집  | R                 | collect(...)         | 공통                                  |
 
 ### 필터링 (distinct(), filter())
 
@@ -188,13 +188,13 @@ double ageAve = list1.stream()
 * distinct() 메소드는 Object.equal(object) 가 true 이면 동일한 객체로 판단하여 제거한다.
 * filter() 는 메소드의 매개값으로 주어진 Predicate 가 true 를 리턴하는 요소만 필터링한다.
 
-| 리턴 타입 | 메소드(매개 변수) | 설명 |
-| ---- | ---- | ---- |
-| Stream | distinct() | 중복 제거 |
-| IntStream | filter(Predicate) | 조건 필터링 |
-| LongStream | filter(IntPredicate) |  |
-| DoubleStream | filter(LongPredicate) |  |
-|  | filter(DoublePredicate) |  |
+| 리턴 타입        | 메소드(매개 변수)              | 설명     |
+| ------------ | ----------------------- | ------ |
+| Stream       | distinct()              | 중복 제거  |
+| IntStream    | filter(Predicate)       | 조건 필터링 |
+| LongStream   | filter(IntPredicate)    |        |
+| DoubleStream | filter(LongPredicate)   |        |
+|              | filter(DoublePredicate) |        |
 
 ```JAVA
 List<String> list = Arrays.asList("Foo", "Bar", "Foo", "FooBar");
@@ -213,15 +213,15 @@ list.stream()
 
 * 요소를 대체하는 복수 개의 요소들로 구성된 새로운 스트림을 리턴한다.
 
-| 리턴 타입 | 메소드(매개 변수) | 요소 -> 대체 요소 |
-| ---- | ---- | ---- |
-| Stream\<R> | flatMap(Function<T, Stream\<R>>) | T -> Stream\<R> |
-| DoubleStream | flatMap(DoubleFunction\<DoubleStream>) | double -> DoubleStream |
-| IntStream | flatMap(IntFunction\<IntStream>) | int -> IntStream |
-| LongStream | flatMap(LongFunction\<LongStream>) | long -> LongStream |
-| DoubleStream | flatMapToDouble(Function<T, DoubleStream>) | T -> DoubleStream |
-| IntStream | flatMapToInt(Function<T, IntStream>) | T -> IntStream |
-| LongStream | flatMapToLong(Function<T, LongStream>) | T -> LongStream |
+| 리턴 타입        | 메소드(매개 변수)                                 | 요소 -> 대체 요소            |
+| ------------ | ------------------------------------------ | ---------------------- |
+| Stream\<R>   | flatMap(Function<T, Stream\<R>>)           | T -> Stream\<R>        |
+| DoubleStream | flatMap(DoubleFunction\<DoubleStream>)     | double -> DoubleStream |
+| IntStream    | flatMap(IntFunction\<IntStream>)           | int -> IntStream       |
+| LongStream   | flatMap(LongFunction\<LongStream>)         | long -> LongStream     |
+| DoubleStream | flatMapToDouble(Function<T, DoubleStream>) | T -> DoubleStream      |
+| IntStream    | flatMapToInt(Function<T, IntStream>)       | T -> IntStream         |
+| LongStream   | flatMapToLong(Function<T, LongStream>)     | T -> LongStream        |
 
 ```JAVA
 List<String> list = Arrays.asList("ABC DEF", "GHI JKL");
@@ -235,24 +235,24 @@ list.stream()
 
 * 요소를 대체하는 요소로 구성된 새로운 스트림을 리턴한다.
 
-| 리턴 타입 | 메소드(매배 변수) | 요소 -> 대체 요소 |
-| ---- | ---- | ---- |
-| Stream\<R> | map(FUnction<T, R>) | T -> R |
-| DoubleStream | mapToDouble(ToDoubleFunction\<T>) | T -> double |
-| IntStream | mapToInt(ToIntFunction\<T>) | T -> int |
-| LongStream | mapToLong(ToLongFunction\<T>) | T -> long |
-| DoubleStream | map(DoubleUnaryOperator) | double -> double |
-| IntStream | mapToInt(DoubleToIntFunction) | double -> int |
-| LongStream | mapToLong(DoubleToLongFunction) | double -> long |
-| Stream\<U> | mapToObj(DOubleFunction\<U>) | double -> U |
-| IntStream | map(IntUnaryOperator) | int -> int |
-| DoubleStream | mapToDouble(IntToDoubleFunction) | int -> double |
-| LongStream | mapToLong(IntToLongFunction) | int -> long |
-| Stream\<U> | mapToObj(IntFunction\<U>) | int -> U |
-| LongStream | map(LongUnaryOperator) | long -> long |
-| IntStream | mapToInt(LongToIntFunction) | long -> int |
-| DoubleStream | mapToDouble(LongToLongFunction) | long -> double |
-| Stream\<U> | mapToObj(LongFunction\<U>) | long -> U |
+| 리턴 타입        | 메소드(매배 변수)                        | 요소 -> 대체 요소      |
+| ------------ | --------------------------------- | ---------------- |
+| Stream\<R>   | map(FUnction<T, R>)               | T -> R           |
+| DoubleStream | mapToDouble(ToDoubleFunction\<T>) | T -> double      |
+| IntStream    | mapToInt(ToIntFunction\<T>)       | T -> int         |
+| LongStream   | mapToLong(ToLongFunction\<T>)     | T -> long        |
+| DoubleStream | map(DoubleUnaryOperator)          | double -> double |
+| IntStream    | mapToInt(DoubleToIntFunction)     | double -> int    |
+| LongStream   | mapToLong(DoubleToLongFunction)   | double -> long   |
+| Stream\<U>   | mapToObj(DOubleFunction\<U>)      | double -> U      |
+| IntStream    | map(IntUnaryOperator)             | int -> int       |
+| DoubleStream | mapToDouble(IntToDoubleFunction)  | int -> double    |
+| LongStream   | mapToLong(IntToLongFunction)      | int -> long      |
+| Stream\<U>   | mapToObj(IntFunction\<U>)         | int -> U         |
+| LongStream   | map(LongUnaryOperator)            | long -> long     |
+| IntStream    | mapToInt(LongToIntFunction)       | long -> int      |
+| DoubleStream | mapToDouble(LongToLongFunction)   | long -> double   |
+| Stream\<U>   | mapToObj(LongFunction\<U>)        | long -> U        |
 
 ```JAVA
 List<String> list = Arrays.asList("1", "2", "3", "4");
@@ -267,11 +267,11 @@ print(result); // 10
 * 각 메소드에 적혀있는 숫자타입 외의 스트림을 메소드에 적혀있는 숫자 타입 스트림으로 타입 변환을 한다.
 * boxed() 메소드는 int, long, double -> Integer, Long, Double 요소로 박싱하여 stream 을 생성한다.
 
-| 리턴 타입 | 메소드(매개 변수) | 설명 |
-| --- | ---- | ---- |
-| DoubleStream | asDoubleStream | int -> double <br/> long -> double |
-| LongStream | asLongStream() | int -> long |
-| Stream\<Integer> <br/> Stream\<Long> <br/> Stream\<Double> | boxed() | int -> Integer <br/> long -> Long <br/> double -> Double |
+| 리턴 타입                                                      | 메소드(매개 변수)     | 설명                                                       |
+| ---------------------------------------------------------- | -------------- | -------------------------------------------------------- |
+| DoubleStream                                               | asDoubleStream | int -> double <br/> long -> double                       |
+| LongStream                                                 | asLongStream() | int -> long                                              |
+| Stream\<Integer> <br/> Stream\<Long> <br/> Stream\<Double> | boxed()        | int -> Integer <br/> long -> Long <br/> double -> Double |
 
 ```JAVA
 int[] intArray = {1, 2, 3, ,4, 5};
@@ -287,13 +287,13 @@ intStream.asDoubleStream().forEach(d -> print(d));
 * 객체 요소를 정렬할 때는 Comparable 을 구현하지 않으면 ClassCastException 예외가 발생한다.
 * 기본 정렬은 오름차순 이므로, 내림차순을 위한 Comparator 가 존재한다.
 
-| 리턴 타입 | 메소드(매개 변수) | 설명 |
-| ---- | ---- | ---- |
-| Stream\<T> | sorted() | 객체를 Comparable 구현 방법에 따라 정렬 |
-| Stream\<T> | sorted(Comparator\<T>) | 객체를 주어진 Comparator 에 따라 정렬 |
-| DoubleStream | sorted() | double 요소를 오름차순으로 정렬 |
-| IntStream | sorted() | int 요소를 오름차순으로 정렬 |
-| LongStream | sorted() | long 요소를 오름차순으로 정렬 |
+| 리턴 타입        | 메소드(매개 변수)             | 설명                          |
+| ------------ | ---------------------- | --------------------------- |
+| Stream\<T>   | sorted()               | 객체를 Comparable 구현 방법에 따라 정렬 |
+| Stream\<T>   | sorted(Comparator\<T>) | 객체를 주어진 Comparator 에 따라 정렬  |
+| DoubleStream | sorted()               | double 요소를 오름차순으로 정렬        |
+| IntStream    | sorted()               | int 요소를 오름차순으로 정렬           |
+| LongStream   | sorted()               | long 요소를 오름차순으로 정렬          |
 
 > sorted(); <br/>
 > sorted( (a,b) -> a.compareTo(b) ); <br/>
