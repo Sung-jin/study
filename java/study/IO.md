@@ -123,3 +123,65 @@ int readCharNo = reader.read(cbuf, 100, 100);
 reader.close();
 // Reader 의 자원을 종료
 ```
+
+## Writer
+
+* 문자 기반 출력 스트림의 최상위 추상 클래스
+* Writer -> FileWriter / BufferedWriter / PrintWriter / OutputStreamWriter
+* Writer 클래스에 기본적으로 가지고 있는 메소드
+
+| 리턴 타입 | 메소드 | 설명 |
+| ---- | ---- | ---- |
+| void | write(int c) | 출력 스트림으로 주어진 한 문자를 보낸다. |
+| void | write(char[] cbuf) | 출력 스트림으로 주어진 문자 배열 cbuf 의 모든 문자를 보낸다. |
+| void | write(char[] cbuf, int off, int len) | 출력 스트림으로 주어진 문자 배열 cbuf[off] 부터 len 개 까지의 문자를 보낸다. |
+| void | wirte(String str, int off, int len) | 출력 스트림으로 주어진 문자열 off 순서부터 len 개까지의 문자를 보낸다. |
+| void | flush() | 버퍼에 잔류하는 모든 문자열을 출력한다. |
+| void close() | 사용한 시스템 자원을 반납하고 출력 스트림을 닫는다. |
+
+```JAVA
+Writer writer = new FileWriter("path/to/dist/test.txt");
+
+char[] data = "FOO".toCharArray();
+String str = "FooBar";
+
+for(s in data) writer.write(s);
+// 한개씩 출력
+
+wirter.write(data);
+// char[] 출력
+
+writer.write(data, 1, 2);
+// O O 출력
+
+writer.write(str, 2, 3);
+// o B 출력
+
+write.flush();
+// 버퍼에 잔류하는 모든 데이터를 출력
+wirte.close();
+// write 의 자원 해제
+```
+
+## 콘솔 입출력
+
+* 시스템을 사용하기 위해 키보드로 입력을 받고 화면으로 출력하는 소프트웨어를 말한다.
+* 자바에서 콘솔사용
+  1. 입력을 받을때는 System.in
+  2. 출력을 할 때 System.out
+  3. 에러를 출력할 때는 System.err
+* 콘솔에 입출력하고 싶으면 System.in / System.out 을 이용하면 된다.
+* Java 6 부터 콘솔에서 입력한 것을 쉽게 읽을 수 있도록 System.io.Console 클래스를 제공한다.
+  * Console 은 문자열은 읽을 수 있으나, 정수/실수 등의 기본 타입 값을 바로 읽을 수 없다.
+  * java.util 패키지의 Scanner 클래스를 이용하면 기본 값을 바로 읽을 수 있다.
+
+```JAVA
+InputStream is = System.in;
+int asciiCode = is.read();
+////////////////////////
+OutputStream os = System.out;
+byte b = 97;
+os.write(b); // 'a' 출력
+////////////////////////
+Console console = System.console();
+```
