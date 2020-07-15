@@ -178,10 +178,78 @@ wirte.close();
 ```JAVA
 InputStream is = System.in;
 int asciiCode = is.read();
+
 ////////////////////////
 OutputStream os = System.out;
 byte b = 97;
 os.write(b); // 'a' 출력
+
 ////////////////////////
 Console console = System.console();
+
+////////////////////////
+Scanner scanner = new Scanner(System.in);
 ```
+
+* 이후 내용들은 input/output stream, writer, reader 를 상속한 클래스들의 사용들이 나온다. 한번 읽어보는거로 해도 될듯.
+
+### 객체 입출력 보조 스트림
+
+* 자바는 메모리에 생성된 객체를 파일 또는 네트워크로 출력할 수 있다.
+* 객체는 문자가 아니기 때문에 바이트 기반 스트림으로 출력해야 한다.
+* 객체를 출력하기 위해서는 객체의 데이터를 일렬로 늘어선 연속적인 바이트로 변경해야 한다.
+  * 연속적인 바이트로 변경하는 것을 serialization 이라 한다.
+* 입력 스트림으로부터 읽어들인 연속적인 바이트를 객체로 복원하는 것을 deserialization 이라 한다.
+* 객체를 입출력할 수 있는 두 개의 보조 스트림인 ObjectInputStream 과 ObjectOuputStream 을 제공한다.
+  * ObjectOutputStream 은 바이트 출력 스트림과 연결되어 객체를 직렬화 하는 역할을 한다.
+  * ObjectInputStream 은 바이트 입력 스트림과 연결되어 객체로 역직렬화하는 역할을 한다.
+
+> 바이트 -> InputStream -> ObjectInputStream -> OBJECT -> ObjectOutputStream -> OutputStream -> 바이트
+
+```JAVA
+ObjectInputStream ois = new ObjectInputStream(바이트입력스트림);
+ObjectOutputStream oos = new ObjectOutputStream(바이트입력스트림);
+
+oos.writeObject(객체);
+value = (객체타입) ois.readObject();
+```
+
+### Serializable (직렬화가 가능한 클래스)
+
+* 자바는 Serializable 인터페이스를 구현한 클래스만 직렬화할 수 있도록 제한한다.
+* Serializable 인터페이스는 객체를 직렬화할 때 private 필드를 포함한 모든 필드를 바이트로 변환해도 좋다는 표시 역할을 한다.
+* 객체를 직렬화하면 바이트로 변환되는 것은 필드들이고, 생성자 및 메소드는 직렬화에 포함되지 않는다.
+  * 역직렬화할 때에는 필드의 값만 복원된다.
+  * 하지만, 필드 선언에 static 또는 transient 가 붙어있을 경우 직렬화가 되지 않는다.
+
+```JAVA
+public class Foo implements Serializable {
+    public int field1;
+    protected int field2;
+    int field3;
+    private int field4;
+    public static int field5;
+    transient int field6;
+}
+
+// filed1 | field2 | field3 | field4 형태로 일렬로 바이트 데이터로 직렬화된다.
+```
+
+### serialVersionUID 필드
+
+* 직렬화된 객체를 역직렬화활 때는 직렬화했을 때와 같은 클래스를 사용해야 한다.
+* 클래스의 이름이 같더라도 클래스의 내용이 변경되면 역직렬화는 실패한다.
+  * serialVersionUID 가 다르다는 에러가 발생한다.
+* serialVersionUID 는 같은 클래스임을 알려주는 식별자 역할을 하며, serializable 인터페이스를 구현한 클래스면 컴파일시 자동으로 serialVersionUID 정적 필드가 추가된다.
+  * 클래스를 재컴파일하면 serialVersionUID 의 값이 달라진다.
+  * 네트워크를 통해 객체를 직렬화하여 전송하고, 수신쪽에서 재컴파일된 객체를 이용한다면 serialVersionUID 가 달라져서 역직렬화에 실패하게 된다.
+
+### writeObject() / readObject() 메소드
+
+* 두 클래스가 상속 관계에 있을경우, 부모 클래스가 Serializable 인터페이스를 구현하고 잇으면 자식 클래스는 Serializable 인터페이스를 구현하지 않아도 자식 객체를 직렬화하면 부모 필드 및 자식 필드가 모두 직렬화 된다.
+* 자식 클래스만 Serializable 인터페이스를 구현하고 부모가 구현하지 않았다면, 부모의 필드는 직렬화에서 제외된다.
+  * 부모 클래스가 Serializable 인터페이스를 구현하도록 한다.
+  * 자식 클래스에서 writeObject() 와 readObject() 메소드를 선언하여 부모 객체의 필드를 직접 출력시킨다.
+* 부모 클래스 변경이 불가능할 때 등의 이유가 있을 때 writeObject()/readObejct() 메소드를 사용한다.
+  * 이 메소드들은 직렬화 될 때 - wrtieObject(), 역직렬화 될 때 - readObject() 가 자동으로 호출된다.
+* writeObject() 와 readObjecT() 는 접근 제한자가 private 이어야 한다.
