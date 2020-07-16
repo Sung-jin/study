@@ -130,14 +130,14 @@ reader.close();
 * Writer -> FileWriter / BufferedWriter / PrintWriter / OutputStreamWriter
 * Writer 클래스에 기본적으로 가지고 있는 메소드
 
-| 리턴 타입 | 메소드 | 설명 |
-| ---- | ---- | ---- |
-| void | write(int c) | 출력 스트림으로 주어진 한 문자를 보낸다. |
-| void | write(char[] cbuf) | 출력 스트림으로 주어진 문자 배열 cbuf 의 모든 문자를 보낸다. |
-| void | write(char[] cbuf, int off, int len) | 출력 스트림으로 주어진 문자 배열 cbuf[off] 부터 len 개 까지의 문자를 보낸다. |
-| void | wirte(String str, int off, int len) | 출력 스트림으로 주어진 문자열 off 순서부터 len 개까지의 문자를 보낸다. |
-| void | flush() | 버퍼에 잔류하는 모든 문자열을 출력한다. |
-| void close() | 사용한 시스템 자원을 반납하고 출력 스트림을 닫는다. |
+| 리턴 타입        | 메소드                                  | 설명                                                 |
+| ------------ | ------------------------------------ | -------------------------------------------------- |
+| void         | write(int c)                         | 출력 스트림으로 주어진 한 문자를 보낸다.                            |
+| void         | write(char[] cbuf)                   | 출력 스트림으로 주어진 문자 배열 cbuf 의 모든 문자를 보낸다.              |
+| void         | write(char[] cbuf, int off, int len) | 출력 스트림으로 주어진 문자 배열 cbuf[off] 부터 len 개 까지의 문자를 보낸다. |
+| void         | wirte(String str, int off, int len)  | 출력 스트림으로 주어진 문자열 off 순서부터 len 개까지의 문자를 보낸다.        |
+| void         | flush()                              | 버퍼에 잔류하는 모든 문자열을 출력한다.                             |
+| void close() | 사용한 시스템 자원을 반납하고 출력 스트림을 닫는다.        |
 
 ```JAVA
 Writer writer = new FileWriter("path/to/dist/test.txt");
@@ -253,3 +253,37 @@ public class Foo implements Serializable {
 * 부모 클래스 변경이 불가능할 때 등의 이유가 있을 때 writeObject()/readObejct() 메소드를 사용한다.
   * 이 메소드들은 직렬화 될 때 - wrtieObject(), 역직렬화 될 때 - readObject() 가 자동으로 호출된다.
 * writeObject() 와 readObjecT() 는 접근 제한자가 private 이어야 한다.
+
+## 네트워크
+
+> 클라이언트 -(요청)-> 서버 <br/>
+> 클라이언트 <-(응답)- 서버
+
+1. 클라이언트에서 연결 요청
+2. 서버에서 연결 수락
+3. 클라이언트에서 처리 요청
+4. 서버에서 처리
+5. 서버에서 처리 결과 응답
+
+### IP 주소와 포트
+
+* Internet Protocol - 컴퓨터에 고유한 주소
+* IP 를 통해 서로 다른 네트워크상의 다른 컴퓨터와 통신할 수 있다.
+  * DNS 를 통해 연결할 컴퓨터의 IP 를 찾는다.
+* IP 는 컴퓨터의 네트워크 어댑터까지만 갈 수 있고, 서버마다 고유한 정보인 포트가 있으며 이 포트를 통해 그 IP 의 특정 프로그램을 찾을 수 있다.
+* 포트의 범위는 0~65535 이며, 아래와 같이 정해져 있다.
+
+| 구분명                             | 범위            | 설명                                          |
+| ------------------------------- | ------------- | ------------------------------------------- |
+| Well Know Port Numbers          | 0 ~ 1023      | 국제인터넷주소관리기구(ICANN) 가 특정 애플리케이션용으로 미리 예약한 포트 |
+| Registered Port Numbers         | 1024 ~ 49151  | 회사에서 등록해서 사용할 수 있는 포트                       |
+| Dynamic Or Private Port Numbers | 49152 ~ 65535 | 운영체제가 부여하는 동적 포트 또는 개인적인 목적으로 사용할 수 있는 포트   |
+
+### InetAddress 로 IP 주소 얻기
+
+* java.net.InetAddress 객체로 IP 주소를 표현한다.
+* 로컬 IP 주소 뿐 아니라, DNS 에서 도메인을 검색하여 IP 주소를 가져오는 기능을 제공한다.
+
+> InetAddress ia = InetAddress.getLocalHost(); <br/>
+> InetAddress ia = InetAddress.getLocalHost(String host); <br/>
+> InetAddress[] iaArr = InetAddress.getAllByName(String host);
