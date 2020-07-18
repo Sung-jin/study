@@ -287,3 +287,19 @@ public class Foo implements Serializable {
 > InetAddress ia = InetAddress.getLocalHost(); <br/>
 > InetAddress ia = InetAddress.getLocalHost(String host); <br/>
 > InetAddress[] iaArr = InetAddress.getAllByName(String host);
+
+### TCP(Transmission Control Protocol) 네트워킹
+
+* 연결 지향적 프로토콜
+  * 클라이언트와 서버가 연결된 상태에서 데이터를 주고받는 프로토콜
+  * 클라이언트가 연결 요청을 하고, 서버가 연결을 수락하면 통신 서로가 고정되고, 모든 데이터는 고정된 통신 선로를 통해서 순차적으로 전달된다.
+  * 연결된 상태에서 데이터를 주고받아서 안정적으로 전달하지만, 그 과정을 위한 준비과정이 오래 걸린다는 단점이 있다.
+* java.net.ServerSocket, java.net.Socket 클래스에서 제공한다.
+* ServerSocket 클래스 - 클라이언트의 연결 요청을 기다리면서 연결 수락을 담당
+* Socket 클래스 - 연결된 클라이언트와 통신을 담당하는 것
+* 서버와 클라이엌트의 연결
+  1. 클라이언트가 서버에 접속할 포트가 존재하야 하며, 그 포트에 연결되는 것을 포트 바인딩이라 한다.
+     * ServerSocket 을 생성할 때 포트 번호를 하나 지정해준다.
+  2. 클라이언트는 서버의 IP 주소와 바인딩 포트 번호로 Socekt 을 생성하여 연결 요청을 한다.
+  3. ServerSocket 은 클라이언트가 연결 요청을 해오면 accept() 메소드로 연결 수락하고 통신용 socket 을 생성한다.
+  4. 클라이언트와 서버는 연결된 상태에서 각각의 socket 을 이용해서 데이터를 주고 받는다.
