@@ -4,9 +4,19 @@
 
 class KAKAO2020ParenthesesConversion {
     fun parenthesesConversion(parenthesesStr: String): String {
-        println("$parenthesesStr : ${isCorrectParentheses(parenthesesStr)}")
+        return if(isCorrectParentheses(parenthesesStr)) {
+            parenthesesStr
+        } else {
+            val (u, v) = Pair(parenthesesStr.substring(0, getBalancedParenthesesStartIndex(parenthesesStr) + 1),
+                parenthesesStr.substring(getBalancedParenthesesStartIndex(parenthesesStr) + 1, parenthesesStr.length)
+            )
 
-        return ""
+            return if (isCorrectParentheses(u)) {
+                "$u${parenthesesConversion(v)}"
+            } else {
+                "(${parenthesesConversion(v)})${u.substring(1, u.length - 1).map { reverseParentheses(it) }.joinToString("")}"
+            }
+        }
     }
 
     private fun isCorrectParentheses(parenthesesStr: String): Boolean {
@@ -14,7 +24,7 @@ class KAKAO2020ParenthesesConversion {
         var parenthesesPair = 0
 
         for(parentheses in parenthesesStr) {
-            if(parentheses == '(') parenthesesPair++ else parenthesesPair--
+            parenthesesPair += checkPairParentheses(parentheses)
 
             if(parenthesesPair < 0) {
                 isCorrect = false
@@ -26,14 +36,21 @@ class KAKAO2020ParenthesesConversion {
     }
 
     private fun getBalancedParenthesesStartIndex(parenthesesStr: String): Int {
-        var parenthesesPair = if (parenthesesStr[0] == '(') 1 else -1
+        var parenthesesPair = checkPairParentheses(parenthesesStr[0])
 
-        for (index in (1..parenthesesStr.length)) {
+        for (index in (1 until parenthesesStr.length)) {
+            parenthesesPair += checkPairParentheses(parenthesesStr[index])
 
+            if (parenthesesPair == 0) return index
         }
+        return parenthesesStr.length - 1
     }
 
     private fun checkPairParentheses(parentheses: Char): Int {
-        return parentheses
+        return if (parentheses == '(') 1 else -1
+    }
+
+    private fun reverseParentheses(parentheses: Char): Char {
+        return if(parentheses == '(') ')' else '('
     }
 }

@@ -303,3 +303,63 @@ public class Foo implements Serializable {
   2. 클라이언트는 서버의 IP 주소와 바인딩 포트 번호로 Socekt 을 생성하여 연결 요청을 한다.
   3. ServerSocket 은 클라이언트가 연결 요청을 해오면 accept() 메소드로 연결 수락하고 통신용 socket 을 생성한다.
   4. 클라이언트와 서버는 연결된 상태에서 각각의 socket 을 이용해서 데이터를 주고 받는다.
+* ServerSocket 객체 생성
+
+> ServerSocekt serverSocket1 = new ServerSocket(bind 할 port number); <br/>
+> ServerSocekt serverSocket2 = new ServerSocket(); <br/>
+> serverSocekt2.bind(new InetSocektAddress(bind 할 port number)); <br/>
+> ServerSocekt serverSocket3 = new ServerSocket(); <br/>
+> serverSocekt3.bind(new InetSocektAddress(IP, bind 할 port number)); <br/>
+
+* 이미 사용중인 port 를 바인딩하면 BindException 이 발생한다.
+* ServerSocket 이 accept() 되기 전까지 블로킹 된다.
+* accept() 에서 블록킹 된 상태에서 close() 하면 SocketException 이 발생한다.
+* InetSocketAddress 객체의 메소드
+
+| 리턴 타입  | 메소드명(매개 변수)   | 설명                   |
+| ------ | ------------- | -------------------- |
+| String | getHostName() | 클라이언트 IP 리턴          |
+| int    | getPort()     | 클라이언트 포트 번호 리턴       |
+| String | toString()    | "IP:포트번호" 형태의 문자열 리턴 |
+
+=====================================================================
+
+* TCP 소켓 연결할 때
+  * 클라이언트의 역할 일 경우 Socekt 클래스를 사용
+    * 연결 요청이 오면 accept() 메소드로 수락하고 통신 시작
+  * 서버에서 연결을 기다리는 경우 SocketServer 클래스를 사용
+    * 외부 서버를 연결하고 싶으면, 생성한 socket 객체에 ip (InetSocketAddress 를 통한 도메인) 및 포트번호를 인자값으로 생성
+* 연결된 이후 앞에서 배웠던 스트림을 이용하여 각각 통신이 된다.
+  * socket 객체의 getInputStream() / getOutputStream() 을 통해 얻는다.
+* 소켓 연결을 할 떄에는 accept()/connect()/read()/wirte() 메소드를 각각 별도의 스레드를 생성하여 통신하는게 좋다.
+  * 하지만, 수천개의 클라이언트가 동시에 연결될 경우 수천개의 스레드가 생성되어 성능이 저하가 된다.
+  * 이를 위해 스레드풀을 사용하여 구현하는게 더 좋다.
+
+### UDP (User Datagram Protocol)
+
+* 비연결 지향적 프로토콜
+  * 데이터를 주고받을 때 연결 절차를 거치지 않고, 발신자가 일방적으로 데이터를 발신하는 방식
+  * 연결의 절차가 없기에 TCP 보다 빠르지만, 데이터 전달의 신뢰성이 떨어진다.
+  * 발송자가 데이터를 순차적으로 발송하여도, 각각 데이터가 전달되는 선로의 상황에 따라 수신자가 데이터를 받는 순서가 다를 수 있으며 데이터가 중간에 누락될 수도 있다.
+* 자바에서 UDP 는 java.net.DatagramSocekt / java.net.DatagramPacket 클래스에서 제공하고 있다.
+
+```JAVA
+DatagramSocket datagramSocket = new DatagramSocket();
+String data = "전송하고 싶은 데이터";
+byte[] byteArr = data.getByutes.("UTF-8");
+DatagramPacket packet = new DatagramPacket(
+    byteArr, byteArr.length, new InetSocketAddress("IP 주소", "포트 주소")
+);
+datagramSocket.send(packet);
+datagramSocket.close();
+// 발송자
+
+DatagramSocket datagramSocket = new DatagramSocket("연결을 기다리는 포트 주소");
+DatagramPacket datagramPacket = new DatagramPacket(new byte[100], 100);
+datagramSocket.receive(datagramPacket);
+String data = new String(packet.getData(), 0, packet.getLength(), "UTF-8");
+// 수신 받는 형태
+SocketAddress socketAddress = packet.getSocektAddress();
+// 발신지의 정보를 알아내는 방법
+datagramSocekt.close();
+```
