@@ -187,4 +187,8 @@ public class SocketServer extends Application {
     void displayText(String text) {
         textArea.appendText(text + "\n");
     }
+
+    public static void main(String[] args) {
+        launch(args);
+    }
 }
