@@ -62,3 +62,100 @@
 * IO 는 대용량 데이터를 처리할 경우 유리하다.
 * NIO 는 버퍼 할당 크기도 문제가 있고, 모든 입출력 작업에 버퍼를 무조건 사용해야 하므로 받는 즉시 처리하는 IO 보다 복잡하다.
 * 연결 클라이언트 수가 적고, 전송되는 데이터가 대용량이면서 순차적으로 처리될 필요성이 있을 경우에는 IO 로 서버를 구성하는것이 좋다.
+
+## 파일과 디렉토리
+
+* File 클래스 외에 NIO 파일 관련 java.nio.file, java.nio.attribute 패키지가 존재한다.
+
+### Path
+
+* NIO path 는 java.nio.file.Paths 에서 사용할 수 있다.
+
+> Path path = Paths.get(String first, String... more); <br/>
+> get 은 java.nio.file.Paths 의 정적 메소드이다.
+
+* path 에 존재하는 여러 메소드
+
+| 리턴 타입 | 메소드(매개 변수) | 설명 |
+| ---- | ---- | ---- |
+| int | compareTo(Path other) | 파일 경로가 동일하면 0 <br/> 상위 경로면 음수 <br/>  하위 경로면 양수 |
+| Path | getFileName() | 부모 경로를 제외한 파일 또는 디렉토리 이름만 가진 Path 리턴 |
+| FileSystem | getFileSystem() | FileSystem 객체 리턴 |
+| Path | getName(int index) | /path/to/file.txt <br/> 0 : path <br/> 1 : to <br/> 2 : file.txt |
+| int | getNameCOunt() | 중첩 경로 수 <br/> /path/to.file.txt 이면 3 |
+| Path | getParent() | 바로 위 부모 폴더의 Path 리턴 |
+| Path | getRoot() | 루트 디렉토리 리턴 |
+| Iterator<Path> | iterator() | 경로에 있는 모든 디렉토리와 파일을 Path 객체로 생성하고 반복자를 리턴 |
+| Path | normalize() | 상대 경로로 표기할 떄 불필요한 요소를 제거 |
+| WatchKey | register(...) | WatchService 를 등록 |
+| File | toFile() | java.io.File 객체로 리턴 |
+| String | toString() | 파일 경로를 문자열로 리턴 |
+| URI | toUri() | 파일 경로를 URI 객체로 리턴 |
+
+### FileSystem
+
+* 운영체제의 파일 시스템은 FileSystem 인터페이스를 통해 접근할 수 있다.
+
+> FileSystem fileSystem = FileSystems.getDefault();
+
+* FileSystem 의 메소드들
+
+| 리턴 타입 | 메소드(매개 변수) | 설명 |
+| ---- | ---- | ---- |
+| Iterable\<FileStore> | getFileStores() | 드라이버 정보를 가진 FileStore 객체들을 리턴 |
+| Iterable\<Path> | getRootDirectories() | 루트 디렉토리 정보를 가진 Path 객체들을 리턴 |
+| String | getSeparator() | 디렉토리 구분자 리턴 |
+
+* FileStore 는 드라이버를 표현한 객체이며, 다음과 같은 메소드들이 있다.
+
+| 리턴 타입 | 메소드(매개 변수) | 설명 |
+| ---- | ---- | ---- |
+| long | getTotalSpace() | 드라이버 전체 공간 크기를 바이트 단위로 리턴 |
+| long | getUnallocatedSpace() | 할당되지 않은 공간 크기를 바이트 단위로 리턴 |
+| long | getUsableSpace() | 사용 가능한 공간 크기, getUnallocatedSpace() 와 동일 |
+| boolean | isReadOnly() | 읽기 전용 여부 |
+| String | name() | 드라이버명 리턴 |
+| String | type() | 파일 시스템 종류 |
+
+### 파일 속성 읽기 및 파일, 디렉토리 생성/삭제
+
+* java.nio.file.Files 클래스는 파일과 디렉토리의 생성 및 삭제, 이들의 속성을 읽는 메소드가 존재한다.
+* java.nio.fileFiles 클래스가 정적 메소드로 제공되는 것들이 많다.
+* https://docs.oracle.com/javase/7/docs/api/java/nio/file/Files.html
+
+### WatchService
+
+* Java 7 에서 추가되었으며, 디렉토리 내부에서 파일 생성, 삭제, 수정 등의 내용 변화를 감지하는데 사용한다.
+* watchService 객체를 생성한 후, 감시할 디렉토리의 Path 객체를 register() 메소드로 watchService 에 등록해야 한다.
+  * 생성, 삭제, 수정 중 감지할 것을 StandardWatchEventKinds 상수로 지정한다.
+
+> WatchService watchService = FileSystems.getDefault().newWatchService(); <br/>
+> StandardWatchEventKinds 의 상수값을 준다.<br/>
+> path.register(watchService, ~.ENTRY_CREATE, ~.ENTRY_MODIFY, ~.ENTRY_DELETE);
+
+* path 에 register 에 등록된 순간부터 path 의 경로에 감시하는 이벤트가 발생하면 다음과 같은 순서로 동작한다.
+  1. WatchEvent 가 발생한다.
+  2. WatchService 는 해당 이벤트 정보를 가진 WatchKey 를 생성하여 Queue 에 넣는다.
+  3. 프로그램은 무한 루프를 돌면서 WatchService 의 take() 메소드를 호출한다.
+  4. WatchKey 가 들어올 때까지 대기하고 있다가 WatchKey 가 큐에 들어오면 WatchKey 를 얻어서 처리한다.
+
+```JAVA
+while(true) {
+    WatchKey watchKey = watchService.take();
+    List<WatchEvent<?> list = watchKey.pollEvents();
+
+    for(WatchEvent watchEven : list) {
+        Kind kind = watchEvent.kind();
+
+        Path path = (Path)watchEvent.context();
+
+        if (kind === StandarWatchEventKinds.ENTRY_CREATE) { 생성되었을 경우 }
+        else if (kind === StandarWatchEventKinds.ENTRY_DELETE) { 상제되었을 경우 }
+        else if (kind === StandarWatchEventKinds.ENTRY_MODIFY) { 변경되었을 경우 }
+        else if (kind === StandarWatchEventKinds.OVERFLOW) { 운영체제에서 이벤트가 소실됐거나 버려진 경우 }
+
+        if (!watchKey.reset()) break;
+    }
+    watchService.close();
+}
+```

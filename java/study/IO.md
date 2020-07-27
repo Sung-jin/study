@@ -361,5 +361,5 @@ String data = new String(packet.getData(), 0, packet.getLength(), "UTF-8");
 // 수신 받는 형태
 SocketAddress socketAddress = packet.getSocektAddress();
 // 발신지의 정보를 알아내는 방법
-datagramSocekt.close();
+datagramSocekt.cloxse();
 ```

@@ -27,7 +27,7 @@ public class SocketClient extends Application {
         new Thread(() -> {
             try {
                 socket = new Socket();
-                socket.connect(new InetSocketAddress("localhost", 5001));
+                socket.connect(new InetSocketAddress("192.168.1.41", 12345));
                 Platform.runLater(() -> {
                     displayText("[연결 완료 : " + socket.getRemoteSocketAddress() + " ]");
                     btnConn.setText("stop");
