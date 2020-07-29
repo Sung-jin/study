@@ -239,12 +239,12 @@ while(true) {
   * index 값의 매개 변수가 없으면, 상대적으로 동작한다.
 * 버퍼 예외 종류
 
-| 예외 | 설명 |
-| ---- | ---- |
-| BufferOverflowException | position 이 limit 에 도달했을 떄 put() 호출하면 발생 |
-| BufferUnderflowException | position 이 limit 에 도달했을 때 get() 호출하면 발생 |
-| InvalidMarkException | mark 가 없는 상태에서 reset() 메소드를 호출하면 발생 |
-| readOnlyBufferException | 읽기 전용 버퍼에서 put() 또는 compact() 메소드를 호출하면 발생 |
+| 예외                       | 설명                                         |
+| ------------------------ | ------------------------------------------ |
+| BufferOverflowException  | position 이 limit 에 도달했을 떄 put() 호출하면 발생    |
+| BufferUnderflowException | position 이 limit 에 도달했을 때 get() 호출하면 발생    |
+| InvalidMarkException     | mark 가 없는 상태에서 reset() 메소드를 호출하면 발생        |
+| readOnlyBufferException  | 읽기 전용 버퍼에서 put() 또는 compact() 메소드를 호출하면 발생 |
 
 ### Buffer 변환
 
@@ -276,3 +276,84 @@ intBuffer.get(data);
 ```
 
 * asIntBuffer() 처럼 Shor, Int, Long, Float, Double 모두 사용하여 위 ByteBuffer <-> IntBuffer 처럼 할 수 있다.
+
+## 파일 채널
+
+* FileChannel 은 동기화 처리가 되어 있어서 멀티 스레드 환경에서 안전하다.
+* FileChannel 의 정적 메소드 open(), File(Input/Output)Stream  의 getChannel() 메소드를 통해서도 얻을 수 있다.
+* open() 메소드에 StandardOpenOption 의 열거 상수로 옵션을 여러개 추가할 수 있다.
+* 생성한 채널은 사용완료 후 close() 를 통해 닫아주어야 한다.
+
+| 열거 상수             | 설명                                         |
+| ----------------- | ------------------------------------------ |
+| READ              | 읽기용으로 파일을 연다                               |
+| WRITE             | 쓰기용으로 파일을 연다                               |
+| CREATE            | 파일이 없다면 새 파일을 생성한다                         |
+| CREATE_NEW        | 새 파일을 만든다. 이미 파일이 있으면 예외와 함께 실패한다          |
+| APPEND            | 파일 끝에 데이터를 추가한다 (WRITE, CREATE  와 함께 사용된다) |
+| DELETE_ON_CLOSE   | 채널을 닫을 때 파일을 삭제한다 (임시 파일)                  |
+| TRUNCATE_EXISTING | 파일을 0 바이트로 잘라낸다 (WRITE 와 함께 사용된다)          |
+
+### 파일 읽기/쓰기/복사
+
+* fileChannel 객체에서 write(ByteBuffer src)/read(ByteBuffer src) 를 통해 읽고 쓸 수 있다.
+  * 리턴값을 읽거나 쓰인 바이트 수이다.
+* NIO Files 클래스의 copy 를 통해 복사할 수 있다.
+
+> Path targetPath = Files.copy(Path source, Path target, CopyOption... options);
+
+| 열거 상수 | 설명 |
+| ---- | ---- |
+| REPLACE_EXISTING | 타겟 파일이 존재하면 대체한다 |
+| COPY_ATTRIBUTES | 파일의 속성까지도 복사한다 |
+| NOFOLLOW_LINKS | 링크 파일일 경우 링크 파일만 복사하고 링크된 파일은 복사하지 않는다 |
+
+```JAVA
+Path from = Paths.get("some/original/file.jpg");
+Path to = Paths.get("some/dist/file2.jpg");
+
+Files.copy(from, to, StandardCopyOption.REPLACE_EXISTING);
+```
+
+## 파일 비동기 채널
+
+* 불특정 다수의 파일 및 대용량 파일의 입출력 작업을 위해서 비동기 파일 채널을 AsynchronousFileChannel 에서 별도로 제공한다.
+* 위 채널은 read()/write() 메소드를 호출하면, 스레드풀에게 작업 처리를 요청하고 이 메소드들을 즉시 리턴시킨다.
+  * 즉, 실질적인 작업 처리는 스레드풀의 작업 스레드가 담당하고, 입출력이 완료되었을 경우 callback 메소드가 자동으로 호출된다.
+
+```JAVA
+AsynchronousFileChannel fileChannel = AsynchronousFileChannel.open(
+    Path file,
+    Set<? extends OpenOption> options,
+    ExecutorService executor,
+    FileAttribute<?>... attrs
+);
+// executor 에 스레드 풀을 추가하여, 생성한 파일 채널의 작업은 해당 스레드 풀에서 실행되도록 생성한다.
+// attrs 는 파일 생성 시 파일 속성값이 될 FileAttribute
+
+fileChannel.read(ByteBuffer dst, long position, A attachment, CompletionHandler<Integer, A> handler);
+fileChannel.write(ByteBuffer src, long position, A attachment, CompletionHandler<Integer, A> handler);
+// position - 파일 읽기/쓰기를 시작할 위치
+// attachment - 콜백 메소드로 전달할 첨부 객체
+// handler 의 결과값은 Integer 이며, 이는 읽거나 쓴 바이트 수이다.
+
+new CompletionHandler<Integer, A>() {
+    @Override
+    public void completed(Integer result, A attachment) {...}
+    @Override
+    public void failed(throwable exc, A attachment) {...}
+}
+```
+
+| 리턴 타입 | 메소드명(매개 변수) | 설명 |
+| ---- | ---- | ---- |
+| void | completed(Integer result, A attachment) | 작업이 정상적으로 완료된 경우 콜백 |
+| void | failed(throwable exc, A attachment) | 예외 때문에 작업이 실패된 경우 콜백 |
+
+## TCP 블록킹 채널
+
+* NIO 를 이용하여 TCP 서버/클라이언트 애플리케이션을 개발한다면, blocking/non-blocking/async 중 선택해야 한다.
+* NIO 에서 TCP 네트워크 동신을 위한 채널
+  * java.nio.channels.ServerSocketChannel
+  * java.nio.channels.SocketChannel
+* 위 채널은 IO 의 ServerSocket, Socket 에 대응되며 NIO 에서는 버퍼를 이용하고 blocking/non-blocking 방식을 모두 지원한다.
