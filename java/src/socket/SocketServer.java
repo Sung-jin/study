@@ -2,11 +2,8 @@ package socket;
 
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.geometry.Insets;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
-import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -23,6 +20,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class SocketServer extends Application {
+    UI ui = new UI();
     ExecutorService executorService;
     ServerSocket serverSocket;
     List<Client> connections = new Vector<>();
@@ -44,7 +42,7 @@ public class SocketServer extends Application {
 
         executorService.submit(() -> {
             Platform.runLater(() -> {
-                displayText("[서버 시작]");
+                ui.displayText(textArea, "[서버 시작]");
                 btnStartStop.setText("stop");
             });
 
@@ -54,13 +52,13 @@ public class SocketServer extends Application {
                     String message = "[연결 수락 : " + socket.getRemoteSocketAddress() +
                             " : " + Thread.currentThread().getName() + " ]";
                     Platform.runLater(() -> {
-                        displayText(message);
+                        ui.displayText(textArea, message);
                     });
 
                     Client client = new Client(socket);
                     connections.add(client);
                     Platform.runLater(() -> {
-                        displayText("[연결 개수 : " + connections.size() + " ]");
+                        ui.displayText(textArea, "[연결 개수 : " + connections.size() + " ]");
                     });
                 } catch (Exception e) {
                     if (!serverSocket.isClosed()) { stopServer(); }
@@ -88,7 +86,7 @@ public class SocketServer extends Application {
             }
 
             Platform.runLater(() -> {
-                displayText("[서버 멈춤]");
+                ui.displayText(textArea, "[서버 멈춤]");
                 btnStartStop.setText("start");
             });
         } catch (Exception e) { }
@@ -115,7 +113,7 @@ public class SocketServer extends Application {
 
                         String message = "[요청 처리 : " + socket.getRemoteSocketAddress()
                                 + " : " + Thread.currentThread().getName() + " ]";
-                        Platform.runLater(() -> displayText(message));
+                        Platform.runLater(() -> ui.displayText(textArea, message));
 
                         String data = new String(byteArr, 0, readByteCount, StandardCharsets.UTF_8);
 
@@ -126,7 +124,7 @@ public class SocketServer extends Application {
                         connections.remove(Client.this);
                         String message = "[클라이언트 통신 오류 : " + socket.getRemoteSocketAddress()
                                 + " : " + Thread.currentThread().getName() + " ]";
-                        Platform.runLater(() -> displayText(message));
+                        Platform.runLater(() -> ui.displayText(textArea, message));
                         socket.close();
                     } catch (Exception e2) { }
                 }
@@ -144,7 +142,7 @@ public class SocketServer extends Application {
                     try {
                         String message = "[클라이언트 통신 오류 : " + socket.getRemoteSocketAddress()
                                 + " : " + Thread.currentThread() + " ]";
-                        Platform.runLater(() -> displayText(message));
+                        Platform.runLater(() -> ui.displayText(textArea, message));
                         connections.remove(Client.this);
                         socket.close();
                     } catch (Exception e2) { }
@@ -155,17 +153,11 @@ public class SocketServer extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        BorderPane root = new BorderPane();
-        root.setPrefSize(500, 300);
-
+        UI ui = new UI();
         textArea = new TextArea();
-        textArea.setEditable(false);
-        BorderPane.setMargin(textArea, new Insets(0, 0, 0, 2));
-        root.setCenter(textArea);
-
         btnStartStop = new Button("start");
-        btnStartStop.setPrefHeight(30);
-        btnStartStop.setMaxWidth(Double.MAX_VALUE);
+
+        ui.startServerUI(primaryStage, textArea, btnStartStop);
 
         btnStartStop.setOnAction(e -> {
             if (btnStartStop.getText().equals("start")) {
@@ -174,18 +166,7 @@ public class SocketServer extends Application {
                 stopServer();
             }
         });
-        root.setBottom(btnStartStop);
-
-        Scene scene = new Scene(root);
-        scene.getStylesheets().add(getClass().getResource("app.css").toString());
-        primaryStage.setScene(scene);
-        primaryStage.setTitle("Server");
         primaryStage.setOnCloseRequest(event -> stopServer());
-        primaryStage.show();
-    }
-
-    void displayText(String text) {
-        textArea.appendText(text + "\n");
     }
 
     public static void main(String[] args) {
