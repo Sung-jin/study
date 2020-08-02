@@ -302,11 +302,11 @@ intBuffer.get(data);
 
 > Path targetPath = Files.copy(Path source, Path target, CopyOption... options);
 
-| 열거 상수 | 설명 |
-| ---- | ---- |
-| REPLACE_EXISTING | 타겟 파일이 존재하면 대체한다 |
-| COPY_ATTRIBUTES | 파일의 속성까지도 복사한다 |
-| NOFOLLOW_LINKS | 링크 파일일 경우 링크 파일만 복사하고 링크된 파일은 복사하지 않는다 |
+| 열거 상수            | 설명                                     |
+| ---------------- | -------------------------------------- |
+| REPLACE_EXISTING | 타겟 파일이 존재하면 대체한다                       |
+| COPY_ATTRIBUTES  | 파일의 속성까지도 복사한다                         |
+| NOFOLLOW_LINKS   | 링크 파일일 경우 링크 파일만 복사하고 링크된 파일은 복사하지 않는다 |
 
 ```JAVA
 Path from = Paths.get("some/original/file.jpg");
@@ -345,15 +345,181 @@ new CompletionHandler<Integer, A>() {
 }
 ```
 
-| 리턴 타입 | 메소드명(매개 변수) | 설명 |
-| ---- | ---- | ---- |
-| void | completed(Integer result, A attachment) | 작업이 정상적으로 완료된 경우 콜백 |
-| void | failed(throwable exc, A attachment) | 예외 때문에 작업이 실패된 경우 콜백 |
+| 리턴 타입 | 메소드명(매개 변수)                             | 설명                   |
+| ----- | --------------------------------------- | -------------------- |
+| void  | completed(Integer result, A attachment) | 작업이 정상적으로 완료된 경우 콜백  |
+| void  | failed(throwable exc, A attachment)     | 예외 때문에 작업이 실패된 경우 콜백 |
 
-## TCP 블록킹 채널
+## TCP 채널
 
 * NIO 를 이용하여 TCP 서버/클라이언트 애플리케이션을 개발한다면, blocking/non-blocking/async 중 선택해야 한다.
 * NIO 에서 TCP 네트워크 동신을 위한 채널
   * java.nio.channels.ServerSocketChannel
   * java.nio.channels.SocketChannel
 * 위 채널은 IO 의 ServerSocket, Socket 에 대응되며 NIO 에서는 버퍼를 이용하고 blocking/non-blocking 방식을 모두 지원한다.
+
+### Blocking
+
+* ServerSocketChannel, SocektChannel 의 configurationBlocking 을 true 로 설정하면 blocking 방식으로 동작하게 된다.
+* 서버의 경우 클라이언트가 연결 요청을 할때까지 accept() 가 대기하므로, aceept() 를 UI 동작과 별도의 스레드로 동작시키는게 좋다.
+  * ExecutorService 를 이용하여 연결 요청, 데이터 전송을 스레드 풀에서 작업할 수 있다.
+  * 하지만, 클라이언트 수가 많다면 스레드의 수가 증가되고 서버에 성능적인 문제를 유발시킬 수 있다.
+
+> serverSocketChannel = ServerSocketChannel.open(); <br/>
+> serverSocketChannel.configureBlocking(true);
+
+### non-blocking
+
+* configurationBlocking 을 false 로 설정하면 non-blocking 방식의 NIO TCP 를 생성할 수 있다.
+* non-blocking 방식에서 connect(), accept(), read(), write() 메소드가 호출되면 응답되는 내용이 없다면 null 이나 0 을 리턴하게 된다.
+  * 그저 while 을 통해서 별도의 작업을 하지 않으면 무한으로 동작할 뿐이다.
+* 이벤트 리스너의 역할을 하는 Selector 를 사용한다.
+  * 멀티 채널의 작업을 싱글 스레드에서 처리할 수 있도록 해주는 멀티플렉서 역할을 한다.
+  * Selector 의 동작방식
+    1. 채널은 Selector 에 자신을 등록할 때 작업 유형을 SelectionKey 로 생성한다.
+    2. Selector 는 관심키셋(interest-set) 에 저장한다.
+    3. 클라이언트가 처리 요청을 하면 Selector 는 관심키셋에 등록된 키 중에서 작업 처리 준비가 된 키를 선택된 키셋(selected-set) 에 별도로 저장한다.
+    4. 작업 스레드가 선택된 키셋에 있는 키를 하나씩 꺼내어 키와 연관된 채널 작업을 처리한다.
+    5. 작업 스레드가 선택된 키셋에 있는 모든 키를 처리하게 되면 선택된 키셋은 비워지고, Selector 는 관심키셋에서 작업 처리 준비가 된 키들을 선택해서 선택된 키셋을 채운다.
+* selectionKey 의 상수
+
+| SelectionKey 의 상수 | 설명                             |
+| ----------------- | ------------------------------ |
+| OP_ACCEPT         | ServerSocketChannel 의 연결 수락 작업 |
+| OP_CONNECT        | SocketChannel 의 서버 연결 작업       |
+| OP_READ           | SocketChannel 의 데이터 읽기 작업      |
+| OP_WRITE          | SocketChannel 의 데이터 쓰기 작업      |
+
+* 위 상수들을 이용하여 selectionKey 를 생성 및 register 할 수 있다.
+* 동일한 SocketChannel 에 2가지 작업 유형을 등록할 수 없으며, 작업 유형이 변경되면 이미 생성된 SelectionKey 를 수정해야 한다.
+  * 등록한 selectionKey 의 wakeup() 메소드를 통해 변경되었다는 것을 알려주면서, 작업 준비가된 SelectionKey 들을 set 으로 얻을 수 있다.
+* 채널의 작업 처리는 selecionKey 마다 다르므로 각 메소드를 통해서 확인하고 각자 처리할 수 있다.
+
+| 리턴 타입   | 메소드명            | 설명                     |
+| ------- | --------------- | ---------------------- |
+| boolean | isAcceptable()  | 작업 유형이 OP_ACCEPT 인 경우  |
+| boolean | isConnectable() | 작업 유형이 OP_CONNECT 인 경우 |
+| boolean | isReadable()    | 작업 유형이 OP_READ 인 경우    |
+| boolean | isWritable()    | 작업 유형이 OP_WRITE 인 경우   |
+
+* 또한, SelectionKey 에서 채널을 얻을 수 있다.
+  * (ServersocketChannel) selectionkey.channel();
+* 또한, selectionKey 에 attachment() 에 첨부를 등록하여, selectionKey 를 사용할 때 첨부를 사용할 수 있다.
+  * selectionKey.attachment();
+
+```JAVA
+try {
+    Selector = selector = Selector.open();
+    // 셀랙터 생성
+
+    ServerSocketChannel serverSocketChannel = ServerSocketChannel.open();
+    ServerSocketChannel.configureBlocking(false);
+    // ServerSocketChannel 을 넌블로킹으로 설정하는 코드
+
+    SocketChannel socketChannel = SocketChannel.open();
+    socketChannel.configureBlocking(false);
+    // SocketChannel 을 넌블로킹으로 설정하는 코드
+
+    SelectionKey selectionKey = serverSocketChannel.register(Selector sel, int ops);
+    SelectionKey selectionKey = serverChannel.register(Selector sel, int ops);
+    // 각 셀렉터에 등록
+
+    SelectionKey key = socketChannel.keyFor(selector);
+    // selector 에 등록 된 selectionKey 를 얻는 메소드
+
+    selectinKey.interestOps(SelectionKey.OP_WRITE);
+    selector.wakeup();
+    // SelectionKey 를 OP_WRITE 로 변경
+} catch (IOException e) {}
+```
+
+### 비동기 채널
+
+* AsynchronousSocketChannel / AsynchronousServerSocket 2개의 비동기 채널을 NIO 에서 제공한다.
+* 비동기 채널은 connect()/accept()/read()/write() 호출 시 바로 리턴한다.
+* non-blocking 방식과 비슷하지만, 메소드들을 호출하면 스레드풀에게 작업 처리를 요청하고 이 메소드들을 즉시 리턴하는 차이가 있다.
+  * 실질적인 작업 처리는 스레드풀의 작업 스레드가 담당한다.
+  * 작업완료 후 콜백 메소드가 자동으로 호출된다.
+* AsynchronousChannelGroup - 비동기 그룹
+  * 같은 스레드풀을 공유하는 비동기 채널들의 묶음
+  * 하나의 스레드풀을 사용한다면, 모든 비동기 채널은 같은 채널 그룹에 속해야 한다.
+  * 비동기 채널을 생성할 때 채널그룹을 지정하지 않으면 기본 비동기 채널 그룹이 생성된다.
+* AsynchronousServerSocketChannel 이 생성하는 AsynchronousSocketChannel 은 자동적으로 AsynchronousServerSocketChannel 과 같은 비동기 채널 그룹에 속한다.
+
+```JAVA
+new ThreadPoolExecutor(
+    0, Integer.MAX_VALUE,
+    Long.MAX_VALUE, TimeUnit.MILLISECONDS,
+    new SynchronousQueue<Runnable>(),
+    threadFactory
+);
+// 채널 그룹을 지정하지 않고 비동기 채널을 생성하면, 위처럼 기본 비동기 채널 그룹이 생성되며 기본 비동기 채널 그룹은 내부적으로 같은 스레풀을 생성한다.
+// 이론적으로는 Integer.MAX_VALUe 만큼 스레드가 증가할 수 있도록 되어있지만 스레드풀은 대부분 최대 스레드 수를 지정해서 사용하므로 아래와 같이 직접 생성하고 사용하는것이 일반적이다.
+
+AsynchronousChannelGroup channelGroup = AsynchronousChannelGroup.withFixedThreadPool(
+    runtime.getRuntime().availableProcessors() (최대 스레드수를 직접 지정),
+    Executors.defaultThreadFactory()
+);
+
+channelGroup.shutdown();
+channelGroup.shutdownNow();
+// shutdown() 은 직시 종료하지 않고 그룹에 포함된 모든 채널이 닫히면 채널 그룹이 종료가 되며, now() 는 호출되는 강제적으로 비동기 채널 그룹에 포함된 모든 비동기 채널을 닫아버리고 그룹을 닫아버린다.
+// 단, 완료 콜백을 실행하고 잇는 스레드는 종료되거나 인터럽트 되지 않는다.
+// 또한 종료된 채널에 채널을 추가하면 ShutdownChannelGroupException 이 발생한다.
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+AsynchronousServerSocketChannel asynchronousServerSocketChannel = AsynchronousServerSocketChannel.open(channelGroup);
+// channelGroup 를 인자로 생성하면, 그 그룹에 포함된 비동기 채널이 생성된다.
+asynchronousServerSocketChannel.bind(new InetSocketAddress(5001));
+
+asynchronousServerSocketChannel.accept(null,
+    new CompletionHandler<AsynchronousSocketChannel, Void>() {
+        @Override
+        public void completed(AsynchronousSocketChannel asynchronousSocketChannel, Void attachment) {
+            asynchronousServerSocketChannel.accep(null, this);
+            // 연결 수락 후 실행할 코드
+        }
+        @Override
+        public void failed(Throwable exc, Void attachment) {
+            //연결 수락 실패 시 실행할 코드
+        }
+    }
+);
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+// client
+AsynchronousChannelGroup channelGroup = AsynchronousChannelGroup.withFixedThreadPool(
+    runtime.getRuntime().availableProcessors() (최대 스레드수를 직접 지정),
+    Executors.defaultThreadFactory()
+);
+
+AsynchronousSocketChannel asynchronousSocketChannel = AsynchronousSocketChannel.open(channelGroup);
+// channelGroup 를 인자로 생성하면, 그 그룹에 포함된 비동기 채널이 생성된다.
+
+asynchronousSocketChannel.connect(new InetSocketAddress("localhost", 5001), null,
+    new CompletionHandler<Void, Void>() {
+        @Override
+        public Void completed(Void result, Void attachment) {
+            // 연결 성공후 실행할 코드
+        }
+        @Override
+        public Void failed(Throwalbe e, Void attachment) {
+            // 연결 실패후 실행할 코드
+        }
+    }
+);
+
+asynchronousSocketChannel.[read or write method](byteBuffer, attachment,
+    new CompletionHandler<Integer, A>() {
+        @Override
+        public void completed(Integer result, A attachment) {
+            // 받은 데이터를 처리하는 코드
+            asynchronousSocketChannel.read(byteBuffer, attachment, this);
+        }
+        @Override
+        public void failed(Throwable exc, A attachment) {
+            // 실패된 경우 실행할 코드
+        }
+    }
+);
+```
