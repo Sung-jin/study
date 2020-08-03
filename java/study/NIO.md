@@ -523,3 +523,21 @@ asynchronousSocketChannel.[read or write method](byteBuffer, attachment,
     }
 );
 ```
+
+## UDP 채널
+
+* NIO 에서 UDP 채널은 DatagramChannel 이다.
+* DatagramChannel 도 blocking/non-blocking 모두 사용가능하다.
+
+```JAVA
+DatagramChannel datagramChannel = DatagramChannel.open(StandardProtocolFamily.INET);
+int byteCount = datagramChannel.send(byteBuffer, new InetSocketAddress("localhost", 5001));
+datagramChannel.close();
+// IPv4 로 UDP 채널 생성 및 close
+
+DatagramChannel datagramChannel = DatagramChannel.open(StandardProtocolFamily.INET);
+datagramChannel.bind(new InetSocketAddress(5001));
+
+SocketAddress socketAddress = datagramChannel.receive(ByteBuffer dst);
+// 수신자 생성
+```
