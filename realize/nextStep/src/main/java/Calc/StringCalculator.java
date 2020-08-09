@@ -21,6 +21,10 @@ ex)
 기본 구분자를 제외하고 커스텀 구분자를 지정할 수 있으며, // 와 \n 사이의 문자를 커스텀 구분자로 사용한다.
 "//;\n1;2;3" -> ; 는 커스텀 구분자가 되며, 1 + 2 + 3 인 6이 반환되어야 한다.
 
+구현 후 내용을 읽는데, 커스텀일 경우에는 기본 구분 연산자를 사용하지 않고, 커스텀 연산자만 사용하는 형태인데,
+이건 기능을 정의하기 나름일 것 같다.
+기존 연산자에 추가로 붙이는 형태인지, 덮어 씌우는 형태인지.
+
 요구사항 3
 음수를 전달하는 경우 RuntimeException 으로 예외처리 해야 한다.
 */
@@ -34,6 +38,7 @@ public class StringCalculator {
     private String formula;
 
     public StringCalculator(String formula) {
+        if (formula == null || formula.isEmpty()) formula = "0";
         if (formula.contains("-")) throw new RuntimeException();
 
         this.formula = formula;
@@ -43,7 +48,7 @@ public class StringCalculator {
         this.formula = formula;
     }
 
-    public int add() {
+    public int add() throws NumberFormatException {
         String operatorRegex = getOperatorRegexByFormula(formula);
         int endCustomOperatorIndex = formula.lastIndexOf("\n") > 0 ? formula.lastIndexOf("\n") + 1 : 0;
 
