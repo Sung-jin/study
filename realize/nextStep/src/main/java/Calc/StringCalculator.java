@@ -25,21 +25,40 @@ ex)
 음수를 전달하는 경우 RuntimeException 으로 예외처리 해야 한다.
 */
 
-import java.util.Arrays;
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 public class StringCalculator {
-    public int add(String formula) {
-        HashSet<String> operator = new HashSet<>(Arrays.asList(",", ";"));
+    private String formula;
 
-        operator.addAll(extractCustomOperator(formula));
-        return 1;
+    public StringCalculator(String formula) {
+        if (formula.contains("-")) throw new RuntimeException();
+
+        this.formula = formula;
     }
 
-    private HashSet extractCustomOperator(String formula) {
-        HashSet<String> customOperator = new HashSet<>();
+    public void setFormula(String formula) {
+        this.formula = formula;
+    }
+
+    public int add() {
+        String operatorRegex = getOperatorRegexByFormula(formula);
+        int endCustomOperatorIndex = formula.lastIndexOf("\n") > 0 ? formula.lastIndexOf("\n") + 1 : 0;
+
+        return Stream.of(formula
+                .substring(endCustomOperatorIndex)
+                .split(operatorRegex)
+        ).mapToInt(Integer::parseInt)
+                .sum();
+    }
+
+    private String getOperatorRegexByFormula(String formula) {
+        ArrayList<String> operator = new ArrayList<String>() {{
+            add(",");
+            add(":");
+        }};
         Matcher m = Pattern.compile(
                 Pattern.quote("//")
                         + "(.*?)"
@@ -47,8 +66,10 @@ public class StringCalculator {
         ).matcher(formula);
 
         while(m.find()){
-            customOperator.add(m.group(1));
+            operator.add(m.group(1));
         }
-        return customOperator;
+
+        return "\\" + String.join("|\\", operator);
     }
+
 }
