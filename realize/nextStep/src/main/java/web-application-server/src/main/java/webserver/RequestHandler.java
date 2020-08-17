@@ -1,5 +1,6 @@
 package webserver;
 
+import model.http.HttpRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,9 +30,10 @@ public class RequestHandler extends Thread {
             for (String line = br.readLine(); line != null && !line.equals(""); line = br.readLine()) {
                 headers.add(line);
             }
-            String endPoint = headers.get(0).split(" ")[1];
 
-            controller.getResponseByEndPoint(dos, endPoint);
+            HttpRequest httpRequest = new HttpRequest(headers);
+
+            controller.getResponseByEndPoint(dos, httpRequest);
         } catch (IOException e) {
             log.error(e.getMessage());
         }

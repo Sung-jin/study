@@ -1,5 +1,6 @@
 package webserver;
 
+import model.http.HttpRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,19 +12,28 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class Controller {
+class Controller {
     private static final Logger log = LoggerFactory.getLogger(RequestHandler.class);
-    private final String rootDir = "./webapp";
+    private static final String rootDir = "./webapp";
 
-    public void getResponseByEndPoint(DataOutputStream dos, String path) {
+    private static List<Path> allFrontResourcePaths;
+    static {
         try {
-            Path requestFilePath = Paths.get(rootDir + path);
-            List<Path> htmlPaths = getAllHtmlFiles();
+            allFrontResourcePaths = Files.walk(Paths.get(rootDir))
+                    .collect(Collectors.toList());
+        } catch(IOException e){
+            log.error(e.getMessage());
+        }
+    }
+
+    void getResponseByEndPoint(DataOutputStream dos, HttpRequest httpRequest) {
+        try {
+            Path requestFilePath = Paths.get(rootDir + httpRequest.getRequestEndPoint());
 
             byte[] body = {};
-            if (htmlPaths.contains(requestFilePath)) {
+            if (allFrontResourcePaths.contains(requestFilePath)) {
                 body = Files.readAllBytes(requestFilePath);
-                response200Header(dos, body.length);
+                response200Header(dos, body.length, httpRequest.getContentType());
             } else {
                 response404Header(dos);
             }
@@ -34,16 +44,11 @@ public class Controller {
         }
     }
 
-    private List<Path> getAllHtmlFiles() throws IOException {
-        return Files.walk(Paths.get(rootDir))
-                .filter(file -> file.toString().contains(".html"))
-                .collect(Collectors.toList());
-    }
-
-    private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
+    private void response200Header(DataOutputStream dos, int lengthOfBodyContent, String contentType) {
         try {
             dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
+//            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
+            dos.writeBytes("Content-Type: " + contentType + "\r\n");
             dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
             dos.writeBytes("\r\n");
         } catch (IOException e) {
