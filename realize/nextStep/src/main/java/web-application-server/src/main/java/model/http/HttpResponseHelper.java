@@ -50,6 +50,17 @@ public class HttpResponseHelper {
         }
     }
 
+    public void responseLogin302Header(DataOutputStream dos, String redirectUrl, boolean success) {
+        try {
+            dos.writeBytes("HTTP/1.1 " + getStatusCode(HttpStatusCode.REDIRECT) + " \r\n");
+            dos.writeBytes("Location: " + redirectUrl + "\r\n");
+            dos.writeBytes("Set-Cookie: login=" + success + "\r\n");
+            dos.writeBytes("\r\n");
+        } catch (IOException e) {
+            log.error(e.getMessage());
+        }
+    }
+
     public void response404Header(DataOutputStream dos) {
         try {
             dos.writeBytes("HTTP/1.1 " + getStatusCode(HttpStatusCode.NOT_FOUND) + " \r\n");

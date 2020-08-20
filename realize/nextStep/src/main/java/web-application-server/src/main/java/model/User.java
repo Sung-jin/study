@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.Map;
 
 public class User {
-    private String userId;
-    private String password;
-    private String name;
-    private String email;
+    private String userId = "";
+    private String password = "";
+    private String name = "";
+    private String email = "";
 
     public User(String userId, String password, String name, String email) {
         this.userId = userId;
@@ -17,10 +17,10 @@ public class User {
     }
 
     public User(Map<String, ArrayList<String>> body) {
-        this.userId = body.get("userId").get(0);
-        this.password = body.get("password").get(0);
-        this.name = body.get("name").get(0);
-        this.email = body.get("email").get(0);
+        if (body.get("userId") != null) this.userId = body.get("userId").get(0);
+        if (body.get("password") != null) this.password = body.get("password").get(0);
+        if (body.get("name") != null) this.name = body.get("name").get(0);
+        if (body.get("email") != null) this.email = body.get("email").get(0);
     }
 
     public String getUserId() {

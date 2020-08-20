@@ -39,7 +39,18 @@ class Controller {
                 case "/user/create" : {
                     UserService userService = new UserService();
                     userService.setUser(httpRequest);
+                    userService.joinUser(userService.getUser());
+
                     httpResponseHelper.response302Header(dos, "/index.html");
+                }
+                case "/user/login" : {
+                    UserService userService = new UserService();
+                    userService.setUser(httpRequest);
+                    boolean loginResult = userService.loginUser(userService.getUser());
+
+                    if (!loginResult) log.error("로그인 실패!");
+
+                    httpResponseHelper.responseLogin302Header(dos, "/index.html", loginResult);
                 }
                 default: {
                     httpResponseHelper.response404Header(dos);

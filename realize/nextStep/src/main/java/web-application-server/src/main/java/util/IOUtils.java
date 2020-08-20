@@ -18,15 +18,21 @@ public class IOUtils {
         br.read(body, 0, contentLength);
         Map<String, ArrayList<String>> convertBody = new HashMap<>();
 
+        System.out.println(body);
+
         Arrays.stream(String
                 .copyValueOf(body)
                 .split("&")
         ).forEach(value -> {
-            String[] splitBody = value.split("=");
-            if (convertBody.containsKey(splitBody[0])) {
-                convertBody.get(splitBody[0]).add(splitBody[1]);
+            ArrayList<String> splitBody = new ArrayList<>(
+                    Arrays.asList(value.split("="))
+            );
+
+            if (splitBody.size() == 1) splitBody.add("");
+            if (convertBody.containsKey(splitBody.get(0))) {
+                convertBody.get(splitBody.get(0)).add(splitBody.get(1));
             } else {
-                convertBody.put(splitBody[0], new ArrayList<>(Collections.singletonList(splitBody[1])));
+                convertBody.put(splitBody.get(0), new ArrayList<>(Collections.singletonList(splitBody.get(1))));
             }
         });
 
