@@ -1,7 +1,7 @@
 package webserver;
 
 import model.http.HttpMethod;
-import model.http.HttpRequest;
+import model.http.HttpParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,16 +33,15 @@ public class RequestHandler extends Thread {
             for (String line = br.readLine(); line != null; line = br.readLine()) {
                 if (line.equals("")) break;
                 headers.add(line);
-                log.debug("header : {}", line);
             }
 
-            HttpRequest httpRequest = new HttpRequest(headers);
+            HttpParser httpRequest = new HttpParser(headers);
 
-            if (httpRequest.getMethod() != HttpMethod.GET) {
-                httpRequest.body = readData(br, httpRequest.getContentLength());
-            }
-
-            controller.response(dos, httpRequest);
+//            if (httpRequest.getMethod() != HttpMethod.GET) {
+//                httpRequest.body = readData(br, httpRequest.getContentLength());
+//            }
+//
+//            controller.response(dos, httpRequest);
         } catch (IOException e) {
             log.error(e.getMessage());
         } catch (Throwable throwable) {

@@ -18,9 +18,10 @@ public class HttpRequest {
     private final static String CONTENT_TYPE = "Accept";
     private final static String KEEP_ALIVE = "Connection";
     private final static String CONTENT_LENGTH = "Content-Length";
+    private final static String COOKIE = "Cookie";
 
     private HttpMethod method;
-    private String requestEndPoint;
+    public String requestEndPoint;
     private Map<String, String> requestParams;
     private String httpVersion;
     private ArrayList<Pair> headers = new ArrayList<>();
@@ -55,10 +56,6 @@ public class HttpRequest {
         return method;
     }
 
-    public String getRequestEndPoint() {
-        return requestEndPoint;
-    }
-
     public Map<String, String> getRequestParams() {
         return requestParams;
     }
@@ -73,6 +70,10 @@ public class HttpRequest {
 
     public String getConnection() {
         return findValue(KEEP_ALIVE);
+    }
+
+    public String getCookie() {
+        return findValue(COOKIE);
     }
 
     public int getContentLength() {

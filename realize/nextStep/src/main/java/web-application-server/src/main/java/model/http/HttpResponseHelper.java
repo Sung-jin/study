@@ -16,7 +16,7 @@ public class HttpResponseHelper {
 
     public void getResponseByHtml(DataOutputStream dos, HttpRequest httpRequest) {
         try {
-            Path requestFilePath = Paths.get(rootDir + httpRequest.getRequestEndPoint());
+            Path requestFilePath = Paths.get(rootDir + httpRequest.requestEndPoint);
 
             byte[] body = Files.readAllBytes(requestFilePath);
             response200Header(dos, body.length, httpRequest);
@@ -54,7 +54,17 @@ public class HttpResponseHelper {
         try {
             dos.writeBytes("HTTP/1.1 " + getStatusCode(HttpStatusCode.REDIRECT) + " \r\n");
             dos.writeBytes("Location: " + redirectUrl + "\r\n");
-            dos.writeBytes("Set-Cookie: login=" + success + "\r\n");
+            dos.writeBytes("Set-Cookie: login=" + success + "; Path=/ \r\n");
+            dos.writeBytes("\r\n");
+        } catch (IOException e) {
+            log.error(e.getMessage());
+        }
+    }
+
+    public void response401Header(DataOutputStream dos, String redirectUrl) {
+        try {
+            dos.writeBytes("HTTP/1.1 " + getStatusCode(HttpStatusCode.UNAUTHORIZED) + " \r\n");
+            dos.writeBytes("Location: " + redirectUrl + "\r\n");
             dos.writeBytes("\r\n");
         } catch (IOException e) {
             log.error(e.getMessage());
