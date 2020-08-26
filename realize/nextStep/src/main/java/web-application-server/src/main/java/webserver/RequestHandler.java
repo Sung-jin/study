@@ -2,6 +2,7 @@ package webserver;
 
 import model.http.HttpMethod;
 import model.http.HttpParser;
+import model.http.HttpRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,8 +15,9 @@ import static util.IOUtils.readData;
 
 public class RequestHandler extends Thread {
     private static final Logger log = LoggerFactory.getLogger(RequestHandler.class);
-    private Controller controller = new Controller();
+    private static HttpParser httpParser = HttpParser.getInstance();
 
+    private Controller controller = new Controller();
     private Socket connection;
 
     public RequestHandler(Socket connectionSocket) {
@@ -35,12 +37,12 @@ public class RequestHandler extends Thread {
                 headers.add(line);
             }
 
-            HttpParser httpRequest = new HttpParser(headers);
+            HttpRequest httpRequest = httpParser.parse(headers);
 
-//            if (httpRequest.getMethod() != HttpMethod.GET) {
-//                httpRequest.body = readData(br, httpRequest.getContentLength());
-//            }
-//
+            if (httpRequest.getMethod() != HttpMethod.GET) {
+                httpRequest.setBody(br);
+            }
+
 //            controller.response(dos, httpRequest);
         } catch (IOException e) {
             log.error(e.getMessage());

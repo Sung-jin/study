@@ -14,31 +14,31 @@ public class HttpResponseHelper {
     private static final Logger log = LoggerFactory.getLogger(RequestHandler.class);
     private static final String rootDir = "./webapp";
 
-    public void getResponseByHtml(DataOutputStream dos, HttpRequest httpRequest) {
-        try {
-            Path requestFilePath = Paths.get(rootDir + httpRequest.requestEndPoint);
-
-            byte[] body = Files.readAllBytes(requestFilePath);
-            response200Header(dos, body.length, httpRequest);
-
-            responseBody(dos, body);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void response200Header(DataOutputStream dos, int contentLength, HttpRequest httpRequest) {
-        try {
-            dos.writeBytes("HTTP/1.1 " + getStatusCode(HttpStatusCode.OK) + " \r\n");
-            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
-//            dos.writeBytes("Content-Type: " + httpRequest.getContentType() + "\r\n");
-            dos.writeBytes("Content-Length: " + contentLength + "\r\n");
-            dos.writeBytes("Connection: " + httpRequest.getConnection() + "\r\n");
-            dos.writeBytes("\r\n");
-        } catch (IOException e) {
-            log.error(e.getMessage());
-        }
-    }
+//    public void getResponseByHtml(DataOutputStream dos, HttpRequest httpRequest) {
+//        try {
+//            Path requestFilePath = Paths.get(rootDir + httpRequest.requestEndPoint);
+//
+//            byte[] body = Files.readAllBytes(requestFilePath);
+//            response200Header(dos, body.length, httpRequest);
+//
+//            responseBody(dos, body);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
+//
+//    private void response200Header(DataOutputStream dos, int contentLength, HttpRequest httpRequest) {
+//        try {
+//            dos.writeBytes("HTTP/1.1 " + getStatusCode(HttpStatusCode.OK) + " \r\n");
+//            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
+////            dos.writeBytes("Content-Type: " + httpRequest.getContentType() + "\r\n");
+//            dos.writeBytes("Content-Length: " + contentLength + "\r\n");
+//            dos.writeBytes("Connection: " + httpRequest.getConnection() + "\r\n");
+//            dos.writeBytes("\r\n");
+//        } catch (IOException e) {
+//            log.error(e.getMessage());
+//        }
+//    }
 
     public void response302Header(DataOutputStream dos, String redirectUrl) {
         try {
