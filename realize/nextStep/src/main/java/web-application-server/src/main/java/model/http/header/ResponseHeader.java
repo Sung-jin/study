@@ -24,6 +24,11 @@ public class ResponseHeader {
         beAddedHeader.put(parseHeader.getKey(), parseHeader.getValue());
     }
 
+    public void addHeader(String key, String value) {
+        HashMap<String, String> beAddedHeader = responseHeaderAllKey.contains(key) ? header : customHeader;
+        beAddedHeader.put(key, value);
+    }
+
     public String getHeaderValue(RequestField field) {
         return header.get(field.getKey());
     }

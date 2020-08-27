@@ -43,7 +43,7 @@ public class RequestHandler extends Thread {
                 httpRequest.setBody(br);
             }
 
-//            controller.response(dos, httpRequest);
+            controller.response(dos, httpRequest);
         } catch (IOException e) {
             log.error(e.getMessage());
         } catch (Throwable throwable) {
