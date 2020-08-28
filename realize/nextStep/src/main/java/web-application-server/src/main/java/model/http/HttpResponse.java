@@ -26,12 +26,10 @@ public class HttpResponse {
         this.responseHeader = header;
     }
 
-    public void responseHeader(DataOutputStream dos, HttpStatusCode code) {
+    public void responseHeader(DataOutputStream dos, HttpStatusCode code, ResponseHeader responseHeader) {
         try {
             dos.writeBytes(httpVersion.getText() + " " + getStatusCode(code) + " \r\n");
-            dos.writeBytes("Content-Type: " + responseHeader.getHeaderValue(RequestField.CONTENT_TYPE) + " \r\n");
-            dos.writeBytes("Content-Length: " + responseHeader.getHeaderValue(RequestField.CONTENT_LENGTH) +  "\r\n");
-            dos.writeBytes("Connection: " + responseHeader.getHeaderValue(RequestField.CONNECTION) + " \r\n");
+            dos.writeBytes(responseHeader.getAllKeyValueHeader());
             dos.writeBytes("\r\n");
         } catch (IOException e) {
             log.error(e.getMessage());

@@ -36,4 +36,24 @@ public class ResponseHeader {
     public String getCustomHeaderValue(String key) {
         return customHeader.get(key);
     }
+
+    public String getAllKeyValueHeader() {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        header.keySet().forEach(key -> {
+            stringBuilder.append(key);
+            stringBuilder.append(": ");
+            stringBuilder.append(header.get(key));
+            stringBuilder.append("\r\n");
+        });
+
+        customHeader.keySet().forEach(key -> {
+            stringBuilder.append(key);
+            stringBuilder.append(": ");
+            stringBuilder.append(customHeader.get(key));
+            stringBuilder.append("\r\n");
+        });
+
+        return stringBuilder.toString();
+    }
 }
