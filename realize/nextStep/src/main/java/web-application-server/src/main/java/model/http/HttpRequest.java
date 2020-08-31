@@ -6,10 +6,7 @@ import model.http.header.RequestHeader;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static util.IOUtils.readData;
 
@@ -20,12 +17,23 @@ public class HttpRequest {
     private RequestHeader requestHeader;
     private Map<String, ArrayList<String>> query = new HashMap<>();
     private Map<String, ArrayList<String>> body = new HashMap<>();
+    private Map<String, String> cookies = new HashMap<>();
 
     public HttpRequest(HttpMethod method, URI uri, HttpVersion httpVersion, RequestHeader header) {
         this.method = method;
         this.uri = uri;
         this.httpVersion = httpVersion;
         this.requestHeader = header;
+
+        if (hasKeyInHeader(RequestField.COOKIE.getKey())) {
+            Arrays.stream(header
+                    .getHeaderValue(RequestField.COOKIE)
+                    .split(";(?=\\s)"))
+                    .forEach(splitCookie -> {
+                        String[] keyValue = splitCookie.split("=");
+                        cookies.put(keyValue[0], keyValue[1]);
+                    });
+        }
     }
 
     public void setBody(BufferedReader br) throws IOException {
@@ -76,4 +84,14 @@ public class HttpRequest {
     public String getKeyValueHeader(RequestField field) { return field.getKey() + ": " + getHeaderValue(field); }
 
     public String getKeyValueCustomHeader(String key) { return key + ": " + getHeaderValue(key); }
+
+    public String getCookieValue(String key) {
+        return cookies.get(key);
+    }
+
+    public Boolean hasKeyInHeader(String key) {
+        return requestHeader
+                .getAllKeyStream()
+                .anyMatch(key::equals);
+    }
 }

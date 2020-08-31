@@ -4,9 +4,10 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-import static util.HttpRequestUtils.parseHeader;
 import static util.HttpRequestUtils.Pair;
+import static util.HttpRequestUtils.parseHeader;
 
 public class RequestHeader {
     private static List<String> requestHeaderAllKey = Arrays
@@ -36,5 +37,12 @@ public class RequestHeader {
 
     public String getCustomHeaderValue(String key) {
         return customHeader.get(key);
+    }
+
+    public Stream<String> getAllKeyStream() {
+        return Stream.concat(
+                header.keySet().stream(),
+                customHeader.keySet().stream()
+        );
     }
 }

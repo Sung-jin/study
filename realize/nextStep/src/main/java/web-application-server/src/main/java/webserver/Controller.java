@@ -1,5 +1,6 @@
 package webserver;
 
+import controller.UserController;
 import model.http.HttpMethod;
 import model.http.HttpRequest;
 import model.http.HttpResponse;
@@ -16,40 +17,22 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 class Controller {
     private static final Logger log = LoggerFactory.getLogger(RequestHandler.class);
+
+    private static final String rootUrl = "/";
+
     private static final String rootDir = "./webapp";
-    private static Set<String> allHtmlEndpoint;
-    private static Set<String> allJsEndpoint;
-    private static Set<String> allCssEndpoint;
+    private static Set<String> allStaticFiles;
     static {
         try {
-            allHtmlEndpoint = Files
+            allStaticFiles = Files
                     .walk(Paths.get(rootDir))
-                    .filter(it -> it.toString().endsWith(".html"))
-                    .map(it -> it
-                            .toString()
-                            .substring(rootDir.length())
-                    )
-                    .collect(Collectors.toSet());
-
-            allJsEndpoint = Files
-                    .walk(Paths.get(rootDir))
-                    .filter(it -> it.toString().endsWith(".js"))
-                    .map(it -> it
-                            .toString()
-                            .substring(rootDir.length())
-                    )
-                    .collect(Collectors.toSet());
-
-            allCssEndpoint = Files
-                    .walk(Paths.get(rootDir))
-                    .filter(it -> it.toString().endsWith(".css"))
+                    .filter(it -> it.toString().contains("."))
                     .map(it -> it
                             .toString()
                             .substring(rootDir.length())
@@ -61,18 +44,22 @@ class Controller {
     }
 
     public void response(DataOutputStream dos, HttpRequest httpRequest) {
-        byte[] file;
+        Optional<String> requestFileResult = Optional.empty();
         ResponseHeader responseHeader = new ResponseHeader();
+        HttpStatusCode httpStatusCode;
 
         try {
             String originalPath = httpRequest.getUri().getPath();
             String requestPath = originalPath.contains(".") ?
                     originalPath.substring(0, originalPath.lastIndexOf("/") + 1) : originalPath;
 
-            if (isRequestStaticFile(originalPath, httpRequest)) {
-                Optional<String> result = getRequestFileTypeSet(
-                        originalPath.contains(".") ? originalPath.substring(originalPath.lastIndexOf(".") + 1) : ""
-                ).stream().filter(it ->
+            if (isNotAuthentication(httpRequest, requestPath)) {
+                httpStatusCode = HttpStatusCode.UNAUTHORIZED;
+                responseHeader.addHeader(ResponseField.LOCATION.getKey(), rootUrl);
+                log.error("로그인이 되어 있지 않습니다. 요청 path = {}", requestPath);
+            } else if (isRequestStaticFile(originalPath, httpRequest)) {
+
+                requestFileResult = allStaticFiles.stream().filter(it ->
                         it.equals(originalPath.substring(0, originalPath.lastIndexOf("/")) + "/index.html")
                                 || it.equals(originalPath)
                 ).findFirst();
@@ -83,121 +70,61 @@ class Controller {
                 );
                 responseHeader.addHeader(httpRequest.getKeyValueHeader(RequestField.CONNECTION));
 
-                HttpResponse httpResponse = new HttpResponse(
-                        httpRequest.getMethod(), httpRequest.getHttpVersion(), responseHeader
-                );
-                httpResponse.responseHeader(dos, HttpStatusCode.OK, responseHeader);
-
-                if (result.isPresent()) {
-                    responseHeader.addHeader(
-                            ResponseField.CONTENT_LENGTH.getKey(),
-                            String.valueOf(responseStaticFile(result.get(), dos))
-                    );
+                httpStatusCode = HttpStatusCode.OK;
+            } else {
+                if (originalPath.startsWith("/user")) {
+                    UserController userController = new UserController(requestPath, httpRequest, responseHeader);
+                    httpStatusCode = userController.getHttpStatusCode();
+                } else {
+                    httpStatusCode = HttpStatusCode.NOT_FOUND;
+                    log.error("없는 요청! Request Path : {}, Method : {}", originalPath, httpRequest.getMethod().name());
                 }
             }
 
+            HttpResponse httpResponse = new HttpResponse(
+                    httpRequest.getMethod(), httpRequest.getHttpVersion(), responseHeader
+            );
+            httpResponse.responseHeader(dos, httpStatusCode);
+
+            if (requestFileResult.isPresent()) {
+                byte[] requestStaticFile = getRequestStaticFile(requestFileResult.get());
+                responseHeader.addHeader(
+                        ResponseField.CONTENT_LENGTH.getKey(),
+                        String.valueOf(requestStaticFile.length)
+                );
+
+                dos.writeBytes("\r\n");
+                dos.write(requestStaticFile, 0, requestStaticFile.length);
+            }
+
+            dos.writeBytes("\r\n");
             dos.flush();
         } catch (IOException e) {
             log.error(e.getMessage());
         }
-
-//        responseBody()
-
-//        Set<String> requestFileTypeSet = getRequestFileTypeSet(
-//                httpRequest.requestEndPoint.substring(
-//                        httpRequest.requestEndPoint.lastIndexOf(".")
-//                )
-//        );
-//
-//        if (requestFileTypeSet.contains())
-//
-//        if (allStaticEndpoint.contains(httpRequest.requestEndPoint)) {
-//            if (hasContain(Arrays.asList("/user/list", "/user/list.html"), httpRequest.requestEndPoint)) {
-//                Map<String, String> cookies = parseCookies(httpRequest.getCookie());
-//                if (Boolean.parseBoolean(cookies.get("login"))) {
-//                    httpRequest.requestEndPoint = "/user/list.html";
-//                    httpResponseHelper.getResponseByHtml(dos, httpRequest);
-//                } else {
-//                    httpResponseHelper.response401Header(dos, "/index.html");
-//                }
-//            } else {
-//                httpResponseHelper.getResponseByHtml(dos, httpRequest);
-//            }
-//        } else {
-//            switch(httpRequest.requestEndPoint) {
-//                case "/user/create" : {
-//                    UserService userService = new UserService();
-//                    userService.setUser(httpRequest);
-//                    userService.joinUser(userService.getUser());
-//
-//                    httpResponseHelper.response302Header(dos, "/index.html");
-//                    break;
-//                }
-//                case "/user/login" : {
-//                    UserService userService = new UserService();
-//                    userService.setUser(httpRequest);
-//                    boolean loginResult = userService.loginUser(userService.getUser());
-//
-//                    if (!loginResult) log.error("로그인 실패!");
-//
-//                    httpResponseHelper.responseLogin302Header(dos, "/index.html", loginResult);
-//                    break;
-//                }
-//                default: {
-//                    httpResponseHelper.response404Header(dos);
-//                }
-//            }
-//        }
     }
 
-    private int responseStaticFile(String requestPath, DataOutputStream dos) throws IOException {
+    private byte[] getRequestStaticFile(String requestPath) throws IOException {
         Path requestFilePath = Paths.get(rootDir + requestPath);
-        byte[] byteStaticFile = Files.readAllBytes(requestFilePath);
-
-        dos.write(byteStaticFile, 0, byteStaticFile.length);
-
-        return byteStaticFile.length;
+        return Files.readAllBytes(requestFilePath);
     }
-
-//    private void responseBody(DataOutputStream dos, byte[] body, ResponseHeader responseHeader) throws IOException {
-//        responseHeader.getAllHeaderKey().
-//
-//        dos.flush();
-//    }
 
     private Boolean isRequestStaticFile(String path, HttpRequest httpRequest) {
         String extension = path.substring(path.lastIndexOf(".") + 1);
 
-
-        return Arrays.asList("html", "js", "css").contains(extension) ||
+        return Arrays.asList("html", "js", "css", "ico", "eot", "svg", "ttf", "woff", "woff2").contains(extension) ||
                 (httpRequest.getMethod() == HttpMethod.GET && httpRequest.getQueryKeySet().size() == 0);
     }
 
-    private Set<String> getRequestFileTypeSet(String extension) {
-        switch (extension) {
-            case "js": {
-                return allJsEndpoint;
-            }
-            case "css": {
-                return allCssEndpoint;
-            }
-            default: {
-                return allHtmlEndpoint;
-            }
+    private boolean isNotAuthentication(HttpRequest httpRequest, String requestPath) {
+        boolean isNotAuthentication = Arrays.asList("/user/list").contains(requestPath);
+        // 특정 패스에 대한 권한 체크
+        // 특정 패스를 요청하였을 경우, 권한 체크가 필요하므로 속해있으면 false 로 초기화
+
+        if (isNotAuthentication && httpRequest.hasKeyInHeader(RequestField.COOKIE.getKey())) {
+            isNotAuthentication = !Boolean.valueOf(httpRequest.getCookieValue("login"));
         }
-    }
 
-    private boolean hasContain(List<String> compareList, String target) {
-        return compareList.contains(target);
+        return isNotAuthentication;
     }
-
-//    private String exclusionContentType(String contentType) {
-//        List<String> exclusions = Arrays.asList(",?application/signed-exchange.*([0-9]$|(?=,))");
-//
-//        for (String exclusion: exclusions) {
-//            contentType = contentType.replaceAll(exclusion, "");
-//        }
-//
-//        return contentType;
-//    }
 }

@@ -1,6 +1,5 @@
 package model.http;
 
-import model.http.header.RequestField;
 import model.http.header.ResponseHeader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +25,7 @@ public class HttpResponse {
         this.responseHeader = header;
     }
 
-    public void responseHeader(DataOutputStream dos, HttpStatusCode code, ResponseHeader responseHeader) {
+    public void responseHeader(DataOutputStream dos, HttpStatusCode code) {
         try {
             dos.writeBytes(httpVersion.getText() + " " + getStatusCode(code) + " \r\n");
             dos.writeBytes(responseHeader.getAllKeyValueHeader());
