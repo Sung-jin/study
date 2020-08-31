@@ -13,8 +13,7 @@ import java.util.ArrayList;
 
 public class RequestHandler extends Thread {
     private static final Logger log = LoggerFactory.getLogger(RequestHandler.class);
-    private static HttpParser httpParser = HttpParser.getInstance();
-//    TODO - 객체 생성하는 형태로 변경해야 함. -> 스레드이므로.
+    private HttpParser httpParser = new HttpParser();
 
     private Controller controller = new Controller();
     private Socket connection;
@@ -24,9 +23,6 @@ public class RequestHandler extends Thread {
     }
 
     public void run() {
-//        log.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
-//                connection.getPort());
-
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
             DataOutputStream dos = new DataOutputStream(out);
             BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));

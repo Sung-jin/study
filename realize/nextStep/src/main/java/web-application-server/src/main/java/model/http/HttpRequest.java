@@ -28,10 +28,10 @@ public class HttpRequest {
         if (hasKeyInHeader(RequestField.COOKIE.getKey())) {
             Arrays.stream(header
                     .getHeaderValue(RequestField.COOKIE)
-                    .split(";(?=\\s)"))
+                    .split(";"))
                     .forEach(splitCookie -> {
                         String[] keyValue = splitCookie.split("=");
-                        cookies.put(keyValue[0], keyValue[1]);
+                        if (keyValue.length == 2) cookies.put(keyValue[0].trim(), keyValue[1].trim());
                     });
         }
     }

@@ -24,15 +24,13 @@ import java.util.stream.Collectors;
 class Controller {
     private static final Logger log = LoggerFactory.getLogger(RequestHandler.class);
 
-    private static final String rootUrl = "/";
-
     private static final String rootDir = "./webapp";
     private static Set<String> allStaticFiles;
     static {
         try {
             allStaticFiles = Files
                     .walk(Paths.get(rootDir))
-                    .filter(it -> it.toString().contains("."))
+                    .filter(it -> it.toString().substring(1).contains("."))
                     .map(it -> it
                             .toString()
                             .substring(rootDir.length())
@@ -55,12 +53,19 @@ class Controller {
 
             if (isNotAuthentication(httpRequest, requestPath)) {
                 httpStatusCode = HttpStatusCode.UNAUTHORIZED;
-                responseHeader.addHeader(ResponseField.LOCATION.getKey(), rootUrl);
+
+                responseHeader.addHeader(
+                        ResponseField.CONTENT_TYPE.getKey(),
+                        httpRequest.getHeaderValue(RequestField.ACCEPT).replaceAll(",.*", "")
+                );
+                requestFileResult = allStaticFiles.stream().filter("/index.html"::equals).findFirst();
                 log.error("로그인이 되어 있지 않습니다. 요청 path = {}", requestPath);
             } else if (isRequestStaticFile(originalPath, httpRequest)) {
-
+                httpStatusCode = HttpStatusCode.OK;
                 requestFileResult = allStaticFiles.stream().filter(it ->
                         it.equals(originalPath.substring(0, originalPath.lastIndexOf("/")) + "/index.html")
+                                || it.equals(originalPath.substring(0, originalPath.lastIndexOf("/")))
+                                || it.equals(originalPath.replaceAll("(.*(?=/css))|(.*(?=/js))|(.*(?=/fonts))", ""))
                                 || it.equals(originalPath)
                 ).findFirst();
 
@@ -69,8 +74,6 @@ class Controller {
                         httpRequest.getHeaderValue(RequestField.ACCEPT).replaceAll(",.*", "")
                 );
                 responseHeader.addHeader(httpRequest.getKeyValueHeader(RequestField.CONNECTION));
-
-                httpStatusCode = HttpStatusCode.OK;
             } else {
                 if (originalPath.startsWith("/user")) {
                     UserController userController = new UserController(requestPath, httpRequest, responseHeader);
@@ -117,7 +120,7 @@ class Controller {
     }
 
     private boolean isNotAuthentication(HttpRequest httpRequest, String requestPath) {
-        boolean isNotAuthentication = Arrays.asList("/user/list").contains(requestPath);
+        boolean isNotAuthentication = Arrays.asList("/user/list/").contains(requestPath);
         // 특정 패스에 대한 권한 체크
         // 특정 패스를 요청하였을 경우, 권한 체크가 필요하므로 속해있으면 false 로 초기화
 
