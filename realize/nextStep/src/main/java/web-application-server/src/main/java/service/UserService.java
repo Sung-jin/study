@@ -8,7 +8,8 @@ import webserver.RequestHandler;
 
 import java.util.List;
 
-import static db.DataBase.*;
+import static db.DataBase.addUser;
+import static db.DataBase.findAll;
 
 public class UserService {
     private static final Logger log = LoggerFactory.getLogger(RequestHandler.class);

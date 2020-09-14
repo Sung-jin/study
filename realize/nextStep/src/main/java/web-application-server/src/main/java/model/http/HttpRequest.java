@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.*;
 
+import static util.HttpRequestUtils.parseQueryString;
 import static util.IOUtils.readData;
 
 public class HttpRequest {
@@ -15,7 +16,7 @@ public class HttpRequest {
     private URI uri;
     private HttpVersion httpVersion;
     private RequestHeader requestHeader;
-    private Map<String, ArrayList<String>> query = new HashMap<>();
+    private Map<String, String> query = new HashMap<>();
     private Map<String, ArrayList<String>> body = new HashMap<>();
     private Map<String, String> cookies = new HashMap<>();
 
@@ -34,6 +35,10 @@ public class HttpRequest {
                         if (keyValue.length == 2) cookies.put(keyValue[0].trim(), keyValue[1].trim());
                     });
         }
+
+        if (method == HttpMethod.GET) {
+            query = parseQueryString(uri.getQuery());
+        }
     }
 
     public void setBody(BufferedReader br) throws IOException {
@@ -45,7 +50,7 @@ public class HttpRequest {
         return this.query.keySet();
     }
 
-    public ArrayList<String> getQueryValues(String key) {
+    public String getQueryValues(String key) {
         return query.get(key);
     }
 

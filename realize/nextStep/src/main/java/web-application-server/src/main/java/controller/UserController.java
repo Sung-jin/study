@@ -2,7 +2,6 @@ package controller;
 
 import model.http.HttpRequest;
 import model.http.HttpStatusCode;
-import model.http.header.RequestField;
 import model.http.header.ResponseField;
 import model.http.header.ResponseHeader;
 import org.slf4j.Logger;
