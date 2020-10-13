@@ -25,6 +25,8 @@ dependencies {
     implementation("com.h2database:h2")
     implementation("mysql:mysql-connector-java")
     implementation("org.projectlombok:lombok")
+    implementation("ch.qos.logback:logback-classic:1.1.6")
+    implementation("ch.qos.logback:logback-core:1.1.6")
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }

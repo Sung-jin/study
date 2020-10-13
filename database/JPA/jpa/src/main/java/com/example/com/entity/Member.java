@@ -1,11 +1,12 @@
 package com.example.com.entity;
 
+import lombok.Data;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.Table;
 
 @Entity
-@Table
+@Data
 public class Member {
     @Id
     private Long id;
