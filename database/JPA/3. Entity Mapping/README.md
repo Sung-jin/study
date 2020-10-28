@@ -34,6 +34,127 @@
 | schema | schema 기능이 있는 데이터베이스에서 schema 를 매핑한다. | |
 | uniqueConstraints (DDL) | DDL 생성 시에 유니크 제약조건을 만든다. <br/> 2개 이상의 복합 유니크 제약조건을 만들 수 있다. <br/> 참고로 이 기능은 스키마 자동 생성 기능을 사용해서 DDL 을 만들 때만 사용한다. |
 
+### @Id
+
+* Primary Key 매핑
+* 하지만 데이터베이스 종류마다 할당해주는 방법이 다르다.
+* JPA 는 이러한 문제를 해결하는 방법으로 다음과 같다.
+    1. IDENTITY - 기본 키 생성을 데이터베이스에 위임한다.
+    2. SEQUENCE - 데이터베이스 시퀀스를 사용해서 기본 키를 할당한다.
+    3. TABLE - 키 생성 테이블을 사용한다.
+* 기본 키만 할당하려면 @Id 만 사용하고, 자동 생성 전략을 사용하려면 @Id 에 @GeneratedValue 에 위의 설정값을 추가하여 사용하면 된다.
+* @GeneratedValue 전략을 사용하려면 persistence.xml 에 다음과 같은 설정 추가가 필요하다.
+
+```xml
+<property name="hibernate.id.new_generator_mappings" value="true" />
+```
+
+#### 기본 키 직접 할당
+
+* @Id 에 적용 가능한 자바 타입
+    1. 자바 기본형
+    2. 자바 래퍼형
+        * String
+        * java.util.Date
+        * java.sql.Date
+        * BigDecimal
+        * BigInteger
+* 기본 키 직접 할당 전략은 em.persist(entity) 로 엔티티를 저장할 때 직접 id 변수에 데이터를 지정한 뒤 영속화 하는 경우이다.
+    * 기본 키 직접 할당 전략에서 직접 키를 지정하지 않고 저장하면 PersistenceException 예외가 발생한다.
+    
+#### IDENTITY 전략
+
+* 기본 키 생성을 데이터베이스에 위임한다.
+* 주로 MySQL, PostgreSQL, SQL Server, DB2 에서 사용된다.
+
+```mysql
+CREATE TABLE entity (
+    id long NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    data varchar(255)
+);
+
+INSERT INTO entity(data) value ('test');
+# 자동으로 id 의 값이 순서대로 채워져서 저장된다.
+```
+
+```java
+@Entity
+@Data
+public class entity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    // 해당 어노테이션과 IDENTITY 속성을 주면 em.persist() 할 때 데이터베이스에서 자동으로 값을 할당하여 저장한다.
+    private long id;
+
+    private String data;
+}
+
+public Entity save() {
+    Entity entity = new Entity();
+    entity.setData("hello world!");
+
+    return em.persist(entity);
+}
+// 위와같이 id 를 지정하지 않더라도, em.persist() 를 통해 데이터베이스에 저장할 때 데이터베이스에서 id 를 자동으로 채워준다.
+// 또한, 저렇게 리턴해주면 자동으로 저장된 id 가 들어간 엔티티가 리턴된다.
+```
+
+* 엔티티가 영속 상태가 되려면 식별자가 필요한데, IDENTITY 전략은 엔티티를 데이터베이스에 저장해야 식별자를 구할 수 있으므로 em.persist() 를 호출하는 즉시 insert sql 이 데이터베이스에 전달된다.
+* 따라서, 트랜재션을 지원하는 쓰기 지연이 동작하지 않는다.
+
+#### SEQUENCE 전략
+
+* 데이터베이스 시퀀스는 유일한 값을 순서대로 생성하는 특별한 데이터베이스 오브젝트이다.
+* Oracle, PostgreSQL, DB2, H2 데이터베이스에서 사용할 수 있다.
+
+```oracle
+CREATE TABLE entity (
+    id long NOT NULL PRIMARY KEY,
+    data varchar(255)
+);
+
+CREATE SEQUENCE ENTITY_SEQ START WITH 1 INCREMENT BY 1;
+```
+
+```java
+@Data
+@Entity
+@SequenceGenerator(
+    name = "ENTITY_SEQ_GENERATOR",
+    sequenceName = "ENTITY_SEQ",
+    initialValue = 1,
+    allocationSize = 1
+)
+// ENTITY_SEQ_GENERATOR 라는 시퀀스 생성기를 등록
+public class entity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ENTITY_SEQ_GENERATOR")
+    // SEQUENCE 전략ㅈ으로 설정하고, ENTITY_SEQ_GENERATOR 에 등록한 시퀀스 생성기를 선택한다.
+    // id 식별자 값은 ENTITY_SEQ_GENERATOR 시퀀스가 할당한다.
+    // IDENTITY 와 다르게 em.persist() 를 호출할 때 먼저 데이터베이스 시퀀스를 사용해서 식별자를 조회한다.
+    // 조회한 식별자를 엔티티에 할당한 후에 엔티티를 영속성 컨텍스트에 저장한다.
+    // 이후 트랜잭션을 커밋해서 플러시가 일어나면 엔티티를 데이터베이스에 저장한다.
+    // 즉, IDENTITY 는 저장 후 id 를 조회해서 엔티티의 식별자에 할당하지만 SEQUENCE 전략은 식별자를 조회한 뒤 셋팅하고 데이터베이스에 저장한다.
+    // @SequenceGenerator -> @GeneratedValue 옆에 사용해도 된다.
+    private long id;
+
+    private String data;
+}
+```
+
+* @SequenceGenerator 속성
+
+| 속성 | 기능 | 기본값 |
+| ---- | ---- | ---- |
+| name | 식별자 생성기 이름 | 필수 |
+| sequenceName | 데이터베이스에 등록되어 있는 시퀀스 이름 | hibernate_sequence |
+| initialValue | DDL 생성 시에만 사용됨. <br/> 시퀀스 DDL 을 생성할 때 처음 시작하는 수를 지정 | 1 |
+| allocationSize | 시퀀스 한 번 호출에 증가하는 수 (성능 최적화에 사용) | 50 |
+| catalog, schema | 데이터베이스 catalog, schema 이름 | |
+
+> CREATE SEQUENCE [sequenceName] <br/>
+> START WITh [initialValue] INCREMENT BY [allocateionSize]
+
 ### @Enumerated
 
 * 자바의 enum 과 매핑하는 어노테이션
@@ -90,3 +211,4 @@ byte[] image;
 
 // 각각 CLOB, BLOB 이 매핑된다.
 ```
+
