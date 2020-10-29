@@ -129,7 +129,7 @@ CREATE SEQUENCE ENTITY_SEQ START WITH 1 INCREMENT BY 1;
 public class entity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ENTITY_SEQ_GENERATOR")
-    // SEQUENCE 전략ㅈ으로 설정하고, ENTITY_SEQ_GENERATOR 에 등록한 시퀀스 생성기를 선택한다.
+    // SEQUENCE 전략으로 설정하고, ENTITY_SEQ_GENERATOR 에 등록한 시퀀스 생성기를 선택한다.
     // id 식별자 값은 ENTITY_SEQ_GENERATOR 시퀀스가 할당한다.
     // IDENTITY 와 다르게 em.persist() 를 호출할 때 먼저 데이터베이스 시퀀스를 사용해서 식별자를 조회한다.
     // 조회한 식별자를 엔티티에 할당한 후에 엔티티를 영속성 컨텍스트에 저장한다.
@@ -153,7 +153,89 @@ public class entity {
 | catalog, schema | 데이터베이스 catalog, schema 이름 | |
 
 > CREATE SEQUENCE [sequenceName] <br/>
-> START WITh [initialValue] INCREMENT BY [allocateionSize]
+> START WITh [initialValue] INCREMENT BY [allocationSize]
+
+#### Table 전략
+
+* 키 생성 전용 테이블을 하나 만들고 해당 테이블에 이름과 값으로 사용할 컬럼을 만들어 데이터베이스 시퀀스를 흉내내는 전략이다.
+* 모든 데이터베이스에서 사용이 가능하다.
+
+```sql
+CREATE TABLE sequence_table (
+    sequence_name varchar(255) not null,
+--  시퀀스 이름 
+    next_val bigint,
+--  시퀀스 값
+    primary key key ( sequence_name )
+)
+```
+
+```java
+@Data
+@Entity
+@TableGenerator(
+    name = "ENTITY_SEQ_GENERATOR",
+    // 테이블 키 생성기
+    table = "sequence_table",
+    // 키 생성용 테이블 매핑
+    pkColumnValue = "entity_seq",
+    allocationSize = 1
+)
+// ENTITY_SEQ_GENERATOR 라는 시퀀스 생성기를 등록
+public class entity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.TABLE, generator = "ENTITY_SEQ_GENERATOR")
+    // TABLE 전략으로 설정하고, ENTITY_SEQ_GENERATOR 에 등록한 시퀀스 생성기를 선택한다.
+    private long id;
+
+    private String data;
+}
+```
+
+* Sequence 전략과 시퀀스 사용 여부 차이만 제외하고 전략과 내부 동작방식이 같다.
+* pkColumnValue 에 해당되는 값이 테이블의 sequence_name 컬럼에 생성되고 해당 테이블에 매핑된다.
+* 테이블이 생성될 때 마다 next_val 컬럼의 값이 증가한다.
+* @TableGenerator 속성
+
+| 속성 | 기능 | 기본값 |
+| ---- | ---- | ---- |
+| name | 식별자 생성기 이름 | 필수 |
+| table | 키생성 테이블명 | hibernate_sequences |
+| pkColumnName | 시퀀스 컬럼명 | sequence_name |
+| valueColumnName | 시퀀스 값 컬렴명 | next_val |
+| pkColumnValue | 키로 사용할 값 이름 | 엔티티 이름 |
+| initialValue | 초기 값, 마지막으로 생성된 값이 기준 | 0 |
+| allocationSize | 시퀀스 한 번 호출에 증가하는 수 <br/> (성능 최적화에 사용) | 50 |
+| catalog, schema | 데이터베이스 catalog, schema 이름 | |
+| uniqueConstraints(DDL) | 유니크 제약 조건을 지정할 수 있다 | |
+
+#### auto 전략
+
+* GenerationType.AUTO 는 선택한 데이터베이스 방언에 따라 IDENTITY, SEQUENCE, TABLE 전략 중 하나를 자동으로 선택한다.
+* @GeneratedValue.strategy 의 기본값은 AUTO 이다.
+* 데이터베이스를 사용하여도 코드를 수정할 필요가 없다.
+* 스키마 자동 생성 기능을 사용하고, SEQUENCE, TABLE 전략이 선택되면 sequence 용 테이블이 자동으로 생성된다.
+
+#### 기본 키 매핑 정리
+
+* 영속성 컨텕스트는 엔티티를 식별자 값으로 구분하므로 엔티티를 영속 상태로 만들려면 식별자 값이 반드시 있어야 한다.
+* em.persist() 를 호출한 직후에 발생하는 일은 다음과 같다.
+    * 직접 할당
+        * 영속화 하기 전에 직접 객체에 식별자 값을 할당해야 하며, 없으면 예외가 발생한다.
+    * SEQUENCE
+        * 데이터베이스 시퀀스에서 식별자 값을 획득한 후 영속성 컨텍스트에 저장한다.
+    * TABLE
+        * 데이터베이스 시퀀스 생성용 테이블에서 식별자 값을 획득한 후 영속성 컨텍스트에 저장한다.
+    * IDENTITY
+        * 데이터베이스에 엔티티를 저장해서 식별자 값을 획득한 후 영속성 컨텍스트에 저장한다.
+        * 테이블에 데이터를 저장해야 식별자 값을 획득할 수 있다.
+* 권장하는 식별자 전략
+    1. null 값은 허용하지 않는다.
+    2. 유일해야 한다.
+    3. 변해서는 안된다.
+* 테이블의 기본 키를 선택하는 전략
+    1. 자연키 (natural key) - 비즈니스에 의미가 있는 키이며, 주민등록번호/이메일/전화번호 등과 같은 데이터
+    2. 대리키 (surrogate key) - 비즈니스와 관련 없는 임의로 만들어진 키이며, 대체키로도 불린다.
 
 ### @Enumerated
 
