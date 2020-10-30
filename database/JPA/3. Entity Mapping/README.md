@@ -237,6 +237,42 @@ public class entity {
     1. 자연키 (natural key) - 비즈니스에 의미가 있는 키이며, 주민등록번호/이메일/전화번호 등과 같은 데이터
     2. 대리키 (surrogate key) - 비즈니스와 관련 없는 임의로 만들어진 키이며, 대체키로도 불린다.
 
+### @Column
+
+* 객체 필드를 테이블 컬럼에 매핑한다.
+* 해당 어노테이션의 속성들
+
+| 속성 | 기능 | 기본값 |
+| ---- | ---- | ---- |
+| name | 필드와 매핑할 테이블의 컬럼 이름 | 객체의 필드 이름 |
+| insertable <br/> (거의 사용하지 않음) | 엔티티 저장 시 이 필드도 같이 저장한다. false 일 경우 해당 필드의 값은 데이터베이스에 저장되지 않는다. (읽기 전용 옵션) | true |
+| updatable <br/> (거의 사용하지 않음) | 엔티티 수정 시 해당 필드도 같이 수정된다. false 일 경우 데이터베이스에 수정하지 않는다. (읽기 전용 옵션) | true |
+| table <br/> (거의 사용하지 않음) | 하나의 엔티티를 두 개 이상의 테이블에 매핑할 때 사용한다. 즉, 해당 필드를 다른 테이블에 매핑할 수 있다. | 현재 클래스가 매핑 된 테이블 |
+| nullable (DDL) | null 값의 허용 여부를 설정한다. false 로 설정하면 DDL 생성시 not null 제약조건이 붙는다. | true |
+| unique (DDL) | @Table 의 uniqueConstraints 와 같지만 한 컬럼에 간단히 유니크 제약조건을 걸 때 사용한다. 두개 이상의 유니크 제약조건을 걸려면 클래스 레벨에서 @Table.uniqueConstrains 를 사용해야 한다. | |
+| ColumnDefinition (DDL) | 데이터베이스 컬럼 정보를 직접 줄 수 있다. | 필드의 자바 타입과 방언 정보를 사용해서 적절한 컬럼 타입을 생성한다. |
+| length (DDL) | 문자 길이 제약조건. String 타입에만 사용한다. | 255 |
+| precision, scale (DDL) | BigDecimal, BigInteger 타입에서 사용한다. precision 은 소수점을 포함한 전체 자릿수를, scale 은 소수의 자리수이다. double, float 에는 적용되지 않는다. 아주 큰 소수나 정밀한 소수를 다룰 때만 사용한다. | precision = 19, scale = 2 |
+
+* @Column 속성을 생략하면, 대부분 해당 어노테이션의 기본값이 적용되지만 nullable 의 경우 다음과 같은 예외상황이 있다.
+
+```
+int number;
+number integer not null
+// @Column 생략, java 의 기본타입 -> not null
+// 자바의 기본타입에 null 을 입력할 수 없기 때문.
+
+Integer number;
+number integer
+// @Column 생략, 객체타입 -> nullable
+
+@Column
+int number;
+number integer
+// @Column 생략x, java 의 기본타입 -> nullable
+// 기본타입에는 null 이 허용하지 않지만, @Column 의 nullable 의 기본값이 true 이므로 not null 설정이 안된다.
+```
+
 ### @Enumerated
 
 * 자바의 enum 과 매핑하는 어노테이션
@@ -294,3 +330,25 @@ byte[] image;
 // 각각 CLOB, BLOB 이 매핑된다.
 ```
 
+### @Transient
+
+* 해당 어노테이션의 필드는 매핑하지 않는다.
+* 데이터베이스에 저장하지 않고 조회하지도 않는다.
+* 객체에 임시로 어떤 값을 보관하고 싶을 때 사용한다.
+
+```java
+@Transient
+private String temp;
+```
+
+### @Access
+
+* JPA 가 엔티티 데이터에 접근하는 방식을 지정한다.
+    * 필드 접근 
+        * AccessType.FIELD
+        * 필드에 직접 접근한다.
+        * 필드 접근 권한이 private 이어도 접근할 수 있다.
+    * 프로퍼티 접근
+        * AccessType.PROPERTY
+        * Getter 를 사용한다.
+* @Access 를 설정하지 않으면 @Id 의 위치를 기준으로 접근 방식이 설정된다.
