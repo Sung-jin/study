@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence" version="2.1">
+
+    <persistence-unit name="test"/>
+</persistence>
+<!--순수하게 자바만 사용하는 J2SE 환경에서는 persistence.xml 에 엔티티 매니저 팩토리 정보를 설정해야 한다.-->
+<!--스프링 프레임워크에서 JPA 를 사용하면 스프링 프레임워크가 제공하는 방식으로 엔티티 매니저 팩토리를 등록해야 한다.-->
+<!--스프링 프레임워크가 제공하는 설정으로 모든 설정을 다 할 수 있어서 persistence.xml 없이도 동작한다.-->

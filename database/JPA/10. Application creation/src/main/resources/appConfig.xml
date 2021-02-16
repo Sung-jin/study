@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--스프링 애플리케이션 관련 설정-->
+<!--비즈니스 로직, 도메인 계층, 서비스 계층, 데이터 저장 계층 담당-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+    <tx:annotation-driven/>
+    <!--스프링 프레임워크가 제공하는 어노테이션 기반의 트랜잭션 관리자를 활성화한다.-->
+    <!--@Transactional 이 붙은 곳에 트랙잭션을 적용한다.-->
+
+    <context:component-scan base-package="jpabook.jpashop.service, jpabook.jpashop.repository"/>
+
+    <bean id="dataSource" class="org.apache.tomcat.jdbc.pool.DataSource">
+        <property name="driverClassName" value="org.h2.Driver"/>
+        <property name="url" value="jdbc:h2:mem:jpashop"/>
+        <property name="username" value="sa"/>
+        <property name="password" value=""/>
+    </bean>
+    <!--데이터베이스에 접근할 데이터소스를 등록-->
+
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+    <!--트랜잭션 관리자를 등록-->
+
+    <!-- JPA 예외를 스프링 예외로 변환 -->
+    <bean class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor"/>
+
+    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="packagesToScan" value="jpabook.jpashop.domain"/> <!-- @Entity 탐색 시작 위치 -->
+        <property name="jpaVendorAdapter">
+            <!-- 하이버네이트 구현체 사용 -->
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"/>
+        </property>
+        <property name="jpaProperties"> <!-- 하이버네이트 상세 설정 -->
+            <props>
+                <prop key="hibernate.dialect">org.hibernate.dialect.H2Dialect</prop>    <!-- 방언 -->
+                <prop key="hibernate.show_sql">true</prop>                              <!-- SQL 보기 -->
+                <prop key="hibernate.format_sql">true</prop>                            <!-- SQL 정렬해서 보기 -->
+                <prop key="hibernate.use_sql_comments">true</prop>                      <!-- SQL 코멘트 보기 -->
+                <prop key="hibernate.id.new_generator_mappings">true</prop>             <!-- 새 버전의 ID 생성 옵션 -->
+                <prop key="hibernate.hbm2ddl.auto">create</prop>                        <!-- DDL 자동 생성 -->
+                <!--create : 기존 DDL 을 제거하고 새로 생성-->
+                <!--create-drop : create 와 같으며, 애플리케이션 종료시 생성한 DDL 을 제거한다.-->
+                <!--update : 현재 엔티티 매핑 정보와 데이터베이스 스키마가 같은지 비교해서 변경사항만 수정한다.-->
+                <!--validate : 비교하고, 엔티티와 스키마가 다르면 경고를 남기고 실행하지 않는다. DDL 을 변경하지 않는다.-->
+            </props>
+        </property>
+    </bean>
+
+</beans>
