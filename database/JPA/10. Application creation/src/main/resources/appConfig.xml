@@ -43,7 +43,7 @@
                 <prop key="hibernate.use_sql_comments">true</prop>                      <!-- SQL 코멘트 보기 -->
                 <prop key="hibernate.id.new_generator_mappings">true</prop>             <!-- 새 버전의 ID 생성 옵션 -->
 <!--                <prop key="hibernate.hbm2ddl.auto">create</prop>                        &lt;!&ndash; DDL 자동 생성 &ndash;&gt;-->
-                <prop key="hibernate.hbm2ddl.auto">create-drop</prop>
+                <prop key="hibernate.hbm2ddl.auto">create</prop>
                 <!--create : 기존 DDL 을 제거하고 새로 생성-->
                 <!--create-drop : create 와 같으며, 애플리케이션 종료시 생성한 DDL 을 제거한다.-->
                 <!--update : 현재 엔티티 매핑 정보와 데이터베이스 스키마가 같은지 비교해서 변경사항만 수정한다.-->
