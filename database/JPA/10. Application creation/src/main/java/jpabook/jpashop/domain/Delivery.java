@@ -9,8 +9,8 @@ import javax.persistence.*;
 @Entity
 public class Delivery {
 
-    @Id @GeneratedValue
-    @Column(name = "DELIVERY_ID")
+    @Id
+    @GeneratedValue
     private Long id;
 
     @OneToOne(mappedBy = "delivery")

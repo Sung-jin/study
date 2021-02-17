@@ -16,8 +16,8 @@ import java.util.List;
 @DiscriminatorColumn(name = "DTYPE")
 public abstract class Item {
 
-    @Id @GeneratedValue
-    @Column(name = "ITEM_ID")
+    @Id
+    @GeneratedValue
     private Long id;
 
     private String name;        //이름
