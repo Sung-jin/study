@@ -21,6 +21,8 @@ public class ItemRepository {
     public void save(Item item) {
         if (item.getId() == null) {
             em.persist(item);
+            // 위 형태는 저장될 때 @GeneratedValue 가 id 에 있기 때문에, 식별자 값이 자동으로 생성되기에 정상적으로 사용가능하다.
+            // id 필드에 @GeneratedValue 가 없다면, 저장되는 시점에 식별자가 없어서 예외가 발생한다.
         } else {
             em.merge(item);
         }

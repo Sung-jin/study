@@ -32,6 +32,8 @@ public class OrderRepository {
     }
 
     public List<Order> findAll(OrderSearch orderSearch) {
+        // 주문 검색시 사용된다.
+        // 회원명과 주문 상태를 받아서 동적 쿼리를 생성한다.
 
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Order> cq = cb.createQuery(Order.class);

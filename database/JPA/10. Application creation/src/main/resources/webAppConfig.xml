@@ -18,6 +18,10 @@
         <property name="prefix" value="/WEB-INF/jsp/"/>
         <property name="suffix" value=".jsp"/>
     </bean>
+    <!--컨트롤러에서 전달받은 스트링 정보는, 해당 설정값을 바탕으로 매핑되어 렌더링할 뷰를 찾는다.-->
+    <!--ex) items/createItemForm 을 전달받았을 떄-->
+    <!--변환 전 items/createItemForm -> {prefix}items/createItemForm{suffix}-->
+    <!--변환 후 items/createItemForm -> WEB-INF/jsp/items/createItemForm.jsp-->
 
     <mvc:default-servlet-handler/>
 
