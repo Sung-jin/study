@@ -7,7 +7,7 @@
     * 상품 등록
     * 상품 수정
     * 상품 조회
-* 주민 기능
+* 주문 기능
     * 상품 주문
     * 주문 내역 조회
     * 주문 취소
@@ -45,3 +45,24 @@
     * 주문시 배송 정보를 생성하며, 주문과 배송은 1:1 관계이다.
 * 카테고리
     * 상품과 n:m 관계를 가진다.
+
+### Repository
+
+* 대부분 데이터 접근 계층은 CRUD (등록/조회/수정/삭제) 를 반복해서 개발한다.
+* 반복되는 문제를 해결하려면 제네릭과 상속을 적절히 사용해서 공통 부분을 처리하는 부모 클래스를 만들어서 처리할 수 있다.
+    * 이러한 방식을 GenericDAO 라고 한다.
+    * 하지만 이 방법은 공통 기능을 구현한 부모 클래스에 너무 종속되고 구현 클래스 상속이 가지는 단점에 노출된다.
+* 스프링 데이터 JPA 가 이러한 반복되는 CRUD 문제를 해결해준다.
+    * Repository 를 개발할 떄 인터패ㅔ이스만 작성하면 실행 시점에 스프링 데이터 JPA 가 구현 객체를동적으로 생성해서 주입해준다.
+    * 데이터 접근 계층을 개발할 때 구현 클래스 없이 인터페이스만 작성해도 개발을 완료할 수 있다.
+    
+```java
+public interface EntityRepository extends JpaRepository<Entity, Long> {
+    // JpaRepository<Entity, 식별자 타입>
+    // 기본적인 CRUD (save, findOne, findAll ...) 은 JpaRepository 에서 제공한다.
+    Entity findByField(String field);
+    // findByField 와 같이 직접 작성한 공통으로 처리할 수 없는 메소드는
+    // 스프링 데이터 JPA 가 메소드 이름을 분석해서 JPQL 을 실행한다.
+    // select e from Entity e where field = :field
+}
+```
