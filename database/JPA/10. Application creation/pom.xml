@@ -23,6 +23,8 @@
         <spring-framework.version>4.1.6.RELEASE</spring-framework.version>
         <!-- JPA, 하이버네이트 버전 -->
         <hibernate.version>4.3.10.Final</hibernate.version>
+        <!-- 스프링 데이터 JPA 버전 -->
+        <spring-data-jpa.version>1.8.0.RELEASE</spring-data-jpa.version>
         <!-- 데이터베이스 버전 -->
         <tomcat-jdbc.version>7.0.57</tomcat-jdbc.version>
         <h2db.version>1.4.187</h2db.version>
@@ -59,6 +61,13 @@
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-entitymanager</artifactId>
             <version>${hibernate.version}</version>
+        </dependency>
+
+        <!-- 스프링 데이터 JPA -->
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-jpa</artifactId>
+            <version>${spring-data-jpa.version}</version>
         </dependency>
 
         <!-- H2 데이터베이스 -->
@@ -138,7 +147,7 @@
 	          <target>${java.version}</target>
 	        </configuration>
 	      </plugin>
-	      
+
 	      <plugin>
 	        <groupId>org.apache.tomcat.maven</groupId>
 	        <artifactId>tomcat7-maven-plugin</artifactId>
@@ -148,7 +157,7 @@
 	       	    <uriEncoding>UTF-8</uriEncoding>
 	        </configuration>
 	      </plugin>
-	                 	      
+
 	    </plugins>
 	</build>
 </project>

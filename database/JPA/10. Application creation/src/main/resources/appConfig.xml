@@ -4,13 +4,17 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+       xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
 
     <tx:annotation-driven/>
     <!--스프링 프레임워크가 제공하는 어노테이션 기반의 트랜잭션 관리자를 활성화한다.-->
     <!--@Transactional 이 붙은 곳에 트랙잭션을 적용한다.-->
 
     <context:component-scan base-package="jpabook.jpashop.service, jpabook.jpashop.repository"/>
+
+    <jpa:repositories base-package="jpabook.jpashop.repository"/>
+    <!-- 스프링 데이터 JPA 디펜던시 추가 후, repository 를 검색할 base-package 를 적는다. -->
 
     <bean id="dataSource" class="org.apache.tomcat.jdbc.pool.DataSource">
         <property name="driverClassName" value="org.h2.Driver"/>
