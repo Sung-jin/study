@@ -3,6 +3,7 @@ package jpabook.jpashop.repository;
 import jpabook.jpashop.domain.Member;
 import jpabook.jpashop.domain.Order;
 import jpabook.jpashop.domain.OrderSearch;
+import jpabook.jpashop.domain.OrderStatus;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
@@ -57,4 +58,16 @@ public class OrderRepository {
         TypedQuery<Order> query = em.createQuery(cq).setMaxResults(1000); //최대 검색 1000 건으로 제한
         return query.getResultList();
     }
+
+    public List<Order> findByStatus(OrderStatus status) {
+        return em.createNamedQuery("Order.findByStatus", Order.class)
+                .setParameter("status", status)
+                .getResultList();
+    }
+    /*
+    스프링 데이터 JPA repository 를 사용하면
+    List<Order> findByStatus(@Param("status") OrderStatus status);
+    으로 namedQuery 를 호출할 수 있다.
+    @Param 을 사용하면 :status 와 같이 이름 기반 파라미터를 바인딩 할 수 있다.
+    */
 }

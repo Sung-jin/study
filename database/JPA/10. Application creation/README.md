@@ -66,3 +66,102 @@ public interface EntityRepository extends JpaRepository<Entity, Long> {
     // select e from Entity e where field = :field
 }
 ```
+
+### 쿼리 메소드 기능
+
+* 스프링 데이터 JPA 가 제공하는 쿼리 메소드 기능
+    1. 메소드 이름으로 쿼리 생성
+    2. 메소드 이름으로 JPA NamedQuery 호출
+    3. @Query 어노테이션을 사용해서 Repository Interface 에 쿼리 직접 정의
+    
+#### 메소드 이름으로 쿼리 생성
+
+```java
+public interface MemberRepository extends Repository<Member, Long> {
+    List<Member> findByEmailAndName(String email, String name);
+}
+// 메소드 이름을 분석하여 쿼리를 생성한다.
+// SELECT m FROM Member m WHERE m.email = ?1 AND m.name = ?2
+```
+
+| 키워드 | 예 | JPQL |
+| ---- | ---- | ---- |
+| And | findByField1AndField2 | ... where a.field1 = ?1 and a.field2 = ?2 |
+| Or | findByField1OrField2 | ... where a.field1 = ?1 or a.field2 = ?2 |
+| Is,Equals | findByField, findByFieldIs, findByFieldEquals | ... where a.field1 = ?1 |
+| Between | findByFieldBetween | ... where a.field between 1? and 2? |
+| LessThan | findByFieldLessThan | ... where a.field < ?1 |
+| LessThanEqual <br/> GreaterThan | findByFieldLessThanEqual <br/> findByFieldGreaterThan | ... where a.field <= ?1 <br/> ... where a.field > ?1 |
+| GreaterThanEqual | findByFieldGreaterThaneEqual | ... where a.field >= ?1 |
+| After | findByFieldDateAfter | ... where a.field > ?1 |
+| Before | findByFieldDateBefore | ... where a.field < ?1 |
+| IsNull | findByFieldIsNull | ... where a.field is null |
+| IsNotNull, NotNull | findByField(Is)NotNull | ... where a.field not null |
+| Like | findByFieldLike | ... where a.field like ?1 |
+| NotLike | findByFieldNotLike | ... where a.field not like ?1 |
+| StartingWith | findByFieldStartWith | ... where a.field like ?1 </br> field% |
+| EndingWith | findByFieldEndingWith | ... where a.field like ?1 </br> %field |
+| Containing | findFieldContaining | ... where a.field like ?1 </br> %field% |
+| OrderBy | findByField1OrderByField2Desc | ... where a.field1 = ?1 order by a.field2 desc |
+| Not | findByFieldNot | ... where a.field <> ?1 |
+| In | findByFieldIn(Collection fields) | ... where a.field in ?1 |
+| NotIn | findByFieldNotIn(Collection fields) | ... where a.field not in ?1 |
+| TRUE | findByFieldTrue() | ... where a.field = true |
+| FALSE | findByFieldFalse() | ... where a.field = false |
+| IgnoreCase | findByFieldIgnoreCase | ... where UPPER(a.field) = UPPER(?1) |
+
+* 스프링 데이터 JPA 공식 문서가 제공하는 쿼리 생성 기능
+* 해당 스프링 데이터 JPA 에 연동된 필드의 엔티티가 변경되면 같이 변경해줘야 한다.
+    * 엔티티와 매핑되지 않으면 컴파일 에러가 발생한다.
+
+#### 반환 타입
+
+* 반환 타입으로는 컬렉션 또는 반환 타입을 지정할 수 있다.
+
+```java
+List<Member> findByName(String name);   // 컬렉션
+Member findByEmail(String email);       // 반환 값 지정
+```
+
+* 위 설정에서 조회 결과가 없을 경우
+    * 컬렉션 -> 빈 컬렉션
+    * 반환 값 지정 -> null
+* 단건으로 지정한 메소드를 호출하면 스프링 데이터 JPA 내부에서 JPQL 의 Query.getSingleResult() 메소드를 호출한다.
+    * 참고로 getSingleResult() 메소드의 결과가 없으면 NoResultException 예외가 발생하나, 스프링 데이터 JPA 는 해당 예외를 무시하고 null 을 리턴해준다.
+
+#### 페이징과 정렬
+
+* 페이징과 정렬 기능을 위한 파라미터
+    1. org.springframework.data.domain.Sort : 정렬 기능
+    2. org.springframework.data.domain.pageable : 페이징 기능 (내부 sort 포함)
+
+```java
+// count 쿼리 사용
+Page<Membmer> findByName(STring name, Pageable pageable);
+
+// count 쿼리 X
+List<Membmer> findByName(STring name, Pageable pageable);
+
+Page<Membmer> findByName(STring name, Sort sort);
+
+...
+
+PageRequest pageRequest = new PageRequest(0, 10, new Sort(Direction.DESC, "name"));
+// Pagable 은 인터페이스이고, 해당 인터페이스를 구현한 PageRequest 를 사용할 수 있다.
+// 해당 클래스에서 제공하는 메소드는 여러가지가 존재한다.
+// 페이지는 0부터 시작된다.
+
+Page<Member> result = memberRepository.findByNameStartingWith("김", pageRequest);
+
+List<Member> members = result.getContent(); // 조회된 데이터
+int toalPages = result.getTotalPages();     // 전체 페이지 수
+boolean hasNextPage = result.hasNextPage(); // 다음 페이지 존재 여부
+```
+
+#### Lock
+
+```java
+@Lock(LockModeType.PESSIMISTIC_WRITE)
+List<Member> findByNAme(String name);
+// LOCK 어노테이션을 사용하면, 해당 쿼리를 사용할 때 락을 사용한다.
+```

@@ -2,6 +2,9 @@ package jpabook.jpashop.repository;
 
 import jpabook.jpashop.domain.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -57,7 +60,21 @@ public interface JpaRepository<T, ID extends Serializable> extends pagingAndSort
 // 위 인터페이스를 상속받고, 제네릭에 엔티티 클래스와 엔티티 클래스의 식별자 타입을 지정하면 사용할 수 있다.
 */
 
-public interface MemberRepository extends JpaRepository<Member, Long> {}
+public interface MemberRepository extends JpaRepository<Member, Long> {
+    @Query("SELECT m FROM Member m WHERE m.name = ?1")
+    List<Member> findByName(String name);
+    // @Query 를 통해 직접 쿼리를 지정할 수 있다.
+
+    @Query(value = "SELECT * FROM member WHERE username = ?0", nativeQuery = true)
+    List<Member> findByNameNative(String name);
+    // nativeQuery 옵션을 통해 nativeQuery 를 생성할 수 있다.
+
+    @Modifying(clearAutomatically = true)
+    // clearAutomatically 를 통해 벌크성 쿼리를 실행하고 영속성 컨텍스트를 초기화 할지 설정할 수 있다.
+    @Query("update Member m set m.name = :name")
+    int bulkUpdateName(@Param("name") String name);
+    // 벌크 수정/삭제 쿼리는 @Modifying 어노테이션을 사용하면 된다.
+}
 /*
 주요 메소드
 

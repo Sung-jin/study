@@ -10,6 +10,12 @@ import java.util.List;
  */
 @Entity
 @Table(name = "ORDERS")
+@NamedQuery(
+        name = "Order.findByStatus",
+        query = "SELECT o FROM Order o WHERE o.status = :status"
+)
+// 어노테이션을 통해 namedQuery 를 지정할 수 있고, xml 을 통해서도 지정할 수 있다.
+// 같은 이름으로 설정되어 있다면, xml 이 우선순위를 가진다.
 public class Order {
 
     @Id @GeneratedValue
