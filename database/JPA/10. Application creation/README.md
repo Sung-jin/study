@@ -165,3 +165,159 @@ boolean hasNextPage = result.hasNextPage(); // 다음 페이지 존재 여부
 List<Member> findByNAme(String name);
 // LOCK 어노테이션을 사용하면, 해당 쿼리를 사용할 때 락을 사용한다.
 ```
+
+### 명세
+
+* 명세를 이해하기 위한 핵심 단어는 술어(predicate) 이다.
+    * 술어 - 단순히 참 or 거짓으로 평가된다.
+* AND/OR 연산자로 조합할 수 있다.
+* 데이터를 검색하기 위한 제약 조건 하나하나를 술어라 할 수 있다.
+* 스프링 데이터 JPA 의 술어는 org.springframework.data.jpa.domain.Specification 클래스로 정의되어 있다.
+    * Specification 은 composite pattern 으로 구성되어 있어 여러 Specification 을 조합할 수 있다.
+    * 즉, 다양한 검색조건을 조립해서 새로운 검색조건을 쉽게 만들 수 있다.
+* 명세 기능을 사용하기 위해서는 org.springframework.data.jpa.repository.JpaSpecificationExecutor 인터페이스를 상속받으면 된다.
+
+```java
+public interface OrderRepository extends JpaRepository<Order, Long>, JpaSpecificationExecutor<Order> {}
+
+/*
+public interface JpaSpecificationExecutor<T> {
+    T findOne(Specification<T> spec);
+    List<T> findAll(Specification<T> spec);
+    Page<T> findAll(Specification<T> spec, Pageable pageable);
+    List<T> findAll(Specification<T> spec, Sort sort);
+    long count(Specification<T> spec);
+}
+
+JpaSpecificationExecutor 는 Specification 을 받아서 검색 조건으로 사용한다.
+*/
+
+...
+
+import some dependencies...
+
+public class OrderSpec {
+    public static Specification<Order> memberName(final String memberName) {
+        return new Specification<Order>() {
+            public Predicate toPredicate(Root<Order> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
+                if (StringUtils.isEmpty(memberNAme)) return null;
+                
+                Join<Order, Member> m = root.join("member", JoinType.INNER);
+                // 회원과 조인
+                return builder.equal(m.get("name"), memberName);
+            }
+        };
+    }
+    
+    public static Specification<Order> isOrderStatus() {...}
+    
+    // 명세를 정의하려면 Specification 인터페이스를 구현하면 된다.
+    // 명세를 정의할 때 toPredicate(...) 메소드만 구현하면 된다.
+    // 해당 메소드는 JPA Criteria 의 Root, CriteriaQuery, CriteriaBuilder
+    // 클래스가 모두 파라미터로 주어진다.
+    // 해당 파라미터를 활용해서 적절한 검색 조건을 반환하면 된다.
+}
+
+...
+
+import static org.springframework.data.jpa.domain.Specifications.*;
+// Specification 안에 where(), and(), or(), not() 메소드를 제공한다.
+import static ...spec.OrderSpec.*;
+
+public List<Order> findOrders(String name) {
+    List<Order> result = orderRepository.findAll(
+            where(memberName(name)).and(isOrderStatus())
+            // memberName(), isOrderStatus() 라는 명세를 and 로 조합해서 검색 조건으로 사용한다.
+    );
+    
+    return result;
+}
+```
+
+### 사용자 정의 리포지토리 구현
+
+```java
+public interface CustomRepository {
+    public List<Entity> findEntityCustom();
+}
+
+...
+
+public class EntityRepositoryImpl implements CustomRepository {
+    @Override
+    public List<Entity> findEntityCustom() {
+        ...
+        // 사용자 정의 구현
+    }
+}
+
+...
+
+public interface EntityRepository extends JpaRepository<Entity, Long>, CustomRepository {}
+
+// 위와 같이 커스텀 repository 클래스를 선언하고, 구현한 클래스를 repository 인터페이스 이름 + Impl 로 생성한다.
+// Impl 외 다른 이름을 붙이고 싶으면 별도의 설정을 해주면 된다.
+```
+
+### Web 확장
+
+#### 설정
+
+* 스프링 데이터가 제공하는 Web 확장 기능을 활성화 하기 위해서는 org.springframework.data.web.config.SpringDataWebConfiguration 을 스프링 빈으로 등록하면 된다.
+* JavaConfig (java 클래스로 설정) 를 사용하면 @EnableSpringDataWebSupport 어노테이션을 통해서 설정할 수 있다.
+
+```java
+@Configuration
+@EnableWebMvc
+@EnableSpringDataWebSupport
+public class WebAppConfig {...}
+```
+
+* 설정 후에 도메인 클래스 컨버터, 페이징, 정렬을 위한 HandlerMethodArgumentResolver 가 스프링 빈에 등록된다.
+
+#### 도메인 클래스 컨버터
+
+* HTTP 파라미터로 넘어온 엔티티의 아이디로 엔티티 객체를 찾아서 바인딩 해준다.
+
+
+```java
+@Controller
+public class EntityController {
+    @RequestMapping("...")
+    public String someFunction(@RequestParam("id") Entity entity, Model model) {
+        // 도메인 클래스 컨버터 설정을 진행하면 id 를 받지만, 해당 id 에 해당되는 엔티티를 바로 바인딩되어 사용할 수 있게 해준다.
+        // 참고로 도메인 클래스 컨버터는 해당 엔티티와 관련된 repository 를 사용해서 엔티티를 ㅊ자는다.
+        model.addAtrribute("entity", entity);
+        return "entity/SomeHtml";
+    }
+}
+```
+
+#### 페이징과 정렬
+
+* 페이징 기능    PageableHandlerMethodArgumentResolver
+* 정렬 기능     SortHandlerMethodArgumentResolver
+
+```java
+@RequestMapping(...)
+public String list(Pageable pageable, Model model) {
+    Page<Entity> page = entityService.findEntities(pageable);
+    model.addAtrribute("entities", page.getContent());
+    return "entity/someHtml";
+}
+
+/*
+Pageable 에 매핑되는 요청 파라미터
+
+page    : 현재 페이지 / 0 부터 시작
+size    : 한 페이지에 노출할 데이터 건수
+sort    : 정렬 조건을 정의
+
+entities?page=0&size=10&sort=field,desc
+와 같이 파라미터로 위 속성을 넘겨주면 해당 값으로 pageable 객체에 매핑되고
+해당 pageable 정보를 바탕으로 쿼리를 진행한다.
+
+pageable 의 기본값은 page = 0, size = 20 이다.
+기본값 변경은 @PageableDefault 어노테이션을 사용해서 변경할 수 있다.
+ */
+```
