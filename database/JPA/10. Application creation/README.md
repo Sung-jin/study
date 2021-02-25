@@ -23,7 +23,7 @@
 ![](../images/10.uml.png)
 
 * 회원/주문/상품의 관계
-    * 회원은 여러 상품을 주문 할 수 있다.
+    * 회원은 여러 상품을 주문  할 수 있다.
     * 한번 주문할 때 여러 상품을 선택할 수 있다.
         * 주문-상품 -> n:m
         * n:m 을 주문-주문상품-상품(물품) 으로 1:n n:1 관계로 변경하였다.
@@ -320,4 +320,26 @@ entities?page=0&size=10&sort=field,desc
 pageable 의 기본값은 page = 0, size = 20 이다.
 기본값 변경은 @PageableDefault 어노테이션을 사용해서 변경할 수 있다.
  */
+```
+
+### 스프링 데이터 JPA 가 사용하는 구현체
+
+* 스프링 데이터 JPA 의 공통 인터페이스는 SimpleJpaRepository 클래스가 구현된다.
+
+```java
+@Repository
+// JPA 예외를 스프링이 추상화한 예외로 변환한다.
+@Transactional(readOnly = true)
+// JPA 의 모든 ㅕㄴ경은 트랜잭션 안에서 이루어져야 한다.
+// 스프링 데이터 JPA 가 제공하는 공통 인터페이스를 사용하면 데이터 변경하는 메소드에 @Transactional 로 트랜잭션 처리가 되어있다.
+// readOnly = true 의 경우 데이터를 조회하는 메소드에서는 flush 를 생략한다.
+public class SimpleJpaRepository<T, ID extends Serializable> implements JpaRepository<T, ID>, JpaRepository<T, ID>, JpaSpecificationExcecutor<T> {
+    @Transactional
+    public <S extends T> S save(S entity) {
+        ...
+        // 해당 메소드를 통해서 넘겨받은 객체가 새로운 엔티티면 persist, 이미 있는 엔티티면 merge 된다.
+        // 새로운 엔티티를 판단하는 방법은 식별자 (ID) 가 null/0 일 경우 새로운 엔티티로 판단한다.
+        // persistable 인터페이스를 구현해서 새로운 판단 로직을 구현할 수 있다.
+    }
+}
 ```
