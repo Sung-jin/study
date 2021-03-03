@@ -259,3 +259,93 @@ class OrderService {
 * 애플리케이션 로직과 뷰가 물리적으로는 나누어져 있지만, 논리적으로 서로 의존하는 문제때문에 이러한 문제들이 발생한다.
 * 결국, 모든 문제는 엔티티가 프리젠테이션 계층에서 준영속 상태이기 때문에 발생한다.
     * 영속성 컨텍스트를 뷰까지 살아있게 하여서 뷰에서도 지연 로딩을 사용할 수 있는 방법이 존재하는데, 이를 OSIV 라고 한다.
+    
+### OSIV
+
+* Open Session In View
+* 영속성 컨텍스트를 뷰까지 열어두는 것을 말한다.
+    * 뷰에서 영속성 컨텍스트가 살아있으므로, 지연 로딩인 객체도 뷰단에서 사용할 수 있다.
+
+#### 과거의 OSIV : 요청 당 트랜잭션
+
+![](../images/12.Transaction scope TPR OSIV.png)
+
+* 가장 단순한 구현 방법은 클라이언트의 요청이 들어오자마자 서블릿 필터나 스프링 인터셉터에서 트랜잭션을 시작하고 요청이 끝날 때 트랜잭션이 끝나는 것이다..
+    * 이러한 방식을 요청 당 트랜잭션 방식의 OSIV 라고 한다.
+* 요청 당 트랜잭션 방식의 OSIV 문제점
+    * 요청당 트랜잭션 방법의 OSIV 는 뷰를 렌더링한 후 트랜잭션 커밋을 진행한다.
+        * 즉, 프리젠테이션 계층이 엔티티를 변경할 수 있다.
+        * 모든 계층에서 영속성 컨텍스트가 살아있으므로, 엔티티를 변경한다면 모든 곳에서 데이터베이스 변경이 일어날 수 있다.
+    * 프리젠테이션 계층에서 엔티티를 수정하지 못하게 막는 방법
+        1. 엔티티를 읽기 전용 인터페이스로 제공
+        2. 엔티티 레핑
+        3. DTO 만 반환
+
+##### 엔티티를 읽기 전용 인터페이스로 제공
+
+* 엔티티를 직접 노출하는 대신 읽기 전용 메소드만 제공하는 인터페이스를 프리젠테이션 계층에 제공한다.
+
+```java
+interface MemberView {
+    public String getName();
+}
+
+@Entity
+class Member implements Memberview {
+    ...
+}
+
+class MemberService {
+    public MemberView getMember(Long id) {
+        return memberRepository.findById(id);
+    }
+}
+```
+
+##### 엔티티 레핑
+
+* 엔티티의 읽기 전용 메소드만 가지고 있는 엔티티를 감싼 객체를 만들고, 이를 프리젠테이션 계층에 반환한다.
+
+```java
+class MemberWrapper {
+    private Member member;
+    
+    public MemberWrapper(Member member) {
+        this.member = member;
+    }
+    
+    // 읽기 전용 메소드만 제공
+    public String getName() {
+        member.getName();
+    }
+}
+
+class MemberService {
+    public MemberWrapper getMember(Long id) {
+        return MemberWrapper(
+                memberRepository.findById(id)
+        );
+    }
+}
+```
+
+##### DTO 만 반환
+
+* 프리젠테이션 계층에 엔티티 대신 단순히 데이터만 전달하는 DTO(Data Transfer Object) 를 전달한다.
+    * 위 방식은 OSIV 를 사용하는 장점을 살릴 수 없고, 엔티티를 거의 복사한 듯한 DTO 클래스도 하나 더 만들어야 한다.
+    
+```java
+@Getter
+@Setter
+class MemberDTO {
+    private String name;
+    
+    ...
+}
+```
+
+##### 요청 당 트랜잭션 OSIV 결론
+
+* 지금까지의 모든 방법은 코드량이 상당히 증가한다.
+* OSIV 를 사용하지 않고 컨벤션을 정하는게 더 좋을 수 있다.
+* 여러 문제점 때문에 '요청 당 트랜잭션 OSIV' 는 거의 사용하지 않는다.
