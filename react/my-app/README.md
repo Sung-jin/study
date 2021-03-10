@@ -1,70 +1,36 @@
-# Getting Started with Create React App
+### React 란?
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+* 사용자 인터페이스를 구축하기 위한 선언적이고 효율적이며 유연한 javascript 라이브러리
+* 컴포넌트라는 고립된 코드의 파편을 이용하여 복잡한 UI 를 구성한다.
+* React 에는 여러 종류의 컴포넌트를 가진다. 
 
-## Available Scripts
+```javascript
+class someComponent extends React.Component {
+    render() {
+        relturn (
+            <div className="some-class">
+                {this.props.someValue}
+            </div>
+        )
+    }
+}
+```
 
-In the project directory, you can run:
+* 위와 같은 형태의 구현을 컴포넌트라고 한다.
+* someComponent 는 react 컴포넌트 클래스 또는 react 컴포넌트 타입이다.
+* 개별 컴포넌트는 props 라는 매개변수를 받아오고 render 함수를 통해 표시할 뷰 계층 구조를 반환한다.
+    * render 는 랜더링할 내용을 경량화한 react 엘리먼트를 반환한다.
+    * React 구조가 아닌 JSX 라는 툭수한 문법으로 더 쉽게 작성할 수 있다.
+    * `<div />` 구문은 빌드하는 시점에 React.createElement('div') 로 변환된다.
+    * [createElement()](https://ko.reactjs.org/docs/react-api.html#createelement)
+    * React 컴포넌트는 캡슐화되어 독립적으로 동작할 수 있고, 이러한 컴포넌트를 조합하여 또 다른 컴포넌트를 만들수 있다.
+    
+```javascript
+return React.createElement('div', {className: 'some-class'}, this.props.someValue);
+```
 
-### `yarn start`
+#### JSX
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `yarn test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `yarn build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+* JSX 내부의 중괄호 안에 어떤 javascript 표현식도 사용할 수 있다.
+* React 엘리먼트는 JavaScript 객체이며 변수에 저장하거나 프로그램 여기저기에 전달할 수 있다.
+* 
