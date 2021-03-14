@@ -45,66 +45,42 @@ function Square(props) {
 // 함수 컴포넌트는 props 를 전달받아서 렌더링할 대상을 반환하는 함수이다.
 
 class Board extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            squares: Array(9).fill(null),
-            xIsNext: true,
-        };
-    }
+    // constructor(props) {
+    //     super(props);
+    //     this.state = {
+    //         squares: Array(9).fill(null),
+    //         xIsNext: true,
+    //     };
+    // }
 
     renderSquare(i) {
         return <Square
-            value={this.state.squares[i]}
-            onClick={() => this.handleClick(i)}
+            value={this.props.squares[i]}
+            onClick={() => this.props.onClick(i)}
         />;
     }
     // 부모인 board 가 자식 컴포넌트인 square 에 value 라는 props 를 전달
 
-    handleClick(i) {
-        const squares = this.state.squares.slice();
-        if (calculateWinner(squares) || squares[i]) {
-            return;
-            // 이미 클릭된 곳일 경우 해당 이벤트는 무시
-        }
-        // .slice 를 통해 기존 배열을 수정하지 않고 복사본을 생성해서 수정을 진행했다.
-        // 이는 불변성을 지키기 위해서이다.
-        squares[i] = this.state.xIsNext ? 'X' : 'O';
-        this.setState({
-            squares: squares,
-            xIsNext: !this.state.xIsNext,
-        });
-    }
-
     render() {
-        const winner = calculateWinner(this.state.squares);
-        let status;
-        if (winner) {
-            status = `Winner: ${winner}`;
-        } else {
-            status = `Next player : ${this.state.xIsNext ? 'X' : 'O'}`;
-        }
-
         return (
             <div>
-            <div className="status">{status}</div>
-            <div className="board-row">
-                {this.renderSquare(0)}
-                {this.renderSquare(1)}
-                {this.renderSquare(2)}
+                <div className="board-row">
+                    {this.renderSquare(0)}
+                    {this.renderSquare(1)}
+                    {this.renderSquare(2)}
+                </div>
+                <div className="board-row">
+                    {this.renderSquare(3)}
+                    {this.renderSquare(4)}
+                    {this.renderSquare(5)}
+                </div>
+                <div className="board-row">
+                    {this.renderSquare(6)}
+                    {this.renderSquare(7)}
+                    {this.renderSquare(8)}
+                </div>
             </div>
-            <div className="board-row">
-                {this.renderSquare(3)}
-                {this.renderSquare(4)}
-                {this.renderSquare(5)}
-            </div>
-            <div className="board-row">
-                {this.renderSquare(6)}
-                {this.renderSquare(7)}
-                {this.renderSquare(8)}
-            </div>
-        </div>
-    );
+        );
     }
 }
 // 보드 컴포넌트
@@ -130,15 +106,74 @@ function calculateWinner(squares) {
 }
 
 class Game extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            history: [{
+                squares: Array(9).fill(null),
+            }],
+            stepNumber: 0,
+            xIsNext: true,
+        }
+    }
+    handleClick(i) {
+        const history = this.state.history.slice(0, this.state.stepNumber + 1);
+        const current = history[this.state.stepNumber];
+        const squares = current.squares.slice();
+        if (calculateWinner(squares) || squares[i]) {
+            return;
+        }
+        squares[i] = this.state.xIsNext ? 'X' : 'O';
+        this.setState({
+            history: history.concat([{
+                squares: squares,
+            }]),
+            // concat 을 이용하여 기존 배열을 변경하지 않고 데이터를 변경할 수 있다.
+            stepNumber: history.length,
+            xIsNext: !this.state.xIsNext,
+        });
+    }
+    jumpTo(step) {
+        this.setState({
+            stepNumber: step,
+            xIsNext: (step % 2) === 0
+        });
+    }
     render() {
+        const history = this.state.history;
+        const current = history[history.length - 1];
+        const winner = calculateWinner(current.squares);
+
+        const moves = history.map((step, move) => {
+            const desc = move ?
+                `Go to move #${move}` :
+                'Go to game start';
+            return (
+                <li key={move}>
+                    <button onClick={() => this.jumpTo(move)}>{desc}</button>
+                </li>
+            )
+            // 위와 같이 배열이나 이터레이터의 자식들은 고유의 "key" 라는 prop 을 가지고 있어야 한다.
+        })
+
+        let status;
+        if (winner) {
+            status = 'Winner: ' + winner;
+        } else {
+            status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
+        }
+
         return (
             <div className="game">
                 <div className="game-board">
-                    <Board />
+                    <Board
+                        squares={current.squares}
+                        onClick={(i) => this.handleClick(i)}
+                    />
                 </div>
                 <div className="game-info">
-                    <div>{/* status */}</div>
-                    <ol>{/* TODO */}</ol>
+                    <div>{status}</div>
+                    <ol>{moves}</ol>
                 </div>
             </div>
     );
