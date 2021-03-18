@@ -4,7 +4,7 @@
 * 컴포넌트라는 고립된 코드의 파편을 이용하여 복잡한 UI 를 구성한다.
 * React 에는 여러 종류의 컴포넌트를 가진다. 
 
-```javascript
+```jsx
 class someComponent extends React.Component {
     render() {
         relturn (
@@ -79,7 +79,7 @@ originalArray = copyArray;
     * key 를 따로 지정하지 않으면 경고를 표시하며 배열의 인덱스로 key 에 셋팅된다.
     * 하지만, 인덱스로 key 를 셋팅하면 리스트 아이템 순서를 바꾸거나 아이템을 추가/제거 할 때 문제가 된다.
 
-```javascript
+```jsx
 const someThing = [1,2,3,4,5,6].map((value, idx) => {
     return (
         <li key={`${value}_${idx}`}>
