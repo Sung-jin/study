@@ -109,3 +109,281 @@ em.persist(child3);
 * 또한, 시스템상이 아닌 리스트의 중간 데이터를 데이터베이스에서 삭제를 하면 해당 리스트를 조회하는 시점에 중간 인덱스가 null 이 온다.
     * 0, 1, 2, 3 순서를 가진 리스트 데이터 중 1 을 삭제하면 0, 2, 3 이 되고 해당 리스트를 조회하면 [0, null, 2, 3] 이 조회된다.
     * 위와 같은 상황에서 순환 조회를 하면 NullPointException 이 발생한다.
+
+#### @OrderBy
+
+* 데이터베이스의 Order By 를 이용하여 컬렉션을 정렬한다.
+* 모든 컬렉션에 사용할 수 있다.
+
+```java
+...
+
+@OneToMany(mappdedBy = "entity")
+@OrderBy("field desc, id desc")
+private Set<Child> children = new HashSet<Child>();
+
+// 위와 같이 엔티티를 셋팅하고, 위 엔티티를 조회하게 되면
+// select e.* from ... order by e.field desc, e.id desc;
+// 와 같이 order by 뒤의 조건이 붙어서 조회가 된다.
+```
+
+* 참고로 하이버네이트는 Set 에 @OrderBy 를 사용하면, 순서를 보장하기 위해 내부에서 LinkedHashSet 을 사용한다.
+
+### @Converter
+
+* 컨버터를 사용하면 엔티티의 데이터를 변환하여 데이터베이스에 저장할 수 있다.
+
+```mysql
+CEATE TABLE MEMBER (
+    id bigint,
+    field varchar(255),
+    ...
+)
+```
+
+```java
+@Converter(converter = BooleanToYNConverter.class)
+private boolean someField;
+
+// 또는
+
+@Converter(converter = BooleanToYNConverter.class, attribute = "someField")
+// 컨버터를 적용할 필드를 명시해주면 클래스 레벨에서도 적용가능하다.
+public class Entity {
+    ...
+}
+
+...
+
+// @Converter(autoApply = true)
+// 위와 같이 설정하면 모든 Boolean 타입에 대해 자동으로 컨버터가 적용된다.
+@Converter
+public class BooleanToYNConverter implements AttributeConverter<Boolean, String> {
+    // 컨버터를 사용하기 위해서는 AttributeConverter 를 구현해야 한다.
+    // <JPA 에 사용할 타입, 데이터베이스에 저장된 타입>
+    public String convertToDatabaseColumn(Boolean attribute) {
+        return (attribute != null && attribute) ? "Y" : "N";
+    }
+    
+    public Boolean convertToEntityAttribute(String dbData) {
+        return "Y".equals(dbData);
+    }
+}
+```
+
+### 리스너
+
+* JPA 리스너를 사용하면 엔티티의 생명주기에 따른 이벤트를 처리할 수 있다.
+
+![](../images/13.life%20cycle%20with%20listener.png)
+
+* PostLoad
+    * 엔티티가 영속성 컨텍스트에 조회된 직후 또는 refresh 를 호출한 후 (2차 캐시에 저장되어 있어도 호출된다.)
+* PrePersist
+    * persist() 메소드를 호출해서 엔티티를 영속성 컨텍스트에 관리하기 직전에 호출된다.
+    * 식별자 생성 전략을 사용한 경우 엔티티에 식별자는 아직 존재하지 않는다.
+    * 새로운 인스턴스를 merge 할 때도 수행된다.
+* PreUpdate
+    * flush 나 commit 을 호출해서 엔티티를 데이터베이스에 수정하기 직전에 호출된다.
+* PreRemove
+    * remove() 메소드를 호출해서 엔티티를 영속성 컨텍스트에서 삭제하기 직전에 호출된다.
+    * 삭제 명령어로 영속성 전이가 일어날 때도 호출된다.
+    * orphanRemoval 에 대해서는 flush/commit 시에 호출된다.
+* PostPersist
+    * flush 나 commit 을 호출해서 엔티티를 데이터베이스에 저장한 직후에 호출된다.
+    * 식별자가 항상 존재한다.
+* PostUpdate
+    * flush 나 commit 을 호출해서 엔티티를 데이터에비스에 수정한 직후에 호출된다.
+* PostRemove
+    * flush 나 commit 을 호출해서 엔티티를 데이터베이스에 삭제한 직후에 호출된다.
+
+#### 이벤트 적용 위치
+
+1. 엔티티에 직접 적용
+
+```java
+@Entity
+public class Entity {
+    ...
+    
+    @PrePersist
+    public void prePersist() {
+        ...
+    }
+    
+    @PostPersist
+    @PostLoad
+    @PreRemove
+    @PostRemove
+    ...
+}
+
+// 엔티티에 직접 적용할 때에는 어노테이션으로 지정하면, 해당하는 시점에 해당 메소드가 실행된다.
+```
+
+2. 별도의 리스너 등록
+
+```java
+@Entity
+@EntityListeners(SomeListener.class)
+public class Entity {...}
+
+...
+
+public class SomeListener {
+    @PrePersist
+    public void prePersist(Object obj) {...}
+    // 특정 타입이 확실하면 특정 타입을 받을 수 있다.
+    // 또한, 반환 타입은 void 로 설정해야 한다.
+    
+    ...
+}
+```
+
+3. 기본 리스너
+
+* 모든 엔티티의 이벤트를 처리하려면 META-INF/orm.xml 에 기본 리스너로 등록하면 된다.
+
+```xml
+<entity-mappings ...>
+    ...
+    <entity-listener class="some.listener.path.class" />
+</entity-mappings>
+```
+
+* 여러 리스너를 등록하였을 때, 이벤트 호출 순서
+    1. 기본 리스너
+    2. 부모 클래스 리스너
+    3. 리스너
+    4. 엔티티
+* 또한, @EcludeDefaultListeners, @ExcludeSuperclassListeners 와 같은 세밀한 설정에 관한 리스너도 존재한다.
+
+### 엔티티 그래프
+
+* 글로벌 fetch 옵션은 애플리케이션 전체에 영향을 주고 변경할 수 없다는 단점이 존재한다.
+    * 그래서 일반적으로 글로벌 fetch 옵션은 FetchType.LAZY 를 사용하고 JPQL 에서 fetch join 을 한다.
+    * 하지만, fetch join 의 경우 같은 JPQL 이 중복해서 작성되는 경우가 많을 수 있다.
+* 엔티티 그래프 기능은 엔티티 조회시점에 연관된 엔티티들을 함께 조회하는 기능이다.
+
+#### Named 엔티티 그래프
+
+```java
+@NamedEntityGraph(name = "Order.withMember", attributeNodes = {
+        @NamedAttributeNode("member")
+})
+// @NamedEntityGraph 를 통해 엔티티 그래프를 정의한다.
+// name 은 엔티티 그래프의 이름을 지정한다.
+// attributeNodes 는 함께 조회할 속성을 선택한다.
+@Entity
+public class Order {
+    ...
+    
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    private Member member;
+}
+// 위와 같은 설정이면 Member 는 LAZY 로 설정하였지만, 엔티티 그래프에서 함께 조회할 속성으로
+// Member 를 선택했으므로 이 엔티티 그래프를 사용하면
+// Order 를 조회할 때 Member 도 함께 조회된다.
+```
+
+#### em.find() 에서 엔티티 그래프 사용
+
+```java
+EntityGraph graph = em.getEntityGraph("Order.withMember");
+
+Map hints = new HashMap();
+hints.put("javax.persistence.fetchgraph", graph);
+
+Order order = em.find(Order.class, orderId, hints);
+```
+
+* Named 엔티티 그래프를 사용하려면 정의한 엔티티 그래프를 em.getEntityGraph 를 통해서 찾아오면 된다.
+
+#### subgraph
+
+* Order -> OrderItem -> Item 과 같이 연관된 테이블들을 조회할 때 subgraph 를 사용하면 된다.
+
+```java
+@NamedEntityGraph(name = "Order.withAll", attributeNodes = {
+        @NamedAttributeNode("member"),
+        @NamedAttributeNode(value = "OrderItems", subgraph = "orderItems")
+    },
+    subgraphs = @NamedEntityGraph(name = "orderItems", attributeNodes = {
+        @NamedAttributeNode("item")
+    })
+)
+@Entity
+public class Order {
+    ...
+    
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    private Member member;
+    
+    @OneToMany(mappedBy = "order", cscade = CascadeType.ALL)
+    private List<OrderItme> orderItems = new ArrayList<OrderItem>();
+}
+
+@Entity
+public class OrderItem {
+    ...
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Item item;
+}
+```
+
+* Order.withAll 이라는 Named 엔티티 그래프를 정의
+* 해당 엔티티 그래프는 Order -> Member, Order -> OrderItem, OrderItem -> Item 의 객체 그래프를 함께 조회한다.
+    * 이때 OrderItem -> Item 의 경우 Order 의 객체 그래프가 아니므로 subgraph 로 정의했다.
+
+```java
+Map hints = new HashSet();
+hints.put("javax.persistence.fetchgraph", em.getEntityGraph("Order.withAll"));
+```
+
+```
+select o.*, m.*, oi.*, i.*
+from Order o
+inner join Member m on o.member = m.id
+left outer join OrderItem oi on o.order = oi.id
+left outer join Item i on oi.item = i.id
+where o.id = ?
+```
+
+#### JPQL 에서 엔티티 그래프 사용
+
+* em.find() 와 동일하게 힌트만 추가하면 된다.
+
+```java
+List<Order> result = em.createQuery("select o from order o where o.id = :orderId", Order.class)
+                        .setParameter("orderId", orderId)
+                        .setHint("javax.persistence.fetchgraph", em.getEntityGraph("Order.withAll")
+                        .getResultList();
+```
+
+#### 동적 엔티티 그래프
+
+* 동적 엔티티 그래프를 구성하려면 createEntityGraph() 메소드를 사용하면 된다.
+    * public <T> EntityGraph<T> createEntityGraph(Class<T> rootType);
+    
+```java
+EnttiyGraph<Order> graph = em.createEntityGraph(Order.class)
+graph.addAtrributeNodes("member");
+Subgraph<OrderItem> orderItems = graph.addSubgraph("orderItems");
+orderItems.addAtrributeNodes("item");
+
+Map hints = new HashMap();
+hints.put("javax.persistence.fetchgraph", graph);
+
+Order order = em.find(Order.class, orderId, hints);
+// graph.addSubgraph("orderItems") 메소드를 통해 서브 그래프를 만들었고,
+// 해당 서브 그래프는 item 속성을 포함하도록 했다.
+```
+
+#### 엔티티 그래프 정리
+
+* ROOT 에서 시작
+    * 엔티티 그래프는 항상 조회하는 엔티티의 ROOT 에서 시작해야 한다.
+* 이미 로딩된 엔티티
+    * 영속성 컨텍스트에 해당 엔티티가 이미 로딩되어 있으면 엔티티 그래프가 적용되지 않는다.
+    * 하지만 아직 초기화 되지 않은 프록시에는 엔티티 그래프가 적용된다.
