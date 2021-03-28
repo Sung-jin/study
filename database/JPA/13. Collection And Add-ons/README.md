@@ -39,7 +39,6 @@ print(entity.getChildren().getClass());
 em.persist(entity);
 print(entity.getChildren().getClass());
 // class org.hibernate.collection.internal.PersistentBag
-
 ```
 
 * 래퍼 컬렉션 
