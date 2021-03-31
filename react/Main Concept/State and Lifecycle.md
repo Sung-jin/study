@@ -2,7 +2,7 @@
 
 * [컴포넌트 API 레퍼런스](https://ko.reactjs.org/docs/react-component.html)
 
-```typescript jsx
+```jsx
 function Clock(props) {
     return (
         <div>
@@ -24,7 +24,7 @@ setInterval(tick, 1000);
 
 * 위와 같은 clock 컴포넌트는 clock 컴포넌트 자체에서 타이머를 설정하고 UI 업데이트를 하는 것은 clock 의 구현 세부사항이 되어야 한다.
 
-```typescript jsx
+```jsx
 ReactDOM.render(
     <Clock />,
     document.getElementById('root')
@@ -44,7 +44,7 @@ ReactDOM.render(
     4. render() 내용 안에 있는 props 를 this.props 로 변경한다.
     5. 남아있는 빈 함수 선언을 삭제한다.
 
-```typescript jsx
+```jsx
 class Clock extends React.Component {
     render() {
         return (
@@ -127,7 +127,7 @@ ReactDOM.render(
 
 * 직접 State 를 수정하면 안된다.
 
-```typescript jsx
+```jsx
 this.state.someValue = 'some change';
 // 위와 같이 직접 변경하면 컴포넌트를 다시 렌더링하지 않는다.
 
@@ -140,7 +140,7 @@ this.setState({someValue: 'some change'});
     * React 는 성능을 위해 여러 setState() 호출을 단일 업데이트로 한꺼번에 처리할 수 있다.
     * this.props 와 this.state 가 비동기적으로 업데이트 될 수 있기 떄문에 다음 state 를 계산할 때 해당 값에 의존해서는 안된다.
 
-```typescript jsx
+```jsx
 this.setState({
     counter: this.state.counter + this.props.increment,
 })
@@ -155,7 +155,7 @@ this.setState((state, props) => {
 * State 업데이트는 병합된다.
     * setState() 를 호출할 때 React 는 제공한 객체를 현재 state 로 병합한다.
 
-```typescript jsx
+```jsx
 constructor(props) {
     super(props);
     this.state = {
@@ -189,7 +189,7 @@ componentDidMount() {
     * state 가 소유하고 설정한 컴포넌트 이외에는 어떠한 컴포넌트에도 접근할 수 없다.
 * 컴포넌트는 자신의 state 를 자식 컴포넌트에 props 로 전달할 수 있다.
 
-```typescript jsx
+```jsx
 <SomeCompoent someValue={this.state.someValue} />
 ```
 
