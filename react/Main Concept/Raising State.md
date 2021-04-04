@@ -106,7 +106,7 @@ function tryConvert(temperature, convert) {
 
 ### 위 코드에 의해 발생하는 일
 
-1. React DOM <input> 의 onChange 에 지정된 함수를 호출한다.
+1. React DOM `<input>` 의 onChange 에 지정된 함수를 호출한다.
    * TemperatureInput 의 handleChange 메서드
 2. TemperatureInput 컴포넌트의 handleChange 메소드는 새로 입력된 값과 함께 this.props.onTemperatureChange() 를 호출한다.
    * onTemperatureChange 는 부모로부터 전달받은 함수이다.
