@@ -307,7 +307,7 @@ tx.commit();
 session.close();
 ```
 
-## ㄴ삐 znjfl glsxm tkdyd
+## SQL 쿼리 힌트 사용
 
 * JPA 는 데이터베이스 SQL 힌트 기능을 제공하지 않는다.
 * SQL 힌트를 직접 사용하려면 하이버네이트를 직접 사용해야 한다.
