@@ -46,3 +46,104 @@
     * 2차 캐시는 영속성 유닛 범위의 캐시이다.
     * 2차 캐시는 조회한 객체를 그대로 반환하는 것이 아니라 복사본을 만들어서 반환한다.
     * 2차 캐시는 데이터베이스 기본 키를 기준으로 캐시하지만 영속성 컨텍스트가 다르면 객체 동일성 (a == b) 를 보장하지 않는다.
+    
+## JPA 2차 캐시 기능
+
+* JPA 2.0 에서 2차 캐시 표준을 정의하였다.
+    * 이전에는 JPA 구현체 2차 캐시 기능을 각자 지원했다.
+
+#### 캐시 모드 설정
+
+```java
+@Cacheable
+// @Cacheable(true or false)
+// true 가 기본값이다.
+@Entity
+public class Entity {
+    ...
+}
+```
+
+```xml
+<persistence-unit name="test">
+    <shared-cache-mode>ENABLE_SELECTIVE</shared-cache-mode>
+    <!-- persistence.xml 에 설정하여 영속성 유닛 단위에 캐시 적용 방식을 지정할 수 있다. -->
+</persistence-unit>
+```
+
+* SharedCacheMode 캐시 모드 설정
+
+| 캐시 모드 | 설명 |
+| ---- | ---- |
+| ALL | 모든 엔티티를 캐시한다. |
+| NONE | 캐시를 사용하지 않는다. |
+| ENABLE_SELECTIVE | Cacheable(true) 로 설정된 엔티티만 캐시를 적용한다. |
+| DISABLE_SELECTIVE | 모든 엔티티를 캐시하지만, Cacheable(false) 로 설정된 엔티티는 캐시하지 않는다. |
+| UNSPECIFIED | JPA 구현체가 정의한 설정을 따른다. |
+
+### 캐시 조회, 저장 방식 설정
+
+* 캐시를 무시하고 데이터베이스를 직접 조회하거나 캐시를 갱신하려면 캐시 조회 모드와 캐시 보관 모드를 사용하면 된다.
+* 프로퍼티
+    * javax.persistence.cache.retrieveMode : 캐시 조회 모드 프로퍼티 이름
+    * javax.persistence.cache.storeMode : 캐시 보관 모드 프로퍼티 이름
+* 옵션
+    * javax.persistence.CacheRetrieveMode : 캐시 조회 모드 설정 옵션
+    * javax.persistence.CacheStoreMode : 캐시 보관 설정 모드
+
+```java
+public enum CacheRetrieveMode {
+    USE,    // 기본값이며, 캐시에서 조회한다.
+    BYPASS  // 캐시를 무시하고 데이터베이스에 직접 접근한다.
+}
+
+public enum CacheStoreMOde {
+    USE,    // 기본값이며, 조회한 데이터를 캐시에 저장한다. 
+            // 조회한 데이터가 이미 캐시에 있다면, 해당 데이터를 최신 데이터로 갱신하지 않는다.
+            // 트랜잭션을 커밋하면 등록 수정한 엔티티도 캐시에 저장한다.
+    BYPASS, // 캐시에 저장하지 않는다.
+    REFRESH // USE 전략 + 데이터베이스에 조회한 엔티티를 최신 상태로 다시 갱신한다.
+}
+
+em.setProperty("javax.persistence.cache.retrieveMode", CacheRetrieveMode.BYPASS);
+em.setProperty("javax.persistence.cache.storeMode", CacheMode.BYPASS);
+// EntityManager 단위로 설정이 가능하다.
+
+Map<String, Object> param = new hashMap<String, Object>();
+param.put("javax.persistence.cache.retrieveMode", CacheRetrieveMode.BYPASS);
+param.put("javax.persistence.cache.storeMode", CacheMode.BYPASS);
+em.find(Entity.class, id, param);
+// find()/refresh 단위로 설정이 가능하다.
+
+em.createQuery("select e from Entity e where ...")
+    .setParameter(...)
+    .setHint("javax.persistence.cache.retrieveMode", CacheRetrieveMode.BYPASS)
+    .setHint("javax.persistence.cache.storeMode", CacheMode.BYPASS)
+    .getSingleResult();
+// zQuery.setHint (TypeQuery 포함) 에 사용할 수 있다.
+```
+
+### JPA 캐시 관리 API
+
+```java
+Cache cache = emf.getCache();
+boolean contains = cache.contains(Entity.class, id);
+// 위와 같이 EntityManagerFactory 에서 캐시를 관리하는 인터페이스를 제공받을 수 있다.
+
+puyblic interface Cache {
+    public boolean contains(Class cls, Object primaryKey);
+    // 해당 엔티티가 캐시에 있는지 여부 확인
+    
+    public void evict(Class cls, Object primaryKey);
+    // 해당 엔티티중 특정 식별자를 가진 엔티티를 캐시에서 제거
+    
+    public void evict(Class cls);
+    // 해당 엔티티 전체를 캐시에서 제거
+    
+    public void evictAll();
+    // 모든 캐시 데이터 제거
+    
+    public <T> T unwrap(Class<T> cls);
+    // JPA Cache 구현체 조회
+}
+```
