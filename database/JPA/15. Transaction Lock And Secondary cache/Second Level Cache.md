@@ -147,3 +147,60 @@ puyblic interface Cache {
     // JPA Cache 구현체 조회
 }
 ```
+
+## 하이버네이트와 EHCACHE 적용
+
+* 하이버네이트가 지원하는 캐시
+    1. 엔티티 캐시 - 엔티티 단위로 캐시하며, 식별자로 엔티티를 조회하거나 컬렉션이 아닌 연관된 엔티티를 로딩할 때 사용한다.
+    2. 컬렉션 캐시 - 엔티티와 연관된 컬렉션을 캐시하며, 컬렉션이 엔티티를 담고 있으면 식별자 값만 캐시한다.
+    3. 쿼리 캐시 - 쿼리와 파라미터 정보를 키로 사용해서 캐시하며, 결과가 엔티티면 식별자 값만 캐시한다.
+* JPA 표준에는 엔티티 캐시만 정의되어 있다.
+
+### 환경설정
+
+```xml
+<!--pom.xml-->
+<dependency>
+    ...
+    <artifactId>hibernate-ehcache</artifactId>
+    ...
+</dependency>
+
+...
+
+<!--ehcache.xml-->
+<!--EHCACHE 는 ehcache.xml 을 설정 파일로 사용한다.-->
+<!--설정값 doc : https://www.ehcache.org/documentation/-->
+<ehcache>
+    <defaultCache
+        maxElementsInMemory="1000"
+        eternal="false"
+        timeToIdleSeconds="1200"
+        timeToLiveSeconds="1200"
+        diskExpiryThreadIntervalSeconds="1200"
+        memoryStoreEvictionPolicy="LRU"
+        />
+</ehcache>
+
+...
+
+<!--persistence.xml-->
+<!--하이버네이트 캐시 사용정보 설정-->
+<persistence-unit name="test">
+    <shared-cache-mode>ENABLE_SELECTIVE</shared-cache-mode>
+    <properties>
+        <property name="hibernate.cache.use_second_level_cache" value="true"/>
+        <!--2차 캐시 활성화-->
+        <!--엔티티 캐시와 컬렉션 캐시를 사용할 수 있다.-->
+        <property name="hibernate.cache.use_query_cache" value="true"/>
+        <!--쿼리 캐시를 활성화-->
+        <property name="hibernate.cache.region.factory_class" value="org.hibernate.cache.ehcache.EhCacheRegionFactory"/>
+        <!--2차 캐시를 처리할 클래스를 지정한다.-->
+        <property name="hibernate.cache.generate_statistics" value="true"/>
+        <!--하이버네이트가 여러 통계정보를 출력해주는데 캐시 적용 여부를 확인할 수 있다.-->
+        <!--성능에 영향을 주므로, 개발 환경에서만 적용하는게 좋다.-->
+    </properties>
+    ...
+</persistence-unit>
+```
+
