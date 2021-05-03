@@ -204,3 +204,49 @@ puyblic interface Cache {
 </persistence-unit>
 ```
 
+### 엔티티 캐시와 컬렉션 캐시
+
+```java
+@Cacheable
+// 해당 어노테이션을 통해 엔티티를 캐시를 적용한다.
+@Cache(usage = CacheConcureencyStrategy.READ_WRITE)
+// 해당 어노테이션은 하이버네이트 전용이다.
+@Entity
+public class Parent {
+    ...
+    
+    @Cache(usage = CacheConcureencyStrategy.READ_WRITE)
+    // 클래스 레벨의 @Cache 와 같으며, 컬렉션 캐시를 적용할 때 사용할 수 있다.
+    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
+    private List<Child> children = new ArrayList<Child>();
+    
+    ...
+}
+```
+
+@Cache
+
+| 속성 | 설명 |
+| ---- | ---- |
+| usage | CacheConcurrencyStrategy 를 사용해서 캐시 동시성 전략을 설정 |
+| region | 캐시 지역 설정 |
+| include | 연관 객체를 캐시에 포함할지 선택한다. <br/> all/non-lazy 를 선택할 수 있다 |
+
+* CacheConcurrencyStrategy
+
+| 속성 | 설명 |
+| ---- | ---- |
+| NONE | 캐시 설정 X |
+| READ_ONLY | 읽기 전용으로 설정 <br/> 등록/삭제는 가능하지만 삭제는 불가능하다. |
+| NONSTRICT_READ_WRITE | 엄격하지 않은 쓰기 전략 <br/> 동시에 같은 엔티티를 수정하면 데이터 일관성이 깨질 수 있다. <br/> EHCACHE 는 데이터를 수정하면 캐시 데이터를 무효화한다 |
+| READ_WRITE | 읽기 쓰기가 가능하고, READ COMMITTED 정도의 격리 수준을 보장한다. <br/> EHCACHE 는 데이터를 수정하면 캐시 데이터도 같이 수정한다. |
+| TRANSACTIONAL | 컨테이너 관리 환경에서 사용할 수 있다. <br/> 설정에 따라 REPEATABLE READ 격리 수준을 보장받을 수 있다. |
+
+* 캐시 동시성 전략 지원 여부
+    * ConcurrentHashMap 은 개발시에만 사용해야 한다.
+    
+| Cache | read-only | nonstrict-read-write | read-write | transactional |
+| ---- | ---- | ---- | ---- | ----- |
+| ConcurrentHashMap | O | O | O |  |
+| EHCache | O | O | O | O |
+| Infinispan | O | | | O |
