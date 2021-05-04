@@ -250,3 +250,13 @@ public class Parent {
 | ConcurrentHashMap | O | O | O |  |
 | EHCache | O | O | O | O |
 | Infinispan | O | | | O |
+
+### 캐시 영역
+
+* 캐시를 적용시, 캐시 영역에 저장된다.
+* 엔티티 캐시 영역은 기본값으로 [패키지명 + 클래스명] 을 사용한다.
+* 컬렉션 캐시 영역은 엔티티 캐시 영역 이름에 ㅏ캐시한 컬렉션의 필드 명이 추가된다.
+* @Cache(region = "someCacheName"...) 과 같이 캐시 영역을 직접 지정할 수 있다.
+* 캐시 영역을 위한 접두사를 설정하려면 persistence.xml 설정에 hibernate.cache.region_prefix 를 사용해도 된다.
+* 캐시 영역별 세부 설정이 가능하다.
+    * ehcache.xml 에서 설정이 가능하다.
