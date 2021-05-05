@@ -260,3 +260,59 @@ public class Parent {
 * 캐시 영역을 위한 접두사를 설정하려면 persistence.xml 설정에 hibernate.cache.region_prefix 를 사용해도 된다.
 * 캐시 영역별 세부 설정이 가능하다.
     * ehcache.xml 에서 설정이 가능하다.
+
+### 쿼리 캐시
+
+* 쿼리 캐시는 쿼리와 파라미터 정보를 키로 사용해서 쿼리 결과를 캐시하는 방법
+* 영속성 유닛을 설정에 hibernate.cache.use_query_cache 옵션을 true 로 해야 쿼리 캐시가 적용된다.
+
+```java
+em.createQuery("select e from Entity e", Entity.class)
+    .setHint("org.hibernate.cacheable", true)
+    .getResultList();
+
+@Entity
+@NamedQuery(
+        hint = @QueryHint(name = "org.hibernate.cacheable", value = true),
+        ...
+)
+```
+
+### 쿼리 캐시 영역
+
+* 쿼리 캐시를 활성화하면 다음 두 캐시 영역이 추가된다.
+    1. org.hibernate.cache.internal.StandardQueryCache
+        - 쿼리 캐시를 저장하는 영역
+        - 쿼리, 쿼리 결과 집합, 쿼리를 실행한 시점의 타임스탬프를 보관
+    2. org.hibernate.cache.spi.UpdateTimestampsCache
+        - 쿼리 캐시가 유효한지 확인하기 위해 쿼리 대상 테이블의 가장 최근 변경 시간을 저장 (등록/수정/삭제)
+        - 테이블 명과 해당 테이블의 최근 변경된 타임스템프를 저장
+* 쿼리 캐시는 캐시한 데이터 집합을 최신 데이터로 유지하려고 쿼리 캐시를 실행하는 시간과 쿼리 캐시가 사용하는 테이블들이 가장 최근에 변경된 시간을 비교한다.
+* 쿼리 캐시를 적용하고 난 후, 쿼리 캐시가 사용하는 테이블에 조금이라도 변경이 발생하면 데이터베이스에서 데이터를 읽어와 쿼리 결과를 다시 캐시한다.
+* 엔티티를 변경하면 org.hibernate.cache.spi.UpdateTimestampsCache 캐시 영역에 해당 엔티티가 매핑한 테이블 이름으로 타임스탬프를 갱신한다.
+
+```java
+em.createQuery("select e from Entity e join e.child c", Entity.class)
+    .setHint("org.hibernate.cacheable", true)
+    .getResultList();
+
+// 1. 위 쿼리를 실행하면 StandardQueryCache 캐시 영역에서 타임스탬프를 조회한다.
+// 2. 쿼리가 사용하는 엔티티의 테이블인 Entity, Child 를 UpdateTimestampsCache 캐시 영역에서 조회해서 테이블들의 타임 스탬프를 확인한다.
+// 3. 만약 StandardQueryCache 캐시 영역의 타임스탬프가 더 오래되었으면 캐시가 유효하지 않은것으로 보고, 데이터베이스에서 조회후 갱신한다.
+```
+
+* 캐시를 잘 사용하면 성능 향상을 기대할 수 있다.
+    * 하지만, 빈번한 변경이 있는 테이블에 사용하면 캐시 적중률이 낮아지기 때문에 성능이 더 하락한다.
+    
+### 쿼리 캐시와 컬렉션 캐시의 주의점
+
+* 엔티티 캐시를 사용해서 엔티티를 캐시하면 엔티티 정보를 모두 캐시하지만, 쿼리 캐시와 컬렉션 캐시는 결과 집합의 식별자 값만 캐시한다.
+    * 쿼리 캐시와 컬렉션 캐시를 조회하면 식별자 값만 들어있다.
+    * 해당 식별자 값을 조회하면, 하나씩 엔티티 캐시에서 조회해서 실제 엔티티를 찾는다.
+* 쿼리 캐시나 컬렉션 캐시를 사용하지만, 대상 엔티티에 엔티티 캐시를 적용하지 않으면 성능문제가 발생할 수 있다.
+    1. `select e from Entity e` 쿼리에 대해 쿼리 캐시가 적용되어 있고, 결과 집합의 수가 100건이라고 가정
+    2. 결과 집합에는 식별자 값만 존재하므로, 한 건씩 엔티티 캐시 영역에서 조회
+    3. Entity 엔티티는 엔티티 캐시를 사용하지 않으므로, 한건씩 데이터베이스에서 조회
+    4. 결국 100 번의 SQL 실행
+* 즉, 쿼리 캐시나 컬렉션 캐시만 사용하고, 엔티티 캐시를 사용하지 않으면 최악의 상황에 결과 집합 수만큼 SQL 이 실행된다.
+* 따라서 쿼리 캐시나 컬렉션 캐시를 사용할 때는 대상 엔티티에도 엔티티 캐시를 적용해야 한다.
