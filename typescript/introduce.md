@@ -82,7 +82,7 @@ type ObjectArray = Array<{name : string}|SomeType>;
 
 interface Backpack<Type> {
     add: (obj: Type) => void;
-    kget: () => Type;
+    get: () => Type;
 }
 
 declare const backpack: Backpack<string>;
@@ -134,3 +134,83 @@ print(virtualPoint);
 // 구조적으로 클래스와 객체가 형태를 따르는 방법에는 차이가 없다.
 // 필요한 속성이 모두 존재한다면, ts 는 구현 세부 정보에 관계없이 일치하게 본다.
 ```
+
+### 삭제된 구조적 타입
+
+* ts 에서 객체는 정확히 단일 타입이 아니다.
+* 인터페이스를 만족하는 객체를 생성할 때, 둘 사이의 선언적 관계가 없더라도 해당 인터페이스가 예상되는 곳에 해당 객체를 사용할 수 있다.
+* ts 의 타입 시스템은 명목이 아닌 구조적이므로, 타입간의 관계는 특정 관계로 선언되었는지가 아닌 포함된 프로퍼티에 의해 결정된다.
+    * 런타임시에는 지정한 타입은 어떠한 형태로도 존재하지 않는다.
+    * 집합으로서의 타입 개념으로 보고, 집합의 멤버로 확인할 뿐이다.
+
+```typescript
+interface Point {
+    x: number;
+    y: number;
+}
+
+interface Name {
+    name: string;
+}
+
+function printPoint(point: Point) {
+    console.log(`x: ${point.x}, y: ${point.y}`);
+}
+
+function printName(val: Name) {
+    console.log(`name: ${val.name}`);
+}
+
+const object = {
+    x: 10,
+    y: 20,
+    name: 'foo',
+}
+
+printPoint(object); // x: 10, y: 20
+printName(object); // name: foo
+```
+
+### 구조적 타입화의 결과
+
+```typescript
+class Empty {}
+
+function fn(arg: Empty) {
+    // do something
+}
+
+fn({foo: 123});
+// 전달된 {foo: 123} 자체는 Empty 와 동일하지는 않지만
+// Empty 의 구조를 확인하여 유효성 검사를 한다.
+// 즉, 해당되는 타입에 모든 프로퍼티가 있다면 유효하다고 판단합니다.
+
+class Car {
+    drive() {
+        // some logic
+    }
+}
+
+class Golfer {
+    drive() {
+        // some other logic
+    }
+}
+
+const w: Car = new Golfer();
+// 위와 같은 형태는 오류가 아니다.
+// 그 이유는 Car 와 Golfer 의 클래스 구조가 동일하기 때문이다.
+// 이러한 형태는 혼란을 줄 수 있지만, 상관없는 클래스가 동일한 경우는 일반적이지 않은 형태이다.
+```
+
+### 반영 (Reflection)
+
+```cs
+static void PrintType<T>() {
+    Console.writeLine(typeof(T).Name);
+}
+```
+
+* ts 타입 시스템이 완벽히 지워졌으므로, 제네릭 타입 인자의 인스턴스화와 같은 정보는 런타임에 사용할 수 없다.
+* js 에는 `typeof`/`instanceof` 와 같은 제한된 원시요소가 있지만, 연산자 타입이 지워진 코드의 출력에 존재한다.
+    * ex) `typeof (new Car())` 는 `Car` 또는 `"Car"` 가 아닌 `"object"` 이다
