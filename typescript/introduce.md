@@ -70,6 +70,71 @@ function wrap(obj: string|string[]): string[] {
 }
 ```
 
+### 교집합
+
+```typescript
+type Combinded = { a: number } & { b: string };     // { a: number, b: string }
+type Conflicting = { a: number } & { a: number };   // { Conflicting.a: number & string }
+```
+
+#### 타입을 체크하는 조건자
+
+```typescript
+// 아래의 형태로 타입 체크하면, 해당하는 값은 해당되는 타입으로 지정된다.
+typeof obj === 'string'     // string
+typeof obj === 'number'     // number
+typeof obj === 'bigint'     // bigint
+typeof obj === 'boolean'    // boolean
+typeof obj === 'symbol'     // symbol
+typeof obj === 'undefinded' // undefinded
+typeof obj === 'function'   // function
+Array.isArray(obj)          // array
+typeof obj === 'object'     // object
+```
+
+#### 유니언 타입
+
+```typescript
+declare function pad(s: string, n: number, direction: 'left'|'right'): string;
+pad('hi', 10, 'left');
+// ok
+
+let s = 'right';
+pad('hi', 10, s);
+// @errors: 2345
+// s 에 당장 할당된 값은 left|right 중 right 이지만, let 이므로 변경 가능하다.
+// 즉, 변경이 가능한 변수를 지정된 유니언 타입에 대입했으므로 타입 에러가 발생한다.
+
+let s2: 'left'|'right' = 'right';
+pad('hi', 10, s2);
+// s2 는 가변변수이지만, 타입을 지정하였기 때문에 에러가 발생하지 않는다.
+```
+
+#### 판별 유니언
+
+```typescript
+type Shape = { kind: "circle"; radius: number }
+    | { kind: "square"; x: number }
+    | { kind: "triangle"; x: number; y: number };
+
+function area(s: Shape) {
+    if (s.kind === 'circle') return Math.PI * s.radius * s.radius;
+    else if (s.kind === 'square') return s.x * s.x;
+    else return (s.x * s.y) / 2;
+    // 모든 타입에 대해서 커버되었기에, 각 분기마다 타입이 정해지고, 해당 타입으로 변수가 사용된다.
+    // 또한, 모두 커버가 되었고 area 의 리턴값은 결론적으로 number 가 되므로, area() => number 형태가 된다.
+    // 하지만, 만약 모든 타입이 커버되지 않았다면, area() => number|undefined 가 된다.
+}
+
+function height(s: Shape) {
+    if (s.kind === 'circle') return 2 * s.radius;
+    else return s.x;
+    // else 에 지정된 타입은 if 에 걸린 타입을 제외한 square/triagle 이 모두 가능하게 되며,
+    // square/triagle 에 모두 x 가 존재하므로 사용할 수 있다.
+    // 이와 같이 변수에 여러 타입이 매핑되더라도 공통된 값은 사용할 수 있다고 추론된다.
+}
+```
+
 ### 제네릭 Generics
 
 * 타입에 변수를 제공하는 방법
@@ -214,3 +279,48 @@ static void PrintType<T>() {
 * ts 타입 시스템이 완벽히 지워졌으므로, 제네릭 타입 인자의 인스턴스화와 같은 정보는 런타임에 사용할 수 없다.
 * js 에는 `typeof`/`instanceof` 와 같은 제한된 원시요소가 있지만, 연산자 타입이 지워진 코드의 출력에 존재한다.
     * ex) `typeof (new Car())` 는 `Car` 또는 `"Car"` 가 아닌 `"object"` 이다
+
+### readonly 와 const
+
+* js 에서 변수는 수정 가능함이 기본이지만, 참조가 수정 불가능함을 선언하기 위해 const 로 변수를 선언할 수 있다.
+    * 참조 대상은 여전히 수정이 가능하다.
+* ts 에서는 readonly 제어자를 사용하여 해당 변수는 변경 불가능하다고 명시할 수 있다.
+* 매핑된 타입인 `Readonly<T>` 는 모든 프로퍼티를 readonly 로 만든다.
+* 부작용을 일으키는 메서드를 제거하고 배열 인덱스에 대한 변경을 방지하는 특정 `ReadonlyArray<T>` 타입과, 이 타입에 대한 특수 구문이 있다.
+* 배열과 객체 리터럴에서 동작하는 const-assertion 만 사용할 수 있다.
+
+```typescript
+const a = [1,2,3];
+a.push(4);
+a[0] = 100;
+--------------------------------------------------
+
+interface Rx {
+    readonly x: number;
+}
+let rx: Rx = { x: 1 };
+rx.x = 12;
+// error
+--------------------------------------------------
+
+interface X {
+    x: number;
+}
+let rx2: X = { x: 1 };
+let rx3: Readonly<X> = { x: 1 };
+rx2.x = 12;
+// ok
+rx3.x = 12;
+// error
+--------------------------------------------------
+
+let foo: ReadonlyArray<number> = [1,2,3];
+let bar: readonly number[] = [1,2,3];
+foo.push(102); // error
+bar[0] = 100; // error
+--------------------------------------------------
+
+let fuz = [1,2,3] as const;
+fuz.push(100); // error
+fuz[0] = 100; // error
+```
