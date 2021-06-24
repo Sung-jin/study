@@ -91,3 +91,46 @@ try {
     console.log(e.message); // 'Some Message' or jsError message
 }
 ```
+
+## Promises
+
+* ECMAScript2015 에서 지연된 흐름과 비동기식의 연산을 제어할 수 있는 Promise 객체에 대한 지원을 얻게되었다.
+* Promise 상태
+    1. pending - 초기상태, fulfilled or rejected 전
+    2. fulfilled - 연산 수행 성공
+    3. rejected - 연산 수행 실패
+    4. settled - Promise 가 fulfilled or rejected 이지만 pending 은 아님
+
+![MDN - promise](https://mdn.mozillademos.org/files/8633/promises.png)
+> MDN Promise 이미지
+
+```js
+// XHR 을 통해 이미지 불러오기
+
+function load(url) {
+    return new Promise((resolve, reject) => {
+        const request = new XMLHttpRequest();
+        request.open('GET', url);
+        request.responseType = 'blob';
+        request.onload = function() {
+            if (request.status === 200) {
+                resolve(request.response);
+            } else {
+                reject(Error(`Image Load Failed. Error Code: ${request.statusText}`));
+            }
+        };
+        request.onerror = function() {
+            reject(Error('Network Error'));
+        };
+        request.send();
+    })
+}
+
+...
+
+try {
+    load('http://some.image.url');
+} catch (e) {
+    console.log(e);
+}
+```
