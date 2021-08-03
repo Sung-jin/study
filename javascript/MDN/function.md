@@ -144,3 +144,57 @@ function outside() {
 }
 result = outside()(20); // 20
 ```
+
+### 클로저
+
+* js 는 함수의 중첩을 허용하고, 내부함수가 외부 함수에서 정의된 모든 변수와 함수들에 접근이 가능하다.
+  * 그러나 외부함수는 내부함수 안에 정의된 변수와 함수에 접근할 수 없다.
+  * 즉, 내부 함수의 변수에 대한 일종의 캡슐화를 제공한다.
+  * 또한 내부 함수가 외부 함수의 변수에 접근할 수 있으므로, 내부 함수가 외부 함수의 수명을 초과하여 생존할 경우 외부 함수의 변수나 함수는 외부함수의 실행 기간보다 길 수 있다.
+* 클로저는 내부 함수가 어떻게든 외부 함수 범위 밖의 모든 범위에서 사용 가능해지면 생성된다.
+
+```js
+var pet = function(name) {
+    var age;
+    
+    return {
+        getName: function() {
+            return name;
+        },
+        setName: function(newName) {
+            name = newName;
+        },
+        getAge: function() {
+            return age;
+        },
+        setAge: function(newAge) {
+            if (typeof newAge === 'number') age = newAge;
+        }
+    };
+}
+
+myPet = pet("poodle");
+
+myPet.getName(); // poodle 을 리턴
+myPet.setAge(10);
+myPet.getAge(); // 10 을 리턴
+myPet.setName("dachshund");
+myPet.getName(); // dachshund 을 리턴
+
+/*
+getAge 를 통해 내부 변수에 접근할 수 있고, setAge 를 통해 내부 변수를 셋팅할 수 있다.
+또한, myPet.age 와 같이 접근은 불가능하다. 
+
+위와같이 설정을 하면 age 라는 내부 변수는 지속적이고 캡슐화된 데이터로서 보유된다.
+ */
+
+var createPet = function(name) {
+    return {
+        setName: function(name) {
+            name = name;
+            // 위와 같이 내부 함수가 외부 함수 범위에 존재하는 변수 중 같은 이름으로 정의하면
+            // 다시는 외부 함수 범위의 변수에 접근할 방법이 없다.
+        }
+    }
+}
+```
