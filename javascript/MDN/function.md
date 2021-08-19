@@ -245,4 +245,32 @@ mul3(2, 1, 2, 3);
 // result: [2, 4, 6];
 ```
 
+### 화살표 함수
 
+* 화살표 함수는 항상 익명 함수이다.
+
+```js
+function Person() {
+    this.age = 0;
+    // new 를 통해 Person() 을 할당하면, 생성자가 this 를 자기 자신으로 바인딩 한다.
+  
+    var self = this;
+    // 그래서 es3/5 에서 this 를 할당한 변수를 이용했었다.
+  
+    setInterval(function growUp() {
+        this.age++;
+        // nonstrict mode 에서 growUp 의 this 는 전역 객체로 정의된다.
+        // 즉, new Person() 으로 바인딩 된 this 와는 다르다.
+      
+        // self.age++;
+    }, 1000);
+    
+    setInterval(() => {
+        this.age++;
+        // 화살표 함수에서 this 는 해당 함수를 포함하는 객체 값이 사용된다.
+        // 즉, 해당 화살표 함수의 this 는 Person 이 할당된다.
+    }, 1000)
+}
+
+var p = new Person();
+```
