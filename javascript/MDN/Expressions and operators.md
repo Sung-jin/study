@@ -78,3 +78,63 @@ typeof null;            // "object"
 typeof 62;              // "number" 반환
 typeof 'some string';   // "string" 반환
 ```
+
+### void
+
+```js
+// 표현식을 평가할 때 값을 반환하지 않도록 할 때 사용한다.
+void (expression)
+void expression
+```
+
+### in
+
+* 지정한 속성이 해당 객체에 존재하면 true 를 반환
+
+```js
+// 배열
+var trees = ["redwood", "bay", "cedar", "oak", "maple"];
+0 in trees;        // true 반환
+3 in trees;        // true 반환
+6 in trees;        // false 반환
+"bay" in trees;    // false 반환 (인덱스에 위치한 값이 아니라
+                   // 인덱스 자체를 지정해야 함)
+"length" in trees; // true 반환 (length는 Array의 속성임)
+
+// 내장 객체
+"PI" in Math;          // true 반환
+var myString = new String("coral");
+"length" in myString;  // true 반환
+
+// 사용자 정의 객체
+var mycar = { make: "Honda", model: "Accord", year: 1998 };
+"make" in mycar;  // true 반환
+"model" in mycar; // true 반환
+```
+
+### instanceof
+
+* 지정한 객체가 지정한 타입이면 true 를 반환
+
+```js
+someObject instanceof Function
+// 객체 <-> 비교할 타입
+```
+
+### this
+
+* 일반적으로 this 는 메서드의 호출 객체를 참조한다.
+
+### new
+
+* 사용자 정의 객체 타입이나 내장 객체 타입의 인스턴스를 생성할 수 있다.
+> var objectName = new objectType([param1, param2, ..., paramN]);
+
+### super
+
+* 객체의 부모가 가진 함수를 호출할 때 사용한다.
+
+```js
+super([arguments]); // 부모 생성자 호출
+super.functionOnParent([arguments]);
+```
