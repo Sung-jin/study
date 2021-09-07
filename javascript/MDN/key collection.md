@@ -49,3 +49,46 @@ Public.prototype.method = function () {
 
 module.exports = Public;
 ```
+
+### Set
+
+* 입력된 순서에 따라 저장된 요소를 반복 처리를 할 수 있고, 중복된 값을 허용하지 않는 값들의 집합
+* Array.from 또는 spread operator 를 통해 Set 객체로 배열을 만들 수 있다.
+* Set 생성자는 배열을 인자로 받을 수 있다.
+
+```js
+var set = new Set();
+
+set.add(1);
+set.add(1);
+set.add(2);
+set.add(3);
+set.add(1);
+
+for (let item of set) console.log(item); // 1 2 3
+
+var setByArray = new Set([1,1,2,3,1,1]);
+for (let item of setByArray) console.log(item); // 1 2 3
+
+var arrayBySet1 = Array.from(set);
+var arrayBySet2 = [...set];
+
+console.log(arrayBySet1); // [1,2,3]
+console.log(arrayBySet2); // [1,2,3]
+```
+
+### array vs set
+
+* indexOf 를 통해 배열에 특정 요소가 존재하는지 확인하는 것은 느리다.
+* set 은 특정 데이터를 삭제하는 기능이 제공된다.
+* NaN 은 indexOf 로 찾을 수 없다.
+* set 은 중복을 확인 할 필요가 없다.
+
+### WeakSet
+
+* WeakSet 내의 요소 열거 형태는 없다.
+* set 과 다른 점
+  * WeakSet 에는 객체만 저장할 수 있다.
+  * WeakSet 은 약한 참조를 가진다.
+    * 즉, WeakSet 에 저장된 객체에 대한 참조가 없어지면 GC 대상이 된다.
+    * 따라서 현재 저장되어 있는 객체에 대한 목록은 없으며 WeakSet 은 열거형이 아니다.
