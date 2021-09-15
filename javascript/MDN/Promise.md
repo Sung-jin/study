@@ -91,3 +91,57 @@ window.addEventListener('unhandledrejection', event => {
 const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
 wait(10000).then(() => something()).catch(failureCallback);
 ```
+
+### 구성
+
+* Promise.resolve()/.reject() - resolve/reject 를 직접 생성하기 위한 바로가기
+* Promise.all()/,race() - 비동기 작업을 병렬로 실행하기 위한 두가지 구성 도구
+
+```js
+const result = someThing.resolve('some result');
+result.then(res => console.log(res)); // some result
+
+const result2 = someThing2.reject('some error');
+result2.then(() => {}).catch(err => console.error(err)); // some error
+
+Promise.all([somePromise1(), somePromise2(), somePromise3()]).map(res => {
+    console.log(res); // 1,2,3 순차적으로 해당 응답값이 출력
+});
+[somePromise1(), somePromise2(), somePromise3()].forEach(async someThing => {
+    await someThing();
+    // ESMAScript 2017 에서 async/await 을 사용하여 순차적 구성을 수행할 수 있다.
+})
+
+const promise1 = new Promise((resolve, reject) => {
+  setTimeout(resolve, 500, 'one');
+});
+
+const promise2 = new Promise((resolve, reject) => {
+  setTimeout(resolve, 100, 'two');
+});
+
+Promise.race([promise1, promise2]).then((value) => {
+  console.log(value);
+  // Both resolve, but promise2 is faster
+  // so fater promise2 result is bind to value
+});
+```
+
+### timing
+
+* then() 에 전달 된 함수는 이미 resolved 된 promise 라도 동기적으로 호출되지 않는다.
+* 즉시 실행되는 대신 전달 된 함수는 마이크로 태스크 대기열에 저장된다.
+  * js 이벤트 루프의 현재 실행이 끝날 때 대기열이 빌때 나중에 실행된다.
+
+```js
+Promise.resolve().then(() => console.log(2));
+console.log(1);
+// 1 2
+
+const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
+wait().then(() => console.log(1));
+Promise.resolve().then(() => console.log(2)).then(() => console.log(3));
+console.log(4);
+
+// 4 2 3 1
+```
