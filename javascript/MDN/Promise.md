@@ -145,3 +145,43 @@ console.log(4);
 
 // 4 2 3 1
 ```
+
+### nesting
+
+* 간단한 promise 체인은 중첩이 부주의 한 구성의 결과 일 수 있으므로 중첩하지 않고 평평하게 유지하는 것이 가장 좋다.
+* 중첩 된 catch 는 중첩 된 범위 외부의 체인에있는 오류가 아닌 범위 및 그 이하의 오류만 잡는다.
+
+```js
+doSomethingCritical()
+.then(res => doSomthingOptional(res)
+        .then(optionalRes => doSomethingExtraNice(optionalRes))
+        .catch(e => {})
+        // 해당 catch 는 doSomthingOptional, doSomethingExtraNice 에서 발생한 오류를
+        // catch 한 후 moreCriticalStuff 를 다시 실행한다.
+).then(() => moreCriticalStuff())
+.catch(e => console.error(e));
+// moreCriticalStuff 의 실패는 해당 catch 에서만 포착된다.
+```
+
+### promise chain 의 일반적인 실수
+
+```js
+doSomething().then(function (res) {
+    doSomthingElse(res)
+            // 해당 함수에서 별도의 결과에 대한 return 값이 없다.
+            .then(newRes => doThirdThing(newRes));
+}).then(() => doFourthThing());
+// 즉, doSomthingElse 은 doThirdThing, doFourthThing 과의 체인이 끊어져 있으므로
+// 각각 독립적인 체인이 경쟁하게 된다.
+// doSomthingElse 이 doThirdThing, doFourthThing 이 완료될 때 까지 기다리지 않고 병렬로 실행하게 된다.
+// 또한 각각의 promise 가 불필요하게 중첩되어 있다.
+// 추가적으로 catch 로 체인을 종료하지 않았다.
+
+doSomething()
+.then(function (res) {
+    return doSomethingElse(res);
+})
+.then(newResult => doThirdThing(newResult))
+.then(() => doFourthThing())
+.catch(err => console.err(err));
+```
