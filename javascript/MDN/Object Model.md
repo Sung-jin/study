@@ -71,3 +71,64 @@ var someObj = new SomeObj();
 * `someObj.someNew = 'new';`
   * someObj 에 대해서는 someNew 라는 속성이 추가는 되지만, SomeObj 객체들은 someNew 라는 석성이 추가되지는 않는다.
 * `SomeObj.prototype.someNew = 'new';` 형태로 prototype 에 추가하면 모든 객체에 해당 속성이 추가된다.
+
+#### 속성 상속의 재고
+
+```js
+function Employee() {
+    this.name = '';
+    this.dept = 'general';
+}
+function WorkerBee() {
+    this.projects = [];
+}
+WorkerBee.prototype = new Employee;
+
+var amy = new WorkerBee;
+// amy 객체는 프로젝트라는 자신만의 속성을 가진다.
+// name, dept 는 amy 자체의 속성은 아니고, __proto__ 속성을 통해 가져 온 속성이다.
+
+Employee.prototype.name = "Unknown";
+// 모든 직원 인스턴스에 적용되지는 않는다.
+// 직원 객체의 인스턴스를 생성할 때, 해당 인스턴스는 이름 속성에 대해 자신이 가지고 있는 값을 가진다.
+// 새로운 직원 객체를 생성하여 Employee 의 프로토타입에 설정 할 때 WorkerBee.prototype 이 이름 속성에 대한 자신만의 값을 가진다는 의미이다.
+// amy 객체의 이름 속성에 대해 WorkerBee.prototype 내에서 name 속성에 대한 amy 객체 자신의 값을 찾는다.
+// 즉, Employee.prototype 까지의 프로토타입 체인을 검색하지 않는다.
+
+// 실행시 객체의 속성 값을 변경하고 새로운 값이 모든 하위 객체들에게도 적용되도록 하려면, 객체의 생성자함수에서는 속성을 정의할 수 없다.
+// 대신 생성자와 연결된 프로토타입에 추가할 수 있다.
+
+function Employee () {
+  this.dept = 'general';
+}
+Employee.prototype.name = '';
+
+function WorkerBee () {
+  this.projects = [];
+}
+WorkerBee.prototype = new Employee;
+
+var amy = new WorkerBee;
+
+Employee.prototype.name = 'Unknown';
+// 이럴 경우 amy 의 name 은 변경이 된다.
+// 즉, 해당 속성들을 생성자 함수 자체안에가 아닌 생성자의 프로토타입에 설정하면 실행 중 해당 속성의 값을 변경할 수 있다.
+```
+
+#### 인스턴스 관계 결정
+
+* 프로토타입 체인에서의 검색
+  * js 속성 검색은 객체 자신의 속성들을 먼저 살펴보고 해당 속성명을 찾지 못하면, `__proto__` 내에서 찾는다.
+  * 이런 검색은 재귀적으로 진행된다.
+* `__proto__` 는 객체가 생성이 될때 설정된다.
+  * 해당 객체 속성은 모든 객체가 가진다. (Object 제외)
+  * 해당 속성은 생성자의 프로토타입 속성의 값으로 설정된다.
+  * new Foo() 는 `__proto__ == Foo.prototype` 인 객체를 생성한다.
+* prototype 이라는 객체 속성은 모든 함수들이 가진다.
+  * `__proto__` 속성과 `prototype` 객체를 비교하여 상속을 테스트 할 수 있다.
+  * js 는 특정 객체가 함수 prototype 으로부터 상속 받는 객체일 경우 instanceof 를 통해 true 가 반환된다.
+
+```js
+var f = new Foo();
+console.log(f instanceof Foo); //true
+```
