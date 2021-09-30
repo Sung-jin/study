@@ -324,3 +324,17 @@ let fuz = [1,2,3] as const;
 fuz.push(100); // error
 fuz[0] = 100; // error
 ```
+
+#### 내장타입
+
+* js 7개의 내장 타입
+
+| 타입 | 설명 |
+| ---- | ---- |
+| Number | 배정밀도 IEEE 754 부동소수점 |
+| String | 수정 불가능한 UTF-16 문자엻 |
+| Boolean | true, false |
+| Symbol | 보통 키로 사용하는 고유 값 |
+| Null | 단위 타입과 동등 |
+| Undefined | 단위 타입과 동등 |
+| Object | 레코드와 유사 |
