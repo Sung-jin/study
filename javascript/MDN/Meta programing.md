@@ -34,3 +34,43 @@ obj.a = 1;
 console.log(obj.a, obj.b); // 1 undefined
 ```
 
+#### 예제
+
+```js
+// get handler
+var getHandler = {
+    get: function(target, name) {
+        return name in target ?
+                target[name] : 37;
+    }
+    // 키에 해당되는 값이 존재한다면 해당 값을, 아니면 37 을 리턴하는 핸들러
+}
+var gp = new Proxy({}, getHandler);
+p.a = 1;
+
+console.log(p.a); // 1
+console.log(p.b); // 37
+
+// validation
+var validator = {
+    set: function(obj, prop, value) {
+        if (prop === 'age') {
+            if (!Number.isInteger(value)) {
+                throw new TypeError('The age is not an integer');
+            }
+            if (value > 200) {
+                throw new RangeError('The age seems invalid');
+            }
+        }
+        
+        obj[prop] = value;
+    }
+};
+
+var person = new Proxy({}, validator);
+
+person.age = 100; // ok
+person.age = 'ten'; // throw TypeError
+person.age = 300; // throw RangeError
+```
+
