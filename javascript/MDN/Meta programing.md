@@ -72,5 +72,64 @@ var person = new Proxy({}, validator);
 person.age = 100; // ok
 person.age = 'ten'; // throw TypeError
 person.age = 300; // throw RangeError
+
+// 생성자 확장
+function extend(sub, base) {
+    var descriptor = Object.getOwnPropertyDescriptor(
+        base.prototype, 'constructor'
+    );
+    base.prototype = Object.create(sup.prototype);
+    var handler = {
+        construct: function(target, args) {
+            var obj = Object.create(base.prototype);
+            this.apply(taret, obj, args);
+            return obj;
+        },
+      apply: function(target, that, args) {
+            sup.apply(that, args);
+            base.apply(that, args);
+      }
+    };
+    var proxy = new Proxy(base, handler);
+    descriptor.value = proxy;
+    Object.defineProperty(base.prototype, 'constructor', descriptor);
+    return proxy;
+}
+
+var Person = function(name) {
+    this.name = name;
+}
+var Boy = extend(Person, function(name, age) {
+    this.age = age;
+});
+
+Boy.prototype.sex = 'M';
+
+var Perter = new Boy('Peter', 13);
+console.log(Peter.sex);     // M
+console.log(Peter.name);    // Peter
+console.log(Peter.age);     // 13
+
+// DOM nodes 조작
+let view = new Proxy({
+  selected: null
+}, {
+    set: function(obj, prop, newVal) {
+        let oldVal = obj[prop];
+        
+        if (prop === 'selected') {
+            if (oldVal) oldVal.setAttribute('some-selected', false);
+            if (newVal) newVal.setAttribute('some-selected', true);
+        }
+        obj[prop] = newVal;
+    }
+});
+
+let i1 = view.selected = document.getElementById('some-item-1');
+console.log(li.getAttribute('some-selected')); // true
+
+let i2 = view.selected = document.getElementById('some-item-2');
+console.log(i1.getAttribute('aria-selected')); // false
+console.log(i2.getAttribute('aria-selected')); // true
 ```
 
