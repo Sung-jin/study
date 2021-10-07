@@ -288,7 +288,8 @@ static void PrintType<T>() {
 * 매핑된 타입인 `Readonly<T>` 는 모든 프로퍼티를 readonly 로 만든다.
 * 부작용을 일으키는 메서드를 제거하고 배열 인덱스에 대한 변경을 방지하는 특정 `ReadonlyArray<T>` 타입과, 이 타입에 대한 특수 구문이 있다.
 * 배열과 객체 리터럴에서 동작하는 const-assertion 만 사용할 수 있다.
-
+    * `let a = [1, 2, 3] as const; a.push(4); // error! a[0] = 10; // error!`
+  
 ```typescript
 const a = [1,2,3];
 a.push(4);
@@ -338,3 +339,61 @@ fuz[0] = 100; // error
 | Null | 단위 타입과 동등 |
 | Undefined | 단위 타입과 동등 |
 | Object | 레코드와 유사 |
+
+* ts 에서 사용할 수 있는 타입
+
+| 타입 | 설명 |
+| ---- | ---- |
+| unknown | 최상위 타입 |
+| never | 하위 타입 |
+| 객체 리터럴 | ex) `{ property: Type }` |
+| void | 리턴 타입으로 사용하기 위한 의도된 undefined 의 서브타입 |
+| T[] | 수정 가능한 배열들 <br/> 또한 Array<T> 형태로 사용 가능 |
+| [T, T] | 고정된 길이지만 수정 가능한 튜플 <br/> T[] 의 서브타입임 |
+| (t: T) => U | 함수 |
+
+#### 점진적인 타이핑
+
+* ts 에서 타입을 알 수 없을 때 any 를 사용할 수 있고, any 에는 어떠한 값이여도 허용된다.
+* tsconfig.json 에서 `'noImplicitAny': true` 또는 `'strict': true` 를 통해 any 사용 시 에러를 발생시킬 수 있다
+
+```typescript
+const anyArr = [
+    1, 'some value', { foo: 'obj' }
+];
+// 어떠한 값이여도 가능
+
+let sepsis = anyArr[0] + arrArr[1];
+// any 타입의 표현식과 함께 변수를 초기화 하면, 해당 변수도 any 타입을 가진다.
+```
+
+#### 구조적인 타이핑
+
+```typescript
+let o = { x: "hi", extra: 1 };
+let o2: { x: string } = o;
+// o2 에 해당되는 x: string 인 부분이 만족된다면
+// 그 외에 다른 데이터가 존재하더라도 할당이 가능하다.
+// o2 는 { x: string } 만 존재하고, 그 외의 값인 { extra: 1 } 의 경우
+// 해당 타입의 서브 타입으로 만들어 진다.
+```
+
+#### 타입 매개변수
+
+```typescript
+function liftArray<T>(t: T): Array<T> {
+    return [t];
+}
+// 타입 매개 변수는 일반적으로 단일 대문자이다.
+// 타입 매개 변수는 타입 클래스 제약과 비슷하게 동작하는 타입으로 제한될 수 있다
+
+function firstish<T extends { length: number }>(t1: T, t2: T): T {
+    return t1.length > t2.length ? t1 : t2;
+}
+// ts 는 일반적으로 인자 타입에 기반하여 호출로부터 타입 인자를 추론할 수 있다.
+// 타입 매개변수는 매개별수를 같은 타입으로 제한하는 것처럼 타입 정보를 전파하는데만 쓰여야 한다.
+
+function length<T extends ArrayLike<unknown>>(t: T): number {}
+// T 는 한번만 참조되고, 다른 매개변수나 리턴 값의 타입을 제한하는데 사용되지 않고 있다.
+function length(t: ArrayLike<unknown>): number {}
+```
