@@ -99,3 +99,36 @@ a = ro as number[];
 // 타입 단언으로 readonly array 를 일반 배열에 대입할 수 있다
 ```
 
+### 초과 프로퍼티 검사
+
+```typescript
+interface SquareConfig {
+    color?: string;
+    width?: number;
+}
+
+function createSquare(config: SquareConfig): { color: string; area: number } {
+    // ...
+}
+
+// error: Object literal may only specify known properties, but 'colour' does not exist in type 'SquareConfig'. Did you mean to write 'color'?
+let mySquare = createSquare({ colour: "red", width: 100 });
+// color 가 아닌 colour 로 전달되었다
+// color 에 대한 프로퍼티는 없고 colour 프로퍼티가 있지만, 해당 프로퍼티는 중요하지 않다
+// ts 의 경우 이럴때 에러가 발생한다
+// 초과 프로퍼티 검사를 피하는 방법으로는 타입 단언을 사용하면 피할 수 있다
+let mySquare = createSquare({ width: 100, opacity: 0.5 } as SquareConfig);
+
+// 또는 문자열 인덱스 서명을 추가할 수 있다
+interface SquareConfig {
+  color?: string;
+  width?: number;
+  [propName: string]: any;
+  // string 타입의 키를 가지는 어떠한 것도 올 수 있다
+}
+
+let squareOptions = { colour: "red" };
+let mySquare = createSquare(squareOptions);
+// color, width 라는 공통 프로퍼티는 하나 이상 존재해야 한다
+// 하지만 위와 같이 하나라도 존재하지 않으므로 에러가 발생한다
+```
