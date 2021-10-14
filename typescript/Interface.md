@@ -132,3 +132,29 @@ let mySquare = createSquare(squareOptions);
 // color, width 라는 공통 프로퍼티는 하나 이상 존재해야 한다
 // 하지만 위와 같이 하나라도 존재하지 않으므로 에러가 발생한다
 ```
+
+### 함수 타입
+
+* 인터페이스는 객체를 기술하는 것 외에 함수 ㅌ타입을 설명할 수 있다
+* 인터페이스에 호출 서명을 전달하여 함수 타입을 기술할 수 있다
+  * 매개변수 목록과 반환 타입만 주어진 함수 선언과 비슷하다
+  * 매개변수는 이름과 타입이 모두 필요하다
+
+```typescript
+interface SearchFunc {
+  (source: string, subString: string): boolean;
+}
+
+let mySearch: SearchFunc
+mySearch = function (src: string, sub: string) {
+    let booleanVal: boolean = false;
+    // 정의된 함수의 이름과 꼭 같을 필요는 없으며, 타입 형태만 같으면 된다
+    ...
+  
+    return booleanVal;
+    // return "some String";
+    // SearchFunc 의 리턴 타입은 boolean 이기 때문에 에러가 발생한다
+    // error: Type '(src: string, sub: string) => string' is not assignable to type 'SearchFunc'.
+    // Type 'string' is not assignable to type 'boolean'.
+}
+```
