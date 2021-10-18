@@ -158,3 +158,46 @@ mySearch = function (src: string, sub: string) {
     // Type 'string' is not assignable to type 'boolean'.
 }
 ```
+
+### 인덕서블 타입
+
+* 타입을 인덱스로 기술할 수 있다
+* 해당 반환 유형과 함께 객체를 인덱싱하는 데 사용할 수 있는 타입을 기술하는 인덱스 시그니처를 가지고 있다
+* 두 타입의 인덱서를 모두 지원하는 것은 가능하지만, 숫자 인덱서에서 반환된 타입은 반드시 문자열 인덱서에서 반환된 타입의 하위 타입이어야 한다
+  * number 로 인덱싱될 때, js 는 실제로 객체를 인덱싱하기 전에 string 으로 변환하기 때문이다
+* 인덱스의 할당을 막기 위해서 인덱스 시그니처를 읽기 전용으로 만들 수 있다
+
+```typescript
+interface StringArray {
+    [index: number]: string;
+}
+
+let myArray: StringArray;
+myArray = ['foo', 'bar'];
+
+interface ReadonlyStringArray {
+    readonly [index: number]: string;
+}
+
+const myReadonlyArray: ReadonlyStringArray = ['foo', 'bar'];
+myReadonlyArray[1] = 'fuz'; // error
+```
+
+### 인터페이스 구현하기
+
+```typescript
+interface ClockInterface {
+  currentTime: Date;
+  setTime(d: Date): void;
+}
+
+class Clock implements ClockInterface {
+  // 인페이스는 클래스의 public, private 모두보다는 public 을 기술한다
+  currentTime: Date = new Date();
+  setTime(d: Date) {
+      this.currentTime = d;
+  }
+
+  constructor(h: nnumber, m: number) {}
+}
+```
