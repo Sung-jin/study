@@ -201,3 +201,89 @@ class Clock implements ClockInterface {
   constructor(h: nnumber, m: number) {}
 }
 ```
+
+### 인터페이스 확장하기
+
+* 인터페이스도 확장이 가능하다
+* 한 인터페이스의 멤버를 다른 인터페이스에 복사하는 것을 가능하게 해준다
+* 또한 여러 인터페이스를 확장할 수 있고, 모든 인터페이스의 조합을 만들어낼 수 있다
+
+```typescript
+interface Shape {
+    color: string;
+}
+
+interface PenStroke {
+    penWidth: number;
+}
+
+interface Square extends Shape, PenStroke {
+    sideLength: number;
+}
+
+let square = {} as Square;
+square.color = 'blue';
+square.sideLength = 10;
+square.penWidth = 5.0;
+```
+
+### 하이브리드 타입
+
+* js 에서는 존재하는 다양한 타입들을 기술할 수 있다
+* js 의 동적이고 유연한 특성 때문에 몇몇 타입의 조합으로 동작하는 객체를 마주할 수 있다
+
+```typescript
+interface Counter {
+  (start: number): string;
+  intervale: number;
+  reset(): void;
+}
+
+function getCounter(): Count {
+    let counter = (function (start: number) {}) as Counter;
+    counter.intervale = 123;
+    counter.reset = function () {};
+    return counter;
+}
+
+const c = getCOunter();
+c(10);
+c.reset();
+c.interval = 5.0;
+```
+
+### 클래스를 확장한 인터페이스
+
+* 인터페이스 타입이 클래스 타입을 확장하면 클래스의 멤버는 상속받지만 구현은 상속받지 않는다
+  * 인터페이스가 구현을 제공하지 않고, 클래스의 멤버 모두를 선언한 것과 같다
+* 인터페이스는 기초 클래스의 private, protected 멤버도 상속 받는다
+  * 인터페이스가 private/protected 멤버를 포함한 클래스를 확장할 수 있다는 뜻
+  * 인터페이스 타입은 그 클래스나 하위 클래스에 의해서만 구현될 수 있다
+* 특정 프로퍼티를 가진 하위클래스에서만 코드가 동작하도록 지정하는데 유용하다
+
+```typescript
+class Control {
+    private state: any;
+}
+
+interface SelectableControl extends Control {
+    // private state 프로퍼티를 포함하여 Control 의 모든 멤버를 가지고 있다
+    // state 의 경우 private 멤버이므로 SelectableControl 를 구현하는 것은 Control 의 자식에만 가능하다
+    select(): void;
+}
+
+class Button extends Control implements SelectableControl {
+    select() { }
+}
+class TextBox extends Control {
+    select() { }
+}
+// Button 과 TextBox 는 Control 을 상속받기 때문에
+// Control 의 모든 멤버를 가지고 있다
+
+class Image implements SelectableControl {
+    private state: any;
+    select() { }
+}
+class Location {}
+```
