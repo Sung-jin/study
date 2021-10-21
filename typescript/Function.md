@@ -64,3 +64,50 @@ const res = buildNameWithOptional3(undefined, 'bar');
 // 앞에서 부터 사용되면 해당 위치에 undefined 를 넣어줘야 동작한다
 // 그런데 굳이 이렇게 할 필요가..
 ```
+
+### 나머지 매개변수
+
+* 함수가 최정적으로 얼마나 많은 매개변수를 취할지 모를 때 사용할 수 있다
+* js 에서 모든 함수 내부에 위치한 arguments 라는 변수를 사용해 직접 인자를 가지고 작업할 수 있다
+  * ts 에서는 해당 인자를 하나의 변수로 모을 수 있다
+
+```typescript
+function buildName(firstName: string, ...restOfName: string[]) {
+    return firstName + ' ' + restOfName.join(' ');
+}
+// (x: type, ...: type[]) => returnType 과 같이 타입으로도 표현이 가능하다
+
+const res = buildName('foo', 'bar', 'fuz', 'baz'); // foo bar fuz baz
+```
+
+### this 와 화살표 함수
+
+* js 에서 this 는 함수가 호출될 때 정해지는 변수이다
+
+```typescript
+const obj = {
+    val: 'foo',
+    someFunc: function() {
+        return function() {
+            return this.val;
+        }
+    }
+}
+
+const someFunc = obj.someFunc();
+const res = someFunc(); // error!
+// someFunc 에 할당된 obj 의 someFunc 에서 바인딩된 this 가 obj 이 아닌 window 가 할당되었기 때문이다
+// 최상위 레벨에서의 비-메서드 문법 호출은 this 를 window 로 한다 (strict mode 에서는 window 가 아닌 undfined 가 된다)
+// 화살표 함수를 사용한다면, 생성된 쪽이 this 가 바인딩 된다
+
+const changedObj = {
+  val: 'foo',
+  someFunc: () => {
+    return function() {
+      return this.val;
+    }
+  }
+}
+const changeSomedFunc = obj.someFunc();
+const changedRes = changeSomedFunc(); // foo
+```
