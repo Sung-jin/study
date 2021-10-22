@@ -111,3 +111,58 @@ const changedObj = {
 const changeSomedFunc = obj.someFunc();
 const changedRes = changeSomedFunc(); // foo
 ```
+
+### 콜백에서의 this 매개변수
+
+* 콜백을 실행할 때, this 는 undefined 가 된다
+  * this 매개변수를 지정하여 콜백 오류를 막는데 사용할 수 있다
+  
+```typescript
+interface UIElement {
+    addClickListener(onclick: (this: void, e: Event) => void): void
+    // addClickListenr 의 콜백인 onclick 에 this 를 void 로 지정함으로써
+    // 콜백의 this 는 void 임을 명시해줄 수 있다
+};
+
+class Handler {
+  info: string;
+  onClickGood = (e: Event) => { this.info = e.message }
+}
+let h = new Handler();
+uiElement.addClickListener(h.onClickBad);
+// 화살표 함수가 외부의 this 를 사용하기 때문에 가능하다
+```
+
+### 오버로드
+
+* js 는 동적인 언어이다
+* 하나의 함수가 전달된 인자의 형태에 따라 다른 타입의 객체들을 반환할 수 있다
+* 하지만, 이러면 어떠한 타입을 받아서 어떠한 타입을 리턴하는 알 수 없다
+  * 이때 오버로드를 이용할 수 있다
+  * 오버로드 목록은 컴파일러가 함수 호출들을 해결할 때 사용한다
+* 컴파일러가 오버로드된 여러 함수둘 중 알맞은 타입 검사를 할 때는 js 와 비슷한 프로세스를 따른다
+  1. 오버로드 목록에서 첫 번째 오버로드를 진행하면서 제공된 매개변수를 사용하여 함수를 호출하려고 시도
+  1. 일치 시 해당 오버로드를 알맞은 오버로드로 선택하여 작업 수행
+  1. 불일치 시 다음 오버로드로 시도를 반복
+* 컴파일러가 오버로드로 타입 체크하는 방식 때문에 가장 구체적인 것부터 오버로드 리스팅을 하는 것이 일반적이다
+
+```typescript
+function someFunc(x): any {
+    if (typeof x === 'object') {
+        // some object logic
+    } else if (typeof x === 'string') {
+        // some string logic
+    }
+    ...
+}
+// 위의 로직을 오버로드를 통해 다음과 같이 구현할 수 있다
+
+function someFunc(x: object): string {
+    // some object logic
+    ...
+}
+function someFunc(x: string): object {
+    // some string logic
+    ...
+}
+```
