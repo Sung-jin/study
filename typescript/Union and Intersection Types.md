@@ -1,4 +1,4 @@
-### 유니언 타입
+## 유니언 타입
 
 ```typescript
 declare function padLeft(value: string, padding: any): string;
@@ -81,4 +81,78 @@ function networkStatus(state: NetworkState): string {
             // response 라는 필드를 접근할 수 있다
     }
 }
+```
+
+## 교차 타입
+
+* 여러 타입을 하나로 결합한 것이 교차 타입이다
+* 기존 타입을 합쳐 필요한 기능을 모두 가진 단일 타입을 얻을 수 있다
+
+```typescript
+interface ErrorHandling {
+    success: boolean;
+    error?: { message: string };
+}
+
+interface ArtworksData {
+    artworks: { title: string }[];
+}
+
+interface ArtistsData {
+    artists: { name: string }[];
+}
+
+type ArtworksResponse = ArtworksData & ErrorHandling;
+// ArtworksResponse 은 artists 와 success,error 가 존재한다
+type ArtistsResponse = ArtistsData & ErrorHandling;
+// ArtistsResponse 은 artworks 와 success,error 가 존재한다
+
+const handleArtistsResponse = (response: ArtistsResponse) => {
+    if (response.error) {
+        console.error(response.error.message);
+        return;
+    }
+
+    console.log(response.artists);
+};
+```
+
+### 교차를 통한 믹스인
+
+```typescript
+class Person {
+    constructor(public name: string) {}
+}
+
+interface Loggable {
+    log(name: string): void;
+}
+
+class ConsoleLogger implements Loggable {
+    log(name: string) {
+        console.log(`Hello, I'm ${name}.`);
+    }
+}
+
+// 두 객체를 받아 하나로 합친다
+function extend<First extends {}, Second extends {}>(
+    first: First,
+    second: Second
+): First & Second {
+    const result: Partial<First & Second> = {};
+    for (const prop in first) {
+        if (first.hasOwnProperty(prop)) {
+            (result as First)[prop] = first[prop];
+        }
+    }
+    for (const prop in second) {
+        if (second.hasOwnProperty(prop)) {
+            (result as Second)[prop] = second[prop];
+        }
+    }
+    return result as First & Second;
+}
+
+const jim = extend(new Person("Jim"), ConsoleLogger.prototype);
+jim.log(jim.name);
 ```
