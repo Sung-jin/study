@@ -159,3 +159,78 @@ const bar = new Bar();  // Bar 의 생성자는 protected 이므로 생성할 �
 const fuz = new Fuz();
 fuz.name; // 오류
 ```
+
+### 읽기전용 지정자
+
+* `readonly` 키워드를 사용하면 해당 프로퍼티가 읽기전용이 된다
+* 읽기전용 프로퍼티는 선언 또는 생성자에서 초기화해야 한다
+
+```typescript
+class Foo {
+    readonly bar: string;
+    readonly fuz = 0;
+
+    constructor(val, private readonly baz: string) {
+        // baz 의 경우 매개변수 프로퍼티에 readonly 키워드를 사용했고,
+        // baz 라는 readonly 변수가 없지만, 생성자에 baz 에 위치한 데이터는
+        // 객체 생성 후 baz 라는 readonly 변수로 생성된다
+        // 또한 private/protected/public 을 사용할 수 있다
+        this.bar = val;
+    }
+}
+
+const foo = new Foo('val', 'readonly baz');
+foo.bar = 'change'; // error
+```
+
+### 접근자
+
+* ts 객체의 멤버에 대한 접근을 가로치는 방식으로 getters/setters 를 지원한다
+* 접근자를 사용하려면 ECMAScript 5 이상이어야 한다
+* ㅎet/set 이 없는 접근자는 자동으로 readonly 로 유추된다
+
+```typescript
+class Employee {
+    private _fullName: string;
+    private fullNameMaxLength = 10;
+
+    get fullName(): string {
+        return this._fullName;
+    }
+
+    set fullName(newName: string) {
+        if (newName && newName.length > this.fullNameMaxLength) {
+            throw new Error("fullName has a max length of " + this.fullNameMaxLength);
+        }
+
+        this._fullName = newName;
+    }
+}
+
+const employee = new Employee();
+
+employee.fullName = "Bob Smith";
+console.log(employee.fullName);
+
+empolyee.fullName = 'foooooooooo'; // error fullName has a max length of 10
+```
+
+### 전역 프로퍼티
+
+* 인스턴스가 아닌 클래스 자체에 전역 멤버를 생성할 수 있다
+* `static` 키워드를 사용하면 `클래스이름.전역프로퍼티` 형태로 접근할 수 있다
+
+```typescript
+class Foo {
+    static val = 0;
+  
+    constructor() {
+        console.log(Foo.val);
+        Foo.val += 1;
+    }
+}
+
+new Foo(); // 0
+new Foo(); // 1
+new Foo(); // 2
+```
