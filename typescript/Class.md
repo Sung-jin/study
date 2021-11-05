@@ -234,3 +234,39 @@ new Foo(); // 0
 new Foo(); // 1
 new Foo(); // 2
 ```
+
+### 추상 클래스
+
+* 추상클래스로 직접 인스턴스화 할 수 없다
+* 멤버에 대한 구현 세부 정보를 포함할 수 있다
+* abstract 키워드는 추상 클래스뿐 아니라 추상 메서드를 정의하는데 사용할 수 있다
+* 추상 클래스 내에 추상으로 표시된 메서드는 구현을 포함하지 않고, 반드시 파생된 클래스에서 구현되어야 한다
+* 추상 메서드와 인터페이스 메서드는 비슷한 문법을 공유하지만, 추상 메서드는 반드시 abstract 키워드를 포함해야 하고, 선택적으로 접근 지정자를 포함할 수 있다
+
+```typescript
+abstract class Animal {
+    abstract makeSound(): void;
+    
+    move(): void {
+        console.log('move');
+    }
+}
+
+class Dog extends Animal {
+    constructor() {
+        super();
+    }
+    
+    makeSound() {
+        console.log('Bow-wow');
+    }
+    
+    eat() {
+        console.log('eat something...')
+    }
+}
+
+const dog = new Dog();
+dog.makeSound(); // Bow-wow
+dog.eat();       // eat something...
+```
