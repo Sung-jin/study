@@ -270,3 +270,63 @@ const dog = new Dog();
 dog.makeSound(); // Bow-wow
 dog.eat();       // eat something...
 ```
+
+### 생성자 함수
+
+* ts 에서 클래스 선언하면 실제로 여러개의 선언이 동시에 생성된다
+
+```typescript
+class Foo {
+    bar: string;
+
+    constructor(val) {
+        this.bar = val;
+    }
+    
+    someThing() {
+        return 'something';
+    }
+}
+
+let foo: Foo;
+// foo 는 Foo 클래스의 인스턴스 타입으로 Foo 를 사용한다
+
+let Bar = (function() {
+    // Bar 는 생성자 함수를 할당받는다
+    // new 를 호출하고 이 함수를 실행할 때, 클래스의 인스턴스를 얻는다
+    // 또한 생성자 함수는 클래스의 모든 전역 변수들을 포함하고 있다
+    function Bar(val) {
+        this.bar = val;
+    }
+    Bar.prototype.someThing = function() {
+        return 'something';
+    };
+    return Bar;
+});
+
+let bar;
+bar = new Bar();
+bar.someThing(); // something
+```
+
+### 인터페이스로써 클래스 사용하기
+
+* 클래스 선언은 `클래스의 인스턴스를 나타내는 타입` 과 `생성자 함수` 를 생성한다
+* 클래스는 타입을 생성하기 때문에 인터페이스를 사용할 수 있는 동일한 위치에서 사용할 수 있다
+
+```typescript
+class Foo {
+    val1: string;
+    val2: number;
+}
+
+interface Bar extends Foo {
+    val3: object;
+}
+
+const bar: Bar = {
+    val1: 'val',
+    val2: 0,
+    val3: {}
+};
+```
