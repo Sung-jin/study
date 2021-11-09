@@ -150,3 +150,68 @@ function printImportant(key: LogLevelStrings, message: string) {
 }
 printImportant('ERROR', 'This is a message');
 ```
+
+### 역 매핑
+
+* 열거형 값에서 열거형 이름으로 역 매핑을 받을 수 있다
+
+```typescript
+enum Enum { A }
+const a = Enum.A;
+const nameOfA = Enum[a];
+
+// ts 로 컴파일
+var Enum;
+(function (Enum) {
+    Enum[Enum['A'] = 0] = 'A';
+})(Enum || (Enum = {}));
+var a = Enum.A;
+var nameOfA = Enum[a]; // 'A'
+// name -> value 의 열거형 정방향 매핑과
+// value -> name 으로의 역방향 매핑 두 정보를
+// 모두 저장하는 객체로 컴파일 된다
+// 다른 열거형 멤버 참조는 항상 프로퍼티 접근으로 노출되며, 인라인되지 않는다
+// 문자열 열거형은 역 매핑을 생성하지 않는다
+```
+
+### const 열거형
+
+* 열거형의 요구사항이 엄격해져야 할 때, const 열거형으로 사용할 수 있다
+  * 열거형 값에 접근할 때 간점 참조에 대한 비용을 피하기 위해 const 열거형을 사용할 수 있다
+  * const 열거형은 const 지정자를 열거형에 붙여 정의한다
+* const 열거형은 상수 열거형 표현식만 사용될 수 있다
+  * 일반적인 열거형과 달리 컴파일 과정에서 완전히 제거된다
+  * const 열거형은 사용하는 공간에 인라인된다
+  
+```typescript
+const enum Enum {
+    A = 1,
+    B = A * 2
+}
+
+const enum Directions {
+    Up,
+    Down,
+    Left,
+    Right
+}
+
+const directions = [Directions.Up, Directions.Down, Directions.Left, Directions.Right];
+// 컴파일 결과
+// var directions = [0 /* Up */, 1 /* Down */, 2 /* Left */, 3 /* Right */];
+```
+
+### Ambient 열거형
+
+* 이미 존재하는 열거형 타입의 모습을 묘사하기 위해 사용한다
+* ambient vs non-ambient 열거형의 가장 큰 차이점
+  * 일반적인 열거형에서 초기화되지 않은 멤버가 상수로 간주하는 멤버 뒤에 있다면 해당 멤버도 상수로 간주한다
+  * const 가 아닌 ambient 열거형에서 초기화되지 않은 멤버는 항상 계산된 멤버로 간주한다
+
+```typescript
+declare enum Enum {
+    A = 1,
+    B,
+    C = 2
+}
+```
