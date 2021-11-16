@@ -28,3 +28,22 @@ const res1 = someThing<string>('some value');
 const res2 = someThing('some value');
 // 가장 일반적인 방법이며, 타입 인수 추론을 통해 제네릭 T 의 값을 추론하여 해당 값으로 결과를 리턴한다
 ```
+
+### 제네릭 타입 변수 작업
+
+* 제네릭을 사용하게 되면, 컴파일러가 함수 본문에 제네릭 타입화된 매개변수를 쓰도록 강요한다
+  * 이러한 매개변수들은 실제로 any 나 모든 타입이 될 수 있는 것처럼 취급할 수 있게 된다
+  
+```typescript
+function someThing<T>(arg: T): T {
+    console.log(arg.length);
+    // eeror, 이러한 상황에서 T 는 any 이므로 length 가 없다 
+    return arg;
+}
+
+function someThing<T>(arg: T[]): T[] {
+    console.log(arg.length);
+    // 이때 T 는 배열이므로, length 를 사용할 수 있다
+    return arg;
+}
+```
