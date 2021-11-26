@@ -125,3 +125,50 @@ function loggingIdentity<T extends Lengthwise>(arg: T): T {
 loggingIdentity(3); // 3 에 length 가 없으므로 오류
 loggingIdentity({length: 10, value: 3});
 ```
+
+### 제네릭 제약조건에서 타입 매개변수 사용
+
+* 다른 타입 매개변수로 제한된 타입 매개변수를 선언할 수 있다
+
+```typescript
+function getProperty<T, K extends keyof T>(obj: T, key: K) {
+    return obj[key];
+}
+
+let x = { a: 1, b: 2, c: 3, d: 4 };
+getProperty(x, 'a');
+getProperty(x, 'f'); // f 는 'a' | 'b' | 'c' | 'd' 에 속하지 않음
+```
+
+### 제네릭에서 클래스 타입 사용
+
+* 제네릭을 사용하는 ts 에서 팩토리를 생성할 때 생성자 함수로 클래스 타입을 참조해야 한다
+
+```typescript
+class BeeKeeper {
+    hasMask: boolean;
+}
+
+class ZooKeeper {
+    nametag: string;
+}
+
+class Animal {
+    numLegs: number;
+}
+
+class Bee extends Animal {
+    keeper: BeeKeeper;
+}
+
+class Lion extends Animal {
+    keeper: ZooKeeper;
+}
+
+function createInstance<A extends Animal>(c: new () => A): A {
+    return new c();
+}
+
+createInstance(Lion).keeper.nametag;  // 타입검사!
+createInstance(Bee).keeper.hasMask;   // 타입검사!
+```
