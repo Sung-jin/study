@@ -72,3 +72,70 @@ let pet = getSmallPet();
 pet.layEggs(); // 성공
 pet.swim();    // 오류
 ```
+
+### 타입 가드와 차별 타입
+
+* 유니언 타입은 값의 타입이 겹쳐질 수 있는 상황을 모델링하는데 유용하다
+* 유니언 타입의 모든 구성 성분을 가지고 있다고 보장되는 멤버에만 접근 할 수 있다
+
+```typescript
+const pet = getSmallPet();
+
+if (pet.swim) {
+    pet.swim();
+}
+else if (pet.fly) {
+    pet.fly();
+}
+// 이렇게 각 프로퍼티들에 접근하는 것은 오류를 발생
+
+if ((pet as Fish).swim) {
+    (pet as Fish).swim();
+} else if ((pet as Bird).fly) {
+    (pet as Bird).fly();
+}
+// 위와 같이 타입 단언을 사용해야 오류가 발생하지 않는다
+```
+
+### 사용자-정의 타입 가드
+
+* 검사를 실시했을 때, 분기별에서 해당 타입을 알 수 있는 방법에는 `타입 가드` 라는 것이 있다
+  * 타입 가드는 스코프 안에서의 타입을 보장하는 런타임 검사를 수행한다는 표현식이다
+
+#### 타입 서술어 사용
+
+```typescript
+function isFish(pet: Fish | Bird): pet is Fish {
+    return (pet as Fish).swim !== undefined;
+    // pet is Fish 가 타입 서술어이다
+    // xxx is Fish 에서 xxx 는 반드시 현재 함수 시그니처의 매개변수 이름이어야 한다
+    // 해당 예제에서는 Fish 또는 Bird 이어야 한다
+}
+
+if (isFish(pet)) {
+    pet.swim();
+    // isFish 라는 함수를 통해서 pet 변수는 해당 스콥에서
+    // Fish 타입임을 알린다
+} else {
+    pet.fly();
+}
+```
+
+#### in 연산자 사용
+
+* `in` 연산자는 타입을 좁히는 표현으로 작용한다
+* `n in x` 라는 표현에서 n 은 문자열 또는 문자열 리터럴 타입이고, x 는 유니언 타입이다
+
+```typescript
+function move(pet: Fish|Bird) {
+    if ('swim' in pet) {
+        // 해당 스콥에서 swim 이라는 프로퍼티가 pet 에 존재하므로,
+        // Fish 라는 타입으로 좁혀지고
+        return pet.swim();
+    } else {
+        // if 에서 벗어날 경우, swim 이 없는 타입으로 좁혀진다
+        return pet.fly();
+    }
+}
+
+```
