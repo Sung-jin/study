@@ -139,3 +139,30 @@ function move(pet: Fish|Bird) {
 }
 
 ```
+
+#### typeof 타입 가드
+
+```typescript
+function padLeft(value: string, padding: string | number) {
+    if (typeof padding === 'number') {
+        // typeof 키워드를 통해 변수를 특정 타입으로 명시할 수 있다
+        // typeof 를 통해 추론할 수 있는 타입으로는 number/string/boolean/symbol 이 존재한다
+        // 그 외으 타입을 비교하는 것을 막지는 않지만, 타입 가드의 표현식으로 인지되지 않는다
+        return Array(padding + 1).join(" ") + value;
+    }
+    if (typeof padding === 'string') {
+         return padding + value;
+    }
+    throw new Error(`Expected string or number, got '${padding}'.`);
+}
+```
+
+#### instanceof 타입 가드
+
+* `instanceof` 의 오른쪽은 생성자 함수여야 하며, ts 는 다음과 같은 형태로 타입을 추론한다
+  1. 함수의 `prototype` 프로퍼티 타입이 any 가 아닌 경우
+  1. 타입의 생성자 시그니처에서 반환된 유니언 타입인 경우
+  
+```typescript
+
+```
