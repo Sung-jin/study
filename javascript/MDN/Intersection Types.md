@@ -162,7 +162,69 @@ function padLeft(value: string, padding: string | number) {
 * `instanceof` 의 오른쪽은 생성자 함수여야 하며, ts 는 다음과 같은 형태로 타입을 추론한다
   1. 함수의 `prototype` 프로퍼티 타입이 any 가 아닌 경우
   1. 타입의 생성자 시그니처에서 반환된 유니언 타입인 경우
-  
-```typescript
 
+```typescript
+interface Foo {
+  log(val): string
+}
+
+class Fuz implements Foo {
+  log(val) {
+    console.log(`val: ${val}`);
+    return val;
+  }
+}
+
+class Foobar implements Foo {
+  constructor(private prefix: string) {}
+  log(val) {
+    return `${this.prefix} ${val}`;
+  }
+}
+
+function getRandomFoo() {
+  return Math.random() < 0.5 ?
+          new fuz() :
+          new Foobar('value');
+}
+
+const foo: Foo = getRandomFoo();
+
+if (foo instanceof Fuz) {}
+if (foo instanceof Foobar) {}
+// 각 분기의 블록 스코프에는 해당되는 타입으로 취급된다
+```
+
+#### Nullable type
+
+* ts 에서 기본적으로 타입 검사시 `null`/`undefined` 를 아무것에나 할당할 수 있다고 간주한다
+  * 이러한 문제는 `--strictNullChecks` 플래그를 통해 변수를 선언할 때 자동으로 `null`/`undefined` 을 포함하지 않게 할 수 있다
+* `null`/`undefined` 를 유니언 타입을 사용하여 명시적으로 포함할 수 있다
+
+```typescript
+let foo = 'hello';
+foo = null; // null 은 string 에 할당 할 수 없다
+
+let bar: string|null = 'world';
+bar = null; // ok
+bar = undefined; // undefined 는 string|null 에 할당 할 수 없다
+```
+
+#### 선택적 매개변수와 프로퍼티
+
+* `--stringNullChecks` 를 적용하고 선택적 매개변수를 사용하면 `undefined` 가 자동으로 타입에 추가된다
+
+```typescript
+function f(x?: number) {}
+f(1); // ok
+f(undefined); // ok
+f(null); // error
+
+class C {
+    a?: number;
+}
+const c = new C();
+c.a = 1; // ok
+c.a = undefined; // ok
+c.a = null; // error
 ```
