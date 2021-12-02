@@ -228,3 +228,60 @@ c.a = 1; // ok
 c.a = undefined; // ok
 c.a = null; // error
 ```
+
+#### 타입 가드와 타입 단언
+
+```typescript
+function f(a: string|null) {
+    return a || 'default';
+    // a 에 값이 없으면 뒤에 있는 값이 기본값으로 리턴된다
+}
+
+function f2(name: string|null) {
+    return name!.length;
+    // ! 연산자를 통해서 null 과 undefined 를 수동으로 제거할 수 있다
+}
+```
+
+#### 타입 별칭
+
+* 타입의 새로운 이름을 만들때 타입 별칭을 사용할 수 있다
+  * 하지만, 실제로 새로운 타입을 생성하는 것은 아니다
+* 타입 별칭은 제네릭이 될 수 있다
+* 타입 별칭을 선언의 오른족 이외에 사용하는 것은 불가능하다
+
+```typescript
+type Name = string;
+type NameResolver = () => string;
+type NameOrResolver = Name | NameResolver;
+function getName(n: NameOrResolver): Name {
+    return typeof n === 'string' ? n : n();
+}
+
+type Container<T> = { value: T };
+// 타입 제네릭
+type Tree<T> = {
+    value: T;
+    left: Tree<T>;
+    right: Tree<T>;
+}
+// 프로퍼티 안에서 자신을 참조가 가능하다
+```
+
+#### 인터페이스 vs 타입 별칭
+
+* 인터페이스는 어디에서나 사용할 수 있는 새로운 이름을 만들 수 있으나, 타입 별칭은 새로운 이름을 만들지 못한다
+* ts 이전 버전에서 타입 별칭은 extend 하거나 implement 가 불가능하였으나, 2.7 이후 버전에서는 타입 별칭은 교차 타입을 생성함으로써 extend 할 수 있게 되었다
+  * `type Cat = Animal & { purrs: true }`
+* 소프트웨어의 이상적인 특징은 확장에 개발되어 있기 때문에 타입 별칭보다는 인터페이스를 사용하는게 좋다
+* 인터페이스로 어떠한 형태를 표현할 수 없고 유니언이나 튜플타입을 사용해야 한다면, 일반적으로 타입 별칭을 사용한다
+
+```typescript
+type Alias = { num: number }
+interface Interface {
+    num: number;
+}
+declare function aliased(arg: Alias): Alias;
+declare function interfaced(arg: Interface): Interface;
+// 해당 함수의 리턴값이 ide 에서 aliased 는 객체를, interfaced 는 Interface 를 반환한다고 한다
+```
