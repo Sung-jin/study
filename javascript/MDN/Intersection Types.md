@@ -285,3 +285,48 @@ declare function aliased(arg: Alias): Alias;
 declare function interfaced(arg: Interface): Interface;
 // 해당 함수의 리턴값이 ide 에서 aliased 는 객체를, interfaced 는 Interface 를 반환한다고 한다
 ```
+
+#### 문자열 리터럴 타입
+
+* 문자열 리터럴 타입은 문자열에 값을 정확하게 지정할 수 있다
+* 문자열 리터럴 타입은 유니언 타입, 타입 가드, 타입 별칭과 잘 결합된다
+
+```typescript
+type Easing = "ease-in" | "ease-out" | "ease-in-out";
+class UIElement {
+    animate(dx: number, dy: number, easing: Easing) {
+        if (easing === "ease-in") { ... }
+        else if (easing === "ease-out") { ... }
+        else if (easing === "ease-in-out") { ... }
+    }
+}
+
+let button = new UIElement();
+button.animate(0, 0, "ease-in");
+button.animate(0, 0, "uneasy"); // error. uneasy 는 Easing 에 정의되어 있지 않음
+// Argument of type '"uneasy"' is not assignable to parameter of type '"ease-in" | "ease-out" | "ease-in-out"'
+
+// 문자열 리터럴 타입은 오버로드를 구별하기 위해 같은 방법으로 사용할 수 있다
+function createElement(tagName: "img"): HTMLImageElement;
+function createElement(tagName: "input"): HTMLInputElement;
+// ... 더 많은 오버로드 ...
+function createElement(tagName: string): Element {
+    // ... 이곳에 코드를 ...
+}
+```
+
+#### 숫자 리터럴 타입
+
+```typescript
+function dice(): 1|2|3|4|5|6 {
+    // ...
+}
+// 위와 같이 ts 에는 숫자 리터럴 타입을 가지고 있지만
+// 숫자 리터럴 타입을 명시적으로 작성되는 경우는 거의 없다
+
+function foo(x: number) {
+    if (x !== 1 || x !== 2) {}
+    // !== 연산자는 1,2 타입에 적용할 수 없다
+    // 즉, x 는 2와 비교될 때, 반드시 1 이어야 하지만 위의 검사가 유효하지 않는 비교를 의미한다
+}
+```
