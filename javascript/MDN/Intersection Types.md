@@ -330,3 +330,62 @@ function foo(x: number) {
     // 즉, x 는 2와 비교될 때, 반드시 1 이어야 하지만 위의 검사가 유효하지 않는 비교를 의미한다
 }
 ```
+
+#### 판별 유니언
+
+* 싱글톤 타입, 유니언 타입, 타입 가드, 타입 별칭을 합칠 수 있다
+* 판별 유니언은 함수형 프로그래밍에서 유용하다
+* 다음과 같은 요소가 존재한다
+  1. 공통 싱글톤 타입 프로퍼티를 갖는 타입 - 판별식
+  1. 해당 타입들의 유니언을 갖는 타입 별칭 - 유니언
+  1. 공통 프로퍼티의 타입 가드
+  
+```typescript
+interface Square {
+    kind: 'square';
+    size: number;
+}
+interface Rectangle {
+    kind: 'rectangle';
+    width: number;
+    height: number;
+}
+interface Circle {
+    kind: 'circle';
+    radius: number;
+}
+type Shape = Square | Rectangle | Circle;
+// 판별 유니언 선언
+
+function area(s: Shape) {
+    switch (s.kind) {
+        case 'square': return s.size * s.size;
+        case 'rectangle': return s.height * s.width;
+        case 'circle': return Math.PI * s.radius ** 2;
+    }
+}
+```
+
+#### 엄격한 검사
+
+```typescript
+type Shape = Square | Rectangle | Circle | Triangle;
+
+function assertNever(x: never): never {
+    throw new Error('Unexpected object: ' + x);
+}
+
+function area(s: Shape): number {
+    switch (s.kind) {
+        case 'square': return s.size * s.size;
+        case 'rectangle': return s.height * s.width;
+        case 'circle': return Math.PI * s.radius ** 2;
+    }
+    // Triangle 에 대한 처리를 하지 않아서 에러가 발생한다
+    // --strictNullChecks 를 설정하여 강제로 에러를 없앨 수 있다
+    // 하지만, 위의 옵션을 키게 되면 해당 함수의 반환 타입은 number|undefined 가 되면서
+    // 명시적으로 number 타입을 가지고 있는 곳에 사용하게 되면 에러가 발생된다
+    // 또는 컴파일러가 완전함을 검사하기 위해 사용하는 never 타입을 사용할 수 있다
+    // default: return assertNever(s); 와 같이 사용하여 빠진 케이스가 있다면 여기서 오류 발생시킬 수 있다
+}
+```
