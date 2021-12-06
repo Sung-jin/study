@@ -389,3 +389,113 @@ function area(s: Shape): number {
     // default: return assertNever(s); 와 같이 사용하여 빠진 케이스가 있다면 여기서 오류 발생시킬 수 있다
 }
 ```
+
+### 다형성 this 타입
+
+* 다형성 `this` 타입은 포함하는 클래스나 인터페이스의 하위 타입을 나타낸다
+  * F-bounded polymorphism 이라고 부른다
+
+```typescript
+class BasicCalculator {
+    public constructor(protected value: number = 0) { }
+    public currentValue(): number {
+        return this.value;
+    }
+    public add(operand: number): this {
+        this.value += operand;
+        return this;
+    }
+    public multiply(operand: number): this {
+        this.value *= operand;
+        return this;
+    }
+    ...
+}
+// this 를 반환하는 함수를 사용하면, 자기 자신을 반환하기 때문에 계속 자신의 메소드를 사용할 수 있다
+
+class ScientificCalculator extends BasicCalculator {
+    public constructor(value = 0) {
+        super(value);
+    }
+    public sin() {
+        this.value = Math.sin(this.value);
+        return this;
+    }
+    ...
+}
+// 또한 this 타입을 사용하였기에 이를 extend 할 수 있다
+// 해당 클래스로 생성된 객체는 sin 함수 외에 상속받은 모든 객체의 this 는
+// ScientificCalculator 클래스로 생성된 객체이다
+
+const result = new ScientificCalculator(2)
+        .multiply(5)
+        .sin()
+        .add(1)
+        .currentValue();
+```
+
+### 인덱스 타입
+
+* 동적인 프로퍼티 이름을 사용하는 코드를 컴ㅍ파일러가 검사할 수 있다
+* `keyof T` 는 인덱스 타입 쿼리 연산자이다
+  * any 타입인 T 에 대해서 keyof T 는 알려지고 공개된 프로퍼티 이름들의 유니언이다
+  * `keyof {id: number, name: string}` 의 경우 `id | name` 이 된다
+  * keyof 를 사용하면 알려진 프로퍼티가 추가될 때 마다 자동으로 업데이트 된다
+  * 미리 프로퍼티 이름을 알 수 없을 때, 제네릭 컨텍스트에 keyof 를 사용할 수 있다
+
+```typescript
+function pluck<T, K extends keyof T>(o: T, propertyNames: K[]): T[K][] {
+    return propertyNames.map(n => o[n]);
+}
+
+interface Car {
+    manufacturer: string;
+    model: string;
+    year: number;
+}
+let taxi: Car = {
+    manufacturer: 'Toyota',
+    model: 'Camry',
+    year: 2014
+};
+
+let makeAndModel: string[] = pluck(taxi, ['manufacturer', 'model']);
+// manufacturer/model 의 경우 string 이므로 타이핑된 문자열 배열로 만들 수 있다
+// 컴파일러는 manufacturer/model 가 Car 의 프로퍼티인지 검사한다
+
+let modelYear = pluck(taxi, ['model', 'year'])
+// 한 타입이 아닌 프로퍼티를 추출할 경우 해당 타입들을 가지는 타입이 추출된다
+// 위의 예시에서는 (string|number)[] 가 추출된다
+
+function getProperty<T, K extends keyof T>(o: T, propertyName: K): T[K] {
+    return o[propertyName];
+    // o[propertyName]는 T[K] 타입이다
+}
+
+let name: string = getProperty(taxi, 'manufacturer');
+let year: number = getProperty(taxi, 'year');
+// T[K] 를 반환하기 때문에 컴파일러는 실제 키의 타입을 인스턴스화한다
+// 즉, getProperty 의 반환 타입은 요청한 프로퍼티에 따라 달라진다
+```
+
+#### 인덱스 타입과 인덱스 시그니처
+
+* 인덱스 시그니처 매개변수 타입은 'string' 또는 'number' 이어야 한다
+* 문자열 인덱스 시그니처 타입일 경우 `keyof T` 는 `string | number` 가 된다
+  * `obj[42]` 나 `obj['42']` 에 접근할 수 있기 떄문
+* `T[string]` 은 인덱스 시그니처의 타입이다
+
+```typescript
+interface Dictionary<T> {
+    [key: string]: T;
+}
+let keys: keyof Dictionary[number]; // string | number
+let value: Dictionary<number>['foo']; // number
+
+interface NumberKeyDictionary<T> {
+    [key: number]: T;
+}
+let numberKeys: keyof NumberKeyDictionary[number]; // number
+// let numberValue: NumberKeyDictionary<number>['foo']; // error
+let numberValue: NumberKeyDictionary<number>[42]; // number
+```
