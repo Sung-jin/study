@@ -499,3 +499,78 @@ let numberKeys: keyof NumberKeyDictionary[number]; // number
 // let numberValue: NumberKeyDictionary<number>['foo']; // error
 let numberValue: NumberKeyDictionary<number>[42]; // number
 ```
+
+### 매핑 타입
+
+* ts 에서는 매핑 타입을 기반으로 새로운 타입을 만드는 방법을 제공한다
+* 모든 프로퍼티를 readonly 또는 선택적으로 만들 수 있다
+
+```typescript
+type Readonly<T> = {
+    readonly [P in keyof T]: T[P];
+}
+type Partial<T> = {
+    [P in keyof T]?: T[P];
+}
+
+type FooPartial = Partial<Foo>;
+type ReadonlyFoo = Readonly<Foo>;
+// 위와 같이 사용할 수 있다
+
+type PartialWithSomeKey<T> = {
+    [P in keyof T]?: T[P];
+} & { someKey: string }
+// 위와 같이 교차 타입을 활용하면 기존의 타입에
+// 특정 키가 추가된 타입을 선언할 수 있다
+type PartialWithSomeKey<T> = {
+    [P in keyof T]?: T[P];
+    someKey: string;
+    // 하지만 이렇게 사용하면 오류가 발생한다
+}
+
+type Keys = 'option1' | 'options2';
+type Flags = { [K in Keys]: boolean };
+type Flags = {
+    option1: boolean;
+    option2: boolean;
+}
+// 위의 타입과 같은 결과가 발생한다
+
+type Pick<T, K extends keyof T> = {
+    [P in K]: T[P];
+}
+type Record<K extends keyof any, T> = {
+    [P in K]: T;
+}
+// 참고로 ts 표준 라이브러리에 위의 Readonly<T> 와 Partial<T> 및
+// Pick, Record 이 포함되어 있다
+// 참고로 Record 는 동형이 아니다
+```
+
+#### 매핑 타입의 추론
+
+* 언래핑 추론은 동형 매핑된 타입에만 동작한다
+  * 동형이 아니면 언래핑 함수에 명시적인 타입 매개변수를 주어야 한다
+
+```typescript
+type Proxy<T> = {
+    get(): T;
+    set(value: T): void;
+}
+type Proxify<T> = {
+    [P in keyof T]: Proxy<T[P]>;
+}
+function proxify<T>(o: T): Proxify<T> {
+    // ... 프록시 래핑 ...
+}
+let proxyProps = proxify(props);
+
+function unproxify<T>(t: Proxify<T>): T {
+    let result = {} as T;
+    for (const k in t) {
+        result[k] = t[k].get();
+    }
+    return result;
+}
+let unproxyProps = unproxify(proxyProps);
+```
