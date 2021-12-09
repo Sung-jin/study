@@ -574,3 +574,93 @@ function unproxify<T>(t: Proxify<T>): T {
 }
 let unproxyProps = unproxify(proxyProps);
 ```
+
+### 조건부 타입
+
+* `T extends U ? X : Y` 와 같은 형태로 조건부 타입을 선언할 수 있다
+  * 위 예제는 T 가 U 에 할당될 수 있으면 타입은 X 가 되고, 아니면 Y 가 된다
+  * 즉, X 와 Y 로 결정되거나 지연될지, 타입 시스템이 T 가 항상 U 에 할당할 수 있는지에 대해 충분한 정보를 가지고 있는지 여부로 결정된다
+
+```typescript
+declare function f<T extends boolean>(x: T): T extends true ? string : number;
+let x = f(Math.random() < 0.5)
+// 타입은 string | number 로 즉시 결정된다
+```
+
+#### 분산 조건부 타입
+
+* 검사된 타입이 벗겨진 타입 매개변수인 조건부 타입을 분산 조건부 타입 이라고 한다
+  * T 에 대한 타입 인수 A|B|C 를 사용하여 조건부 타입을 사용할 경우
+    * `(A extends U ? X : Y) | (B extends U ? X : Y) | (C extends U ? X : Y)`
+
+```typescript
+type TypeName<T> = 
+        T extends string ? "string" :
+        T extends number ? "number" :
+        T extends boolean ? "boolean" :
+        T extends undefined ? "undefined" :
+        T extends Function ? "function" :
+        "object";
+
+type T10 = TypeName<string|(() => void)>; // "string" | "function"
+type T12 = TypeName<string | string[] | undefined>;  // "string" | "object" | "undefined"
+type T11 = TypeName<string[] | number[]>; // "object"
+// 분산 조건부 타입에 의해, 조건부 타입 내의 T 에 대한 참조는 유니언 타입의 개별 성분으로 결정된다
+
+type BoxedValue<T> = { value: T };
+type BoxedArray<T> = { array: T[] };
+type Boxed<T> = T extends any[] ? BoxedArray<T[number]> : BoxedValue<T>;
+
+type T20 = Boxed<string>;  // BoxedValue<string>;
+type T21 = Boxed<number[]>;  // BoxedArray<number>;
+type T22 = Boxed<string | number[]>;  // BoxedValue<string> | BoxedArray<number>;
+// T 가 분기 안에서 추가 제약조건 any[] 를 가지고 T[number] 로 배열의 요소 타입을 참조할 수 있다
+
+type Diff<T, U> = T extends U ? never : T;  // U에 할당할 수 있는 타입을 T에서 제거
+type Filter<T, U> = T extends U ? T : never;  // U에 할당할 수 없는 타입을 T에서 제거
+
+type T30 = Diff<"a" | "b" | "c" | "d", "a" | "c" | "f">;  // "b" | "d"
+type T31 = Filter<"a" | "b" | "c" | "d", "a" | "c" | "f">;  // "a" | "c"
+type T32 = Diff<string | number | (() => void), Function>;  // string | number
+type T33 = Filter<string | number | (() => void), Function>;  // () => void
+
+type NonNullable<T> = Diff<T, null | undefined>;  // T에서 null과 undefined를 제거
+
+type T34 = NonNullable<string | number | undefined>;  // string | number
+type T35 = NonNullable<string | string[] | null | undefined>;  // string | string[]
+
+function f1<T>(x: T, y: NonNullable<T>) {
+    x = y;  // 성공
+    y = x;  // 오류
+}
+
+function f2<T extends string | undefined>(x: T, y: NonNullable<T>) {
+  x = y;  // 성공
+  y = x;  // 오류
+  let s1: string = x;  // 오류
+  let s2: string = y;  // 성공
+}
+// 다음과 같이 조건부 타입의 분산 프로퍼티는 유니언 타입을 필터링하는데 사용할 수 있다
+
+type FunctionPropertyNames<T> = { [K in keyof T]: T[K] extends Function ? K : never }[keyof T];
+type FunctionProperties<T> = Pick<T, FunctionPropertyNames<T>>;
+
+type NonFunctionPropertyNames<T> = { [K in keyof T]: T[K] extends Function ? never : K }[keyof T];
+type NonFunctionProperties<T> = Pick<T, NonFunctionPropertyNames<T>>;
+
+interface Part {
+    id: number;
+    name: string;
+    subparts: Part[];
+    updatePart(newName: string): void;
+}
+
+type T40 = FunctionPropertyNames<Part>;  // "updatePart"
+type T41 = NonFunctionPropertyNames<Part>;  // "id" | "name" | "subparts"
+type T42 = FunctionProperties<Part>;  // { updatePart(newName: string): void }
+type T43 = NonFunctionProperties<Part>;  // { id: number, name: string, subparts: Part[] }
+// 조건부 타입을 이용한 매핑 타입
+
+type ElementType<T> = T extends any[] ? ElementType<T[number]> : T; // 오류
+// 유니언과 교차 타입과 유사하게 조건부 타입은 재귀적으로 자기 자신을 참조할 수 없다
+```
