@@ -664,3 +664,55 @@ type T43 = NonFunctionProperties<Part>;  // { id: number, name: string, subparts
 type ElementType<T> = T extends any[] ? ElementType<T[number]> : T; // 오류
 // 유니언과 교차 타입과 유사하게 조건부 타입은 재귀적으로 자기 자신을 참조할 수 없다
 ```
+
+#### 조건부 타입의 타입 추론
+
+* 조건부 타입의 `extends` 절 안에 추론 될 타입 변수를 도입하는 `infer` 선언을 가질 수 있다
+* 추론된 타입 변수는 조건부 타입의 실제 분기에서 참조될 수 있다
+* 같은 타입 변수에 대한 여러개의 `infer` 위치를 가질 수 있다
+
+```typescript
+type Unpacked<T> =
+        T extends (infer U)[] ? U :
+        T extends (...args: any[]) => infer U ? U :
+        T extends Promise<infer U> ? U :
+        T;
+
+type T0 = Unpacked<string>;  // string
+type T1 = Unpacked<string[]>;  // string
+type T2 = Unpacked<() => string>;  // string
+type T3 = Unpacked<Promise<string>>;  // string
+type T4 = Unpacked<Promise<string>[]>;  // Promise<string>
+type T5 = Unpacked<Unpacked<Promise<string>[]>>;  // string
+
+type Foo<T> = T extends { a: infer U, b: infer U } ? U : never;
+type T10 = Foo<{ a: string, b: string }>;  // string
+type T11 = Foo<{ a: string, b: number }>;  // string | number
+// co-variant (공변) 위치에서 같은 타입 변수에 대한 여러 후보의 유니언 타입 추론
+
+type Bar<T> = T extends { a: (x: infer U) => void, b: (x: infer U) => void } ? U : never;
+type T20 = Bar<{ a: (x: string) => void, b: (x: string) => void }>;  // string
+type T21 = Bar<{ a: (x: string) => void, b: (x: number) => void }>;  // string & number
+// contra-variant (반-변) 위치에서 같은 타입 변수에 대한 여러 후보의 유니언 타입 추론
+
+declare function foo(x: string): number;
+declare function foo(x: number): string;
+declare function foo(x: string | number): string | number;
+type T30 = ReturnType<typeof foo>;  // string | number
+// 여러 호출 시그니처가 있는 타입에서 추론 -> 마지막 시그니처에서 만들어진다
+
+type ReturnType<T extends (...args: any[]) => infer R> = R;
+// 오류, 일반 타입 매배견수에 대한 제약 조건절에서 infer 는 불가능하다
+
+type AnyFunction = (...args: any[]) => any;
+type ReturnType<T extends AnyFunction> = T extends (...args: any[]) => infer R ? R : any;
+// 제약조건에서 타입 변수를 지우고 조건부 타입을 지정하면 거의 비슷한 효과를 낼 수 있다
+```
+
+#### 미리 정의된 조건부 타입
+
+* `Exclude<T, U>` : U 에 할당할 수 잇는 타입은 T 에서 제외
+* `Extract<T, U>` : U 에 할당할 수 있는 타입을 T 에서 추출
+* `NonNullable<T>` : T 에서 null 과 undefined 를 제외
+* `ReturnType<T>` : 함수 타입의 반환 타입을 얻음
+* `InstanceType<T>` : 생성자 함수 타입의 인스턴스 타입을 얻음
