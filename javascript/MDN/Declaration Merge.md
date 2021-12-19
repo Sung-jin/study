@@ -96,3 +96,98 @@ namespace Animals {
 }
  */
 ````
+
+### 클래스, 함수, 열거형과 네임스페이스 병합
+
+* 네임스페이스는 다른 타입의 선언과 병합할 수 있을 정도로 유연하다
+  * 이를 위해서는 네임 스페이스의 선언은 병합할 선언을 따라야 한다
+
+#### 네임 스페이스와 클래스 병합
+
+```typescript
+function buildLabel(name: string): string {
+    return buildLabel.prefix + name + buildLabel.suffix;
+    // buildLabel 이라는 네임스페이스에서 prefix/suffix 이 export 되어야만 접근이 가능하다
+    // 최종 결과물은 다른 클래스 내에서 관리되는 클래스이다
+    // 또한 네임스페이스를 사용하여 기존 클래스에 더 많은 정적 멤버를 추가할 수 있다
+}
+
+namespace buildLabel {
+    export let suffix = "";
+    export let prefix = "Hello, ";
+}
+
+console.log(buildLabel("Sam Smith"));
+
+enum Color {
+    red = 1,
+    green = 2,
+    blue = 4
+}
+
+namespace Color {
+    export function mixColor(colorName: string) {
+        if (colorName == "yellow") {
+            return Color.red + Color.green;
+        }
+        else if (colorName == "white") { } ...
+    }
+    // 정적 멤버의 열거형을 확장할 수 있다
+}
+```
+
+#### 허용되지 않는 병합
+
+* ts 에서 모든 병합이 허용되지 않는다
+* 클래스는 다른 클래스 혹은 변수와 병합할 수 없다
+  * 클래스를 병합을 대처하는 방법으로는 믹스인을 활용할 수 있다
+
+#### 모듈 보강
+
+* js 는 모듈 병합을 지원하지 않지만, 기존 객체를 가져와서 업데이트 패치를 할 수 있다
+* 모듈 보강의 경우 두 가지 제한사항이 존재한다
+  1. 보강에 새로운 최상위 선언은 할 수 없다
+    * 기존 선언에 대한 패치만 가능하다
+  1. default export 는 보강할 수 없으며, 이름을 가지는 export 만 보강할 수 있다
+
+```typescript
+// observable.ts
+export class Observable<T> {}
+
+// some.ts
+import { Observable } from '/some/path';
+Observable.prototype.map = function (f) {...}
+// 이는 ts 에서 동작은 잘 하나, 컴파일러는 Observable.prototype.map 에 대해 알 수 없다
+// 이는 모듈 보강을 통해 컴파일러에게 정보를 알려줄 수 있다
+
+declare module '/some/path' {
+    interface Observable<T> {
+        map<U>(f: (x: T) => U): Observable<U>;
+    }
+}
+Observable.prototype.map = function (f) {...}
+
+// consumer.ts
+import { Observable } from "/some/path";
+import "/some/map";
+let o: Observable<number>;
+o.map(x => x.toFixed());
+```
+
+#### 전역 보강
+
+* 모듈 내부에서 전역 범위에 선언을 추가할 수 있다
+* 전역 보강 또한 기존의 모듈 보강과 같은 제한사항을 가진다
+
+```typescript
+// observable.ts
+export class Observable<T> {}
+
+declare global {
+    interface Array<T> {
+        toObservable(): Observable<T>;
+    }
+}
+
+Array.prototype.toObservable = function () {}
+```
