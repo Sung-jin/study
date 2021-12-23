@@ -129,3 +129,109 @@ console.log(new Greeter("world"));
 }
  */
 ```
+
+#### 메서드 데코레이터
+
+* 메서드 데코레이터는 메서드 선언 직전에 선언된다
+* 데코레이터는 메서드의 프로퍼티 설명자에 적용되며 메서드 정의를 관찰, 수정 또는 대체하는데 사용할 수 있다
+* 메서드 데코레이터는 선언 파일, 오버로드 또는 기타 주변 컨텍스트에서 사용할 수 없다
+* 메서드 데코레이터의 표현식은 다음과 같은 인수와 함께 함수로 호출된다
+  1. 정적 멤버에 대한 클래스의 생성자 함수 또는 인스턴스 멤버에 대한 클래스의 프로토타입
+  1. 멤버의 이름
+  1. 멤버의 프로퍼티 설명자 (ES5 이전일 경우 프로퍼티 설명자는 undefined 이다)
+* 메서드 데코레이터가 값을 반환한다면, 메서드의 프로퍼티 설명자로 사용된다
+  * ES5 이전일 경우 반환 값은 무시된다
+
+```typescript
+function enumerable(value: boolean) {
+    return function (target: any, propertyKey: string, descriptor: PropertyDescriptor) {
+        descriptor.enumerable = value;
+    };
+    // 해당 데코레이터가 호출되면 설명자의 enumerable 프로퍼티를 수정한다
+}
+
+class Greeter {
+    greeting: string;
+    constructor(message: string) {
+        this.greeting = message;
+    }
+
+    @enumerable(false)
+    greet() {
+        return "Hello, " + this.greeting;
+    }
+}
+```
+
+#### 접근자 데코레이터
+
+* 접근자 데코레이터는 접근자 선언 바로 전에 선언된다
+* 접근자 데코레이터는 접근자의 프로퍼티 설명자에 적용되며 접근자의 정의를 관찰, 수정 또는 교체하는데 사용할 수 있다
+* 접근자 데코레이터는 선언 파일이나 다른 주변 컨텍스트에서 사용할 수 없다
+* ts 는 단일 멤버에 대한 get/set 접근자를 데코레이팅을 할 수 없다
+* 접근자 데코레이터의 표현식은 런타임에 다음 세가지 인수와 함게 함수로 호출된다
+  1. 정적 멤버에 대한 클래스의 생성자 함수 또는 인스턴스 멤버에 대한 클래스의 프로토타입
+  1. 멤버의 이름
+  1. 멤버의 프로퍼티 설명자 (ES5 이전일 경우 프로퍼티 설명자는 undefined 이다)
+* 메서드 데코레이터가 값을 반환한다면, 메서드의 프로퍼티 설명자로 사용된다
+  * ES5 이전일 경우 반환 값은 무시된다
+  
+```typescript
+function configurable(value: boolean) {
+    return function (target: any, propertyKey: string, descriptor: PropertyDescriptor) {
+        descriptor.configurable = value;
+    };
+}
+
+class Point {
+    private _x: number;
+    private _y: number;
+    constructor(x: number, y: number) {
+        this._x = x;
+        this._y = y;
+    }
+  
+    @configurable(false)
+    get x() { return this._x; }
+  
+    @configurable(false)
+    get y() { return this._y; }
+}
+```
+
+#### 프로퍼티 데코레이터
+
+* 프로퍼티 데코레이터는 프로퍼티 선언 바로 전에 선언된다
+* 프로퍼티 데코레이터는 선언 파일이나 다른 주변 컨텍스트에서 사용할 수 없다
+* 프로퍼티 데코레이터의 표현 식은 런타임에 다음과 같은 인수와 함께 함수로 호출된다
+  1. 정적 멤버에 대한 클래스의 생성자 함수 또는 인스턴스 멤버에 대한 클래스의 프로토타입
+  1. 멤버의 이름
+
+```typescript
+import "reflect-metadata";
+
+const formatMetadataKey = Symbol("format");
+
+function format(formatString: string) {
+    return Reflect.metadata(formatMetadataKey, formatString);
+}
+
+function getFormat(target: any, propertyKey: string) {
+    return Reflect.getMetadata(formatMetadataKey, target, propertyKey);
+}
+
+class Greeter {
+    @format("Hello, %s")
+    // 데코레이터 팩토리
+    // 해당 데코러에티가 호출되면 reflect-metadata 라이브러리의 Reflect.metadat 함수를 사용하여 프로퍼티에 대한 메타데이터 항목을 추가한다
+    greeting: string;
+
+    constructor(message: string) {
+        this.greeting = message;
+    }
+    greet() {
+        let formatString = getFormat(this, "greeting");
+        return formatString.replace("%s", this.greeting);
+    }
+}
+```
