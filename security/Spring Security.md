@@ -51,3 +51,160 @@ public interface Authentication extends Principal, Serializable {
     void setAuthenticated(boolean isAuthenticated) throws IllegalArgumentException;
 }
 ```
+
+##### UsernamePasswordAuthenticationToken
+
+* Authentication 을 implements 한 AbstractAuthenticationToken 의 하위 클래스
+* User 의 Id 가 Principal, Password 가 Credential 역할을 한다
+
+```java
+public class UsernamePasswordAuthenticationToken extends AbstractAuthenticationToken {
+    // 주로 사용자의 ID
+    private final Object principal;
+
+    // 주로 사용자의 PW에 해당함
+    private Object credentials;
+
+    // 인증 완료 전의 객체 생성
+    public UsernamePasswordAuthenticationToken(Object principal, Object credentials) {
+        uper(null);
+        this.principal = principal;
+        this.credentials = credentials;
+        setAuthenticated(false);
+    }
+
+    // 인증 완료 후의 객체 생성
+    public UsernamePasswordAuthenticationToken(Object principal, Object credentials, Collection<? extends GrantedAuthority> authorities) {
+        super(authorities);
+        this.principal = principal;
+        this.credentials = credentials;
+        super.setAuthenticated(true);
+        // must use super, as we override
+    }
+}
+
+public abstract class AbstractAuthenticationToken implements Authentication, CredentialsContainer { }
+```
+
+##### AuthenticationProvider
+
+* 실제 인증에 대한 부분을 처리
+* 인증 전의 Authentication 객체를 받아서 인증이 완료된 객체를 반환하는 역할을 한다
+
+```java
+public interface AuthenticationProvider {
+    // 인증 전의 Authentication 객체를 받아 인증된 Authentication 객체를 반환
+    Authentication authenticate(Authentication var1) throws AuthenticationException;
+    
+    boolean supports(Class<?> var1);
+}
+```
+
+##### AuthenticationManager
+
+* AuthenticationManager 에 등록된 AuthenticationProvider 에 의해 인증에 대한 처리
+* 인증에 성공하면 두번째 생성자를 이용하여 `isAuthenticated=true` 인 객체를 생성하여 SecurityContext 에 저장
+* 인증 상태를 유지하기 위해 세션에 보관하며, 인증이 실패한 경우에 AuthenticationException 발생
+
+```java
+public interface AuthenticationManager {
+    Authentication authenticate(Authentication authentication) throws AuthenticationException;
+}
+```
+
+* AuthenticationManager 를 implements 한 ProviderManager 는 실제 인증 과정에 대한 로직을 가지고 있다
+* ProviderManager 는 실제 인증 로직인 AuthenticationProvider list 를 가지고 있으며, 해당 리스의 모든 provider 를 조회하면서 authenticate 를 처리한다
+
+```java
+public class ProviderManager implements AuthenticationMAnager, MessageSourceAware, InitializingBean {
+    public List<AuthenticationProvider> getProviders() {
+        return providers;
+    }
+    
+    public Authentication authenticate(Authentication authenticate) throws AuthenticationException {
+        ...
+        for (AuthenticationProvider provider: getProviders()) {
+            try {...}
+        }
+    }
+}
+```
+
+* CustomAuthenticationProvider 를 등록하기 위해서는 WebSecurityConfigurerAdapter 를 상속한 SecurityConfig 에서 가능하다
+  * WebSecurityConfigurerAdapter 의 상위 클래스에서는 AuthenticationManager 를 가지고 있기 때문에 CustomAuthenticationProvider 를 등록할 수 있다
+
+```java
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
+    @Bean
+    public AuthenticationManger getAuthenticationManager() throws Exception {
+        return super.authenticationManagerBean();
+    }
+    
+    @Bean
+    public CustomAuthenticationProvider customAuthenticationProvider() throws Exception {
+        return new CustomAuthtneticationProvider();
+    }
+    
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.authenticationProvider(customAuthenticationProvider());
+    }
+}
+```
+
+##### UserDetails
+
+* 인증에 성공하여 생성된 객체이며, Authentication 객체를 구현한 UsernamePasswordAuthenticationToken 을 생성하기 위해 사용된다
+* 직접 설정한 유저 객체 모델에 UserDetails 를 implements 하여 처리할 수 있다
+
+```java
+public interface UserDetails extends Serializable {
+    collection<? extends GrantedAuthority> getAuthorities();
+    
+    String getPassword();
+    
+    String getUsername();
+    
+    boolean isAccountNonExpired();
+    
+    boolean isAccountNonLocked();
+    
+    boolean isCredentialsNonExpired();
+    
+    boolean isEnabled();
+}
+```
+
+##### UserDetailsService
+
+* UserDetails 객체를 반환하는 단 하나의 메서드를 가지고 있으며, 이를 구현한 클래스의 내부에 UserRepository 를 주입받아 DB 연결 처리를 한다
+
+```java
+public interface UserDetailsService {
+    UserDetails loadUserByUsername(String var1) throws UsernameNotFoundException;
+}
+```
+
+##### Password Encoding
+
+* `AuthenticationManagerBuilder.userDetailsService().passwordEncoder()` 를 통해 패스워드 암호화에 사용될 PasswordEncoder 구현체를 지정할 수 있다
+
+```java
+@Override
+protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+}
+
+@Bean
+public PasswordEncoder passwordEncoder() {
+    return new BCryptPasswordEncoder();
+}
+```
+
+##### GrantedAuthority
+
+* 현재 사용자인 Principal 이 가지고 있는 권한을 의미한다
+* `ROLE_ADMIN`/`ROLE_USER` 등과 같이 `ROLE_...` 형태로 사용한다
+* GrantedAuthority 객체는 UserDetailsService 에 의해 불러올 수 있으며, 특정 자원에 대한 권한 검사하여 접근 허용 여부를 결정한다
