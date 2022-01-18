@@ -235,3 +235,101 @@ class Greeter {
     }
 }
 ```
+
+#### 매개변수 데코레이터
+
+* 매개변수 데코레이터는 매개변수 선언 직전에 선언된다
+* 클래스 생성자 또는 메서드 선언의 함수에 적용된다
+* 선언 파일, 오버로드 또는 다른 주변 컨텍스트 (선언 클래스) 에서 사용할 수 없다
+* 매개변수 데코레이터는 매개변수가 메서드에서 선언되었을 때에만 관찰하는데 사용할 수 있다
+* 매개변수 데코레이터의 반환 값은 무시된다
+* 런타임시 다음 세개의 인수와 함께 매개변수 데코레이터 표현식이 호출된다
+  1. 정적 멤버에 대한 클래스의 생성자 함수 또는 인스턴스 멤버에 대한 클래스의 프로토타입
+  1. 멤버의 이름
+  3. 함수의 매개 변수 목록에 있는 매개 변수의 서수 색인
+
+```typescript
+import 'reflect-metadata';
+// reflect-metadata 라이브러리를 이용
+
+function required(target: Object, propertyKey: string|symbol, parameterIndex: number) {
+    const existingRequiredParameters: number[] = Reflect.getOwnMetadata(requiredMetadataKey, target, propertyKey) || [];
+    existingRequiredParameters.push(parameterIndex);
+    Reflect.defineMetadata(requiredMetadataKey, existingRequiredParameters, target, propertyKey);
+}
+// 해당 데코레이터를 이용하여 매개변수를 표시하는 메타데이터 항목을 추가한다
+
+function validate(target: any, propertyName: string, descriptor: TypedPropertyDescriptor<Function>) {
+    let method = descriptor.value;
+    descriptor.value = function () {
+        const requiredParameters: number[] = Reflect.getOwnMetadata(requiredMetadataKey, target, propertyName);
+        if (requiredParameters) {
+            for (let parameterIndex of requiredParameters) {
+                if (parameterIndex >= arguments.length || arguments[parameterIndex] === undefined) {
+                    throw new Error("Missing required argument.");
+                }
+            }
+        }
+    
+        return method.apply(this, arguments);
+      }
+}
+// 해당 데코레이터는 원래 메서드를 호출하기 전에 인수 유효성 검증
+
+class Greeter {
+    greeting: string;
+  
+    constructor(message: string) {
+        this.greeting = message;
+    }
+  
+    @validate
+    greet(@required name: string) {
+        return "Hello " + name + ", " + this.greeting;
+    }
+}
+```
+
+#### 메타데이터
+
+* 실험적 메타데이터 API 에 대한 폴리필을 추가하는 reflect-metadata 라이브러리를 사용할 수 있다
+  * 해당 라이브러리는 ECMAScript 표준의 일부가 아니다
+* `npm i reflect-metadata --save` 명령어를 통해 설치가 가능하다
+* ts 에는 데코레이터가 있는 선언에 대해 특정 타입의 메타 데이터를 내보내는 실험적인 지원을 포함한다
+  * tsconfig.json 에서 `emitDecoratorMetadata` 컴파일러 옵션을 설정해야 한다
+
+```typescript
+import 'reflect-metadata';
+
+// function validate<T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) {
+//     const set = descriptor.set;
+//     descriptor.set = function (value: T) {
+//         const type = Reflect.getMetadata('design:type', target, propertyKey);
+//         if (!(value instanceof type)) {
+//             throw new TypeError('Invalid type.');
+//         }
+//         set.call(target, value);
+//     }
+// }
+
+class Point {
+    x: number;
+    y: number;
+}
+
+class Line {
+    private _p0: Point;
+    private _p1: Point;
+  
+    @validate
+    @Reflect.metadata('design:type', Point)
+    set p0(value: Point) { this._p0 = value; }
+    get p0() { return this._p0; }
+  
+    @validate
+    @Reflect.metadata('design:type', Point)
+    // 해당 데코레이터를 사용하면 디자인-타입 정보를 주입한다
+    set p1(value: Point) { this._p1 = value; }
+    get p1() { return this._p1; }
+}
+```
