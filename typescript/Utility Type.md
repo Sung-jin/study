@@ -108,3 +108,21 @@ const someThing: SomeThing = {
     baz: '3',
 }
 ```
+
+### Exclude<T, U>
+
+* T 에서 U 에 할당할 수 있는 모든 속성을 제외한 타입을 구성한다
+
+```typescript
+type T0 = Exclude<'a'|'b'|'c'|'e'|'f', 'a'|'c'|'f'>; // 'b'|'e'
+type T1 = Exclude<string|number|(() => void), Function>; // string|number
+```
+
+### Extract<T, U>
+
+* T 에서 U 에 할당 할 수 있는 모든 속성을 추출하여 타입을 구성한다
+
+```typescript
+type T0 = Extract<'a'|'b'|'c'|'d'|'e', 'a'|'c'|'f'>; // 'a'|'c'
+type T1 = Extract<string|number|(() => void), Function>; // () => void
+```
