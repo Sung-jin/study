@@ -126,3 +126,4 @@ type T1 = Exclude<string|number|(() => void), Function>; // string|number
 type T0 = Extract<'a'|'b'|'c'|'d'|'e', 'a'|'c'|'f'>; // 'a'|'c'
 type T1 = Extract<string|number|(() => void), Function>; // () => void
 ```
+
