@@ -127,3 +127,26 @@ type T0 = Extract<'a'|'b'|'c'|'d'|'e', 'a'|'c'|'f'>; // 'a'|'c'
 type T1 = Extract<string|number|(() => void), Function>; // () => void
 ```
 
+### NonNullable<T>
+
+* T 에서 `null`/`undefined` 를 제외한 타입을 구성한다
+
+```typescript
+type T0 = NonNullable<string|number|null|undefined>; // string|number
+```
+
+### Parameters<T>
+
+* 함수 타입 T 의 매개변수 타입들의 튜플 타입을 구성한다
+
+```typescript
+declare function f1(arg: { a: number, b: string }): void
+type T0 = Parameters<() => string>; // []
+type T1 = Parameters<(s: string) => string>; // [string]
+type T2 = Parameters<typeof f1>; // [{a: number, b: string}]
+type T3 = Parameters<any>; // unkown[]
+type T4 = Parameters<never>; // never
+type T5 = Parameters<string>; // 오류
+type T6 = Parameters<Function>; // 오류
+```
+
