@@ -143,3 +143,161 @@ var myComponent = MyFactoryFunction();
 // 요소 클래스 타입 => MyFactoryFunction
 // 요소 인스턴스 타입 => { render: () => void }
 ```
+
+### 속성 타입 검사
+
+* 속성 타입 검사를 위해 요소 속성 타입을 경정해야 한다
+  * 이는 내장 요소와 값-기반 요소 간에 약간 다른 점이 있다
+  * 내장 요소의 경우, 요소 속성 타입은 `JSX.IntrinsicElements` 의 프로퍼티 타입과 동일하다
+* 값-기반 요소
+  * 요소 인스턴스 타입의 프로퍼티 타입에 따라 결정된다
+  * 사용할 프로퍼티는 `JSX.ElementAttributesProperty` 에 따라 결정된다
+  * 이는 단일 프로퍼티로 선언되어야 한다
+  * 이후 해당 프로퍼티 이름을 사용한다
+  * ts 2.8 부터 `JSX.ElementAttributesProperty` 가 제공되지 않으면, 클래스 요소의 생성자 또는 함수형 컴포넌트의 첫 번째 매개변수 타입을 대신 사용할 수 있다
+* 요소 속성 타입은 JSX 에서 속성 타입을 확인하는데 사용되며, 선택적 혹은 필수적인 프로퍼티들이 지원된다
+
+```typescript jsx
+declare namespace JSX {
+    interface IntrinsicElements {
+        foo: { bar?: boolean }
+    }
+}
+
+<foo bar />
+// foo 의 요소 속성 타입은 '{bar?: boolean}'
+
+declare namespace JSX {
+    interface ElementAttributesProperty {
+        props; // 사용할 프로퍼티 이름을 지정
+  }
+}
+
+class MyComponent {
+    // 요소 인스턴스 타입의 프로퍼티를 지정
+    props: {
+        foo?: string;
+    }
+}
+
+<MyComponent foo="bar" />
+// MyComponent 의 요소 속성 타입은 '{foo?: string}'
+
+declare namespace JSX {
+    interface IntrinsicElements {
+        foo: { requiredProp: string; optionalProp?: number }
+    }
+}
+
+<foo requiredProp="bar" />; // 성공
+<foo requiredProp="bar" optionalProp={0} />; // 성공
+<foo />; // requiredProp 누락 오류
+<foo requiredProp={0} />; // requiredProp 타입 오류
+<foo requiredProp="bar" unkownProp />; // 없는 prop 오류
+<foo requiredProp="bar" unkown-prop />; // unkown-prop 은 유효한 식별자가 아니여서 성공
+
+var props = {requiredProp: "bar"};
+var errorProps = {}
+<foo {...props} />; // 이와 같이 스프레드 연산자로도 가능
+<foo {...errorProps} />; // 기존의 타입 체크와 동일하게 체크하며, 해당 형태는 오류가 발생
+```
+
+* 속성 이름이 유효한 js 식별자가 아닌 경우, 해당 이름을 요소 속성 타입에서 찾을 수 없어도 오류로 간주하지 않는다
+* 또한 `JSX.IntrinsicAttributes` 인터페이스는 일반적으로 컴포넌트의 props 나 인수로 사용되지 않는 JSX 프레임워크를 위한 추가적인 프로퍼티를 지정할 수 있다
+  * React 의 `Key` 등
+* `JSX.IntrinsicAttributes<T>` 제네릭 타입을 사용하여 함수형 컴포넌트를 제외한 클래스형 컴포넌트에 대해 동일한 종류의 추가 속성을 지정할 수 있다
+  * 해당 유형은 제네릭의 매개변수는 클래스 인스턴스 타입에 해당한다
+
+### 자식 타입 검사
+
+* ts 2.3 부터 자식의 타입 검사를 도입했다
+* 자식은 자식 JSX 표현식을 속성에 삽입하는 요소 속성 타입의 특수한 프로퍼티이다
+* ts 는 `JSX.ElementAttributesProperty` 를 사용해 props 를 결정하는 것과 유사하게 `JSX.ElementChildrenAttribute` 를 사용해 해당 props 내의 자식의 이름을 결정한다
+  * `JSX.ElementChildrenAttribute` 는 단일 프로퍼티로 선언되어야 한다
+  
+```typescript jsx
+interface PropsType {
+    children: JSX.Element
+    name: string
+}
+
+class Component extends React.Component<PropsType, {}> {
+    render() {
+        return (
+            <h2>
+              {this.props.children}
+            </h2>
+        )
+    }
+}
+
+// 성공
+<Component name="foo">
+    <h1>Hello World</h1>
+</Component>
+
+// 오류 : 자식은 JSX.Element의 배열이 아닌 JSX.Element 타입이어야 한다
+<Component name="bar">
+    <h1>Hello World</h1>
+    <h2>Hello World</h2>
+</Component>
+
+// 오류 : 자식은 JSX.Element의 배열이나 문자열이 아닌 JSX.Element 타입이이어야 한다
+<Component name="baz">
+    <h1>Hello</h1>
+    World
+</Component>
+```
+
+### JSX 결과 타입
+
+* 기본적으로 JSX 표현식의 결과물은 `any` 타입이지만, `JSX.Element` 인터페이스를 수정하여 특정한 타입을 지정할 수 있다
+* 그러나 이 인터페이스에서 JSX 의 요소, 속성, 자식에 대한 정보를 검색할 수 없다
+  * 해당 인터페이스는 블랙박스이다
+
+### 표현식 포함하기
+
+* JSX 는 `{}` 로 표현식을 감싸 태그 사이에 표현식 사용을 허용한다
+
+```typescript jsx
+var a = <div>
+    {["foo", "bar"].map(value => <span>value</span>)}
+</div>
+```
+
+### 리액트와 통합하기
+
+* 리액트에서 JSX 를 사용하기 위해선 React 타이핑을 사용해야 한다
+  * 이는 리액트를 사용할 수 있도록 JSX 네임스페이스를 적절하게 정의한다
+
+```typescript jsx
+interface Props {
+    foo: string;
+}
+
+class MyComponent extends React.Component<Props, {}> {
+    render() {
+        return <span>{this.props.foo}</span>
+    }
+}
+
+<MyComponent foo="bar" />; // 성공
+<MyComponent foo={0} />; // 오류
+```
+
+### 팩토리 함수
+
+* `jsx: react` 컴파일러 옵션에서 사용하는 팩토리 함수는 설정이 가능하다
+* `jsxFactory` 명령 줄 옵션을 사용하거나 인라인 `@jsx` 주석을 사용하여 파일별로 설정할 수 있다
+* `jsxFactory` 에 `createElement` 를 설정한다면, `div/>` 는 `React.createElement('div')` 대신 `createElement('div')` 으로 생성된다
+* 선택된 팩토리는 전역 네임스페이스로 돌아가기 전에 `JSX` 네임스페이스(타입 검사를 위한 정보)에도 영향을 미친다
+
+```typescript jsx
+import preact = require('preact');
+/* @jsx preact.h */
+const x = <div />;
+
+// 이는 다음과 같이 생성된다
+const preact = require('preact');
+const x = preact.h('div', null);
+```
