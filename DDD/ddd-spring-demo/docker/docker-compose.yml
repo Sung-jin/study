@@ -1,0 +1,20 @@
+version: '3'
+services:
+  demo:
+    build:
+      context: .
+      args:
+        - TIME_ZONE=Asia/Seoul
+        - PROFILE=docker
+        - BOOTSTRAP_APP=ddd-spring-demo
+        - MAX_MEMORY=500m
+    image: 'ddd-spring-demo'
+    container_name: 'ddd-spring-demo'
+    ports:
+      - 8080:8080
+    networks:
+      - demo
+
+networks:
+  demo:
+    name: demo

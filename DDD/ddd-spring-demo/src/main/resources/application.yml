@@ -1,0 +1,18 @@
+spring:
+  port: 8080
+  profiles.active: local
+  jpa:
+    hibernate.use-new-id-generator-mappings: false
+    properties.hibernate.implicit_naming_strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyHbmImpl
+    show-sql: true
+  application:
+    name: ddd-spring-demo
+
+---
+spring.profiles: local
+
+spring.datasource:
+  driver-class-name: com.mysql.cj.jdbc.Driver
+  url: jdbc:mysql://localhost/ddd_spring_demo?characterEncoding=utf8&useUnicode=true&autoReconnect=true&zeroDateTimeBehavior=convertToNull
+  username: demo
+  password: '1q2w3e4r'
