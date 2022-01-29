@@ -88,3 +88,80 @@
   * 이러한 요구사항을 따르는 주문 항목을 표현하는 OrderLine 을 표현할 수 있다 (이는 `order/domain` 의 `OrderLine.kt` 에 구현하였다)
     * 해당 도메인에는 주문할 상품, 상품의 가격, 구매 개수를 포함하고 있어야 한다
     * 또한 각 구매 항목의 구매 가격도 제공해야 한다
+
+### 엔티티와 벨류
+
+* 도출한 모델은 크게 엔티티와 벨류로 구분할 수 있다
+* 엔티티와 벨류를 제대로 구분해야 도메인을 올바르게 설계하고 구현할 수 있기 때문에 둘의 차이를 명확하게 이해하는 것은 도메인을 구현하는 데 중요하다
+
+#### 엔티티
+
+* 엔티티의 가장 큰 특징은 식별자를 가진다는 것이다
+* 식별자는 엔티티 객체마다 고유해서 각 엔티티는 서로 다른 식별자를 가진다
+  * 테이블의 id, 주문의 주문 번호(고유 할 경우) 등
+  * 주문으로 예를 들면, 주문의 주소지가 변경되거나 목록이 변경되더라도 식별자(주문번호) 는 유지된다
+* 엔티티의 식별자는 바뀌지 않고 고유하기 떄문에 두 엔티티 객체의 식별자가 같으면 두 엔티티는 같다고 판단할 수 있다
+  * 엔티티를 구현한 클래스는 식별자를 이용해서 `equals()`/`hashCode()` 메서드를 구현할 수 있다
+  
+```kotlin
+data class Order {
+    val orderNumber: String
+    
+    ...
+
+    override fun equals(obj: Any): Boolean {
+        if (this == obj) return true
+        if (obj == null) return false
+        if (obj.javaClass != Order::javaClass) return true
+        if (this.orderNumber == null) return false
+        val other: Order = obj as Order
+        return this.orderNmber.equals(other.orderNumber);
+    }
+  
+    override fun hashCode(): Int{
+        val prime = 31
+        var result = 1
+        result = prime * result + if ((orderNumber == null)) 0 else orderNumber.hashCode()
+        
+        return result
+    }
+}
+```
+
+### 엔티티의 식별자 생성
+
+* 엔티티의 식별자를 생성하는 시점은 도메인의 특징과 사용하는 기술에 따라 달라진다
+* 다음과 같은 형태로 식별자를 생성한다
+  1. 특정 규칙에 따라 생성
+  1. UUID 사용
+  1. 값을 직접 입력
+  1. 일련번호 사용 (시퀀스나 DB 자동 증가 컬럼 사용)
+
+```java
+// UUID 사용 예제
+UUID uuid = UUID.randomUUID();
+
+String strUUID = uuid.toString();
+// 8658f722-80c0-11ec-a8a3-0242ac120002 와 같은 형식
+```
+
+* 회원 아이디나 이메일 등과 같은 사용자가 직접 입력하는 식별자는 중복 방지 처리와 함께 사용자가 입력하게 할 수 있다
+
+```java
+String orderNumber = orderRepository.generate();
+// 엔티티를 생성하기 전에 식별자 생성
+
+Order order = new Order(orderNumber, ...);
+orderRepository.save(order);
+```
+
+* 위와 같이 데이터베이스가 제공하는 자동 증가 기능을 사용하여 식별자를 구할 수 있다
+* 자동증가 컬럼이 아닌 경우, 위의 예제와 같이 식별자를 먼저 만들고 엔티티 객체를 생성할 때 식별자를 전달할 수 있다
+* 자동 증가 컬럼은 DB 에 데이터를 추가하기 전까지는 식별자 값을 알 수 없다
+  * 이는 엔티티 객체를 생성할 때 식별자를 전달할 수 없다는 의미이다
+
+```java
+Article article = new Article(author, title, ...);
+articleRepository.save(article); // DB 에 저장 후 식별자를 엔티티에 반영된다
+Long savedArticleId = article.getId(); // DB 에 저장된 후 식별자 참조가 가능하다
+```
