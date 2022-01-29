@@ -1,14 +1,44 @@
 package com.example.dddspringdemo.order.domain
 
-data class Order (
-    var state: OrderState,
-    var shippingInfo: ShippingInfo,
-    var orderLines: List<OrderLine>
+import com.example.dddspringdemo.common.model.Money
+
+class Order (
+    val id: OrderNo,
+    // String 등의 타입이 id 라면 'id' 라는 이름만으로는 해당 필드가 주문 번호인지 여부를 알 수 없다
+    // OrderNo 라는 이름으로 필드를 정의함으로써 어떠한 필드인지 식별할 수 있게 한다
+    state: OrderState,
+    shippingInfo: ShippingInfo,
+    orderLines: List<OrderLine>
 ) {
-//    val totalAmounts: Int
-//        get() {
-//
-//        }
+    init {
+        verifyAtLeastOneOrMoreOrderLines(orderLines)
+        // constructor validation 이 필요하면 해당 스콥에서 체크
+        // 기존에는 정의한 생성자에서 setter 를 통해서 validation 을 일괄 체크하였으나,
+        // kotlin 에서는 init block 을 통해 초기화 단계에서 validation 과
+        // setter 에 별도 validation 을 추가하여 별도로 체크할 수 있다
+    }
+
+    var state = state
+        private set(newState) { field = newState }
+
+    var shippingInfo = shippingInfo
+        private set(newShippingInfo) {
+            field = newShippingInfo
+        }
+
+    var orderLines = orderLines
+        private set(newOrderLines) {
+            verifyAtLeastOneOrMoreOrderLines(newOrderLines)
+            field = newOrderLines
+            // Order 는 한개 이상의 OrderLine 을 가질 수 있으므로 Order 를 생성할 때 OrderLine 목록을 List 로 전달한다
+            // 생성자에서 setOrderLines 메서드를 호출할 때 제약 조건을 검사하도록 할 수 있다
+            // 요구사항에는 최소 한 종류 이상의 상품을 주문해야 하므로, setter 메서드에서 validation 함수를 호출하여 체크한다
+        }
+
+    val totalAmount: Money
+        get() = Money(
+            orderLines.sumOf { it.amounts.value }
+        )
 
     fun changeShipped() {
         // 로직 검사
@@ -25,7 +55,10 @@ data class Order (
         this.state = OrderState.CANCELED
     }
 
-    fun completedPayment() {}
+    fun completedPayment() {
+        // 결제 완료와 관련된 처리 코드를 함께 구현하기 때문에 결제 완료와 관련된 도메인 지식을 코드로 구현하는 것이 자연스럽다
+        // setState 가 존재한다면, 해당 메서드에서 단순히 값만 변경할지 아니면 상태값에 따라 추가 처리를 할지를 함께 구현하기가 애매한다
+    }
 
     @Deprecated("The method has been extended",
         ReplaceWith("Changed to use method verifyNotYetShipped")
@@ -45,20 +78,6 @@ data class Order (
         // 핵심 규칙을 구현한 코드는 도메인 모델에만 위치하기 때문에 규칙이 변경되거나 규칙을 확장해야 할 때는 다른 코드에 영향을 덜 주고 변경 내역을 모델에 반영할 수 있다
     }
 
-    @JvmName("setOrderLines1")
-    fun setOrderLines(orderLines: List<OrderLine>) {
-        verifyAttLeastOneOrMoreOrderLines(orderLines)
-        this.orderLines = orderLines
-        // Order 는 한개 이상의 OrderLine 을 가질 수 있으므로 Order 를 생성할 때 OrderLine 목록을 List 로 전달한다
-        // 생성자에서 setOrderLines 메서드를 호출할 때 제약 조건을 검사하도록 할 수 있다
-        // 요구사항에는 최소 한 종류 이상의 상품을 주문해야 하므로, setter 메서드에서 validation 함수를 호출하여 체크한다
-        // 예제에서는 totalAmount 에 대해서 setter 가 완료되었을 때 계산하였지만, 여기에서는 getter 를 활용한다
-        // 또한, data class 의 getter, setter override 이슈 등으로 추후 구현을 하면서 적절하게 리펙토링이 필요하다 (현재시점에서는 해당 함수를 사용하지도, 용도에 맞지도 않게 구현되어 있다)
-    }
-    // shippingInfo 에 대한 setter 도 예제에는 있지만, 이도 위와 같은 이유로 우선 추후 용도에 맞게 리펙토링 예정
-    // 해당 setter 는 shippingInfo 가 null 인 경우 exception 이 발생하게 구현하였지만,
-    // shippingInfo 는 nullable 이 아니므로.. 여기서는 딱히..?
-
     private fun verifyNotYetShipped() {
         if (this.state != OrderState.PAYMENT_WAITING && this.state != OrderState.PREPARING) throw IllegalStateException("Already shipped. state: $state")
         // 기존에 배송지 정보 변경에 대한 제약 조건만 있었을 때는 isShippingChangeable 를 통해 배송지 정보 변경에 대한 제약 조건만 판단하였으나
@@ -66,7 +85,7 @@ data class Order (
         // verifyNotYetShipped 으로 이름을 변경하고 해당 메서드를 사용하여 검사한다
     }
 
-    private fun verifyAttLeastOneOrMoreOrderLines(orderLines: List<OrderLine>) {
-        if (orderLines.isEmpty()) throw IllegalArgumentException("No OrderLine")
+    private fun verifyAtLeastOneOrMoreOrderLines(orderLines: List<OrderLine>) {
+        if (orderLines.isNullOrEmpty()) throw IllegalArgumentException("no OrderLine")
     }
 }

@@ -1,16 +1,15 @@
 package com.example.dddspringdemo.order.domain
 
-data class OrderLine (
-    val product: Product,
-    val price: Int,
-    val quantity: Int,
-    val amounts: Int
-) {
-    private fun calculateAmounts(): Int {
-        return this.price * this.quantity
-    }
+import com.example.dddspringdemo.common.model.Money
 
-    fun getAmounts() {}
+data class OrderLine (
+//    val product: Product,
+    val price: Money,
+    val quantity: Int
+) {
+    val amounts: Money
+        get() = this.price.multiply(this.quantity)
+    // 코드의 가독성을 향상시킬 수 있다
 }
 
 /*

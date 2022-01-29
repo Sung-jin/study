@@ -1,11 +1,11 @@
 package com.example.dddspringdemo.order.domain
 
 data class ShippingInfo (
-    val receiverName: String,
-    val receiverPhoneNumber: String,
-    val shippingAddress1: String,
-    val shippingAddress2: String,
-    val shippingZipcode: String
+    val receiver: Receiver,
+    val address: Address
+    // Receiver 라는 '받는 사람' 이라는 도메인 개념을 표현하고,
+    // 해당 도메인에는 '받는 사람' 의 정보인 이름과 번호가 들어가 있다
+    // 위와 같이 벨류 타입을 사용함으로써 개념적으로 완전한 하나를 잘 표현할 수 있다
 )
 
 /*
