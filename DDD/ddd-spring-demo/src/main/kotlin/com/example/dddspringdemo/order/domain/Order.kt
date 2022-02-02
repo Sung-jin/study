@@ -1,14 +1,19 @@
 package com.example.dddspringdemo.order.domain
 
 import com.example.dddspringdemo.common.model.Money
+import javax.persistence.*
 
+@Entity
+@Table(name = "purchase_order")
 class Order (
-    val id: OrderNo,
+    @EmbeddedId
+    val number: OrderNo,
     // String 등의 타입이 id 라면 'id' 라는 이름만으로는 해당 필드가 주문 번호인지 여부를 알 수 없다
     // OrderNo 라는 이름으로 필드를 정의함으로써 어떠한 필드인지 식별할 수 있게 한다
     state: OrderState,
     shippingInfo: ShippingInfo,
-    orderLines: List<OrderLine>
+    orderLines: List<OrderLine>,
+    orderer: Orderer
 ) {
     init {
         verifyAtLeastOneOrMoreOrderLines(orderLines)
@@ -18,14 +23,23 @@ class Order (
         // setter 에 별도 validation 을 추가하여 별도로 체크할 수 있다
     }
 
+    @Enumerated(EnumType.STRING)
     var state = state
         private set(newState) { field = newState }
 
+    @Embedded
     var shippingInfo = shippingInfo
         private set(newShippingInfo) {
             field = newShippingInfo
         }
 
+    @ElementCollection // 벨류 컬렉션을 매핑하기 위한 어노테이션
+    @CollectionTable(name = "order_line", joinColumns = [JoinColumn(name = "order_number")])
+    // 벨류를 저장할 때 테이블을 지정할 때 사용한다
+    // name: 테이블 이름, join column: 외부키로 사용하는 컬럼을 지정
+    @OrderColumn(name = "line_idx")
+    // OrderLine 에 인덱스 값을 저장하기 위한 프로퍼티가 존재하지 않지만, List 타입 자체가 인덱스를 가지고 있다
+    // JPA 는 @OrderColumn 애노테이션을 이용해서 지정한 컬럼에 리스트 인덱스값을 저장한다
     var orderLines = orderLines
         private set(newOrderLines) {
             verifyAtLeastOneOrMoreOrderLines(newOrderLines)
@@ -34,6 +48,8 @@ class Order (
             // 생성자에서 setOrderLines 메서드를 호출할 때 제약 조건을 검사하도록 할 수 있다
             // 요구사항에는 최소 한 종류 이상의 상품을 주문해야 하므로, setter 메서드에서 validation 함수를 호출하여 체크한다
         }
+
+    var orderer = orderer
 
     val totalAmount: Money
         get() = Money(

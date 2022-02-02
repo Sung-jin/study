@@ -1,10 +1,23 @@
 package com.example.dddspringdemo.order.domain
 
+import com.example.dddspringdemo.common.jpa.MoneyConverter
 import com.example.dddspringdemo.common.model.Money
+import com.example.dddspringdemo.product.domain.ProductId
+import javax.persistence.Column
+import javax.persistence.Convert
+import javax.persistence.Embeddable
+import javax.persistence.Embedded
 
-data class OrderLine (
-//    val product: Product,
+@Embeddable
+class OrderLine (
+    @Embedded
+    val productId: ProductId,
+
+    @Column(name = "price")
+    @Convert(converter = MoneyConverter::class)
     val price: Money,
+
+    @Column(name = "quantity")
     val quantity: Int
 ) {
     val amounts: Money

@@ -1,11 +1,11 @@
-package com.example.dddspringdemo.order.domain
+package com.example.dddspringdemo.member.domain
 
 import java.io.Serializable
 import javax.persistence.Column
 import javax.persistence.Embeddable
 
 @Embeddable
-class OrderNo (
-    @Column(name = "order_number")
-    val number: String
+class MemberId (
+    @Column(name = "member_id")
+    private val id: String
 ): Serializable

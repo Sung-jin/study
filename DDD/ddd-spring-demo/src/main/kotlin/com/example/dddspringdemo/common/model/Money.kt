@@ -1,6 +1,6 @@
 package com.example.dddspringdemo.common.model
 
-data class Money (
+class Money (
     val value: Int
     // value 의 타입이 val 이고, 별도의 setter 가 없으므로
     // Money 는 불변타입이다
