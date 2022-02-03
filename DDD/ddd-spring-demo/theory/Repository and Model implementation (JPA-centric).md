@@ -252,3 +252,183 @@ public class OrderNo implements Serializable {
     // 식별자에 대한 별도의 기능을 추가할 수 있다
 }
 ```
+
+#### 별도 테이블에 저장하는 벨류 매핑
+
+* 애그리거트에서 루트 엔티티를 뺀 나머지 구성요소는 대부분 벨류이다
+  * 별도 테이블에 저장한다고 해서 엔티티가 아니다
+* 하나의 에그리거트에서 루트 엔티티를 제외한 객체가 벨류가 아닌 엔티티가 맞다면, 다른 애그리거트인지 확인해야 한다
+  * 자신만의 독자적인 라이프사이클을 가진다면 다른 애그리거트일 가능성이 높다
+  * 예를들어서 상품과, 상품 리뷰이다 (각자 별도로 생성/수정이 되고, 변경 주체도 다르다)
+* 애그리거트에 속한 객체가 벨류인지 엔티티인지 구분하는 방법은 고유 식별자를 가지는지 여부를 확인하는 것이다
+  * 식별자를 찾을 때 매핑되는 테이블의 식별자를 애그리거트 구성요소의 식별자와 동일한 것으로 착각하면 안된다
+  * 이는 별도 테이블로 저장되면서 PK 가 있다고 해서 테이블과 매핑되는 애그리거트 구성요소가 고유 식별자를 가지는 것은 아니다
+  
+```java
+@Entity
+@SecondaryTable(
+        name = "article_content",
+        // 저장할 테이블을 지정
+        pkJoinColumns = @PrimaryKeyJoinColumn(name = "id")
+        // 벨류 테이블에서 엔티티 테이블로 조인할 때 사용할 컬럼을 지정
+)
+public class Article {
+    @Id
+    private Long id;
+    private STring title;
+    
+    @AttributeOverrides({
+            @AttributeOverride(name = "content", column = @Column(table = "article_content")),
+            @AttributeOverride(name = "contentType", column = @Column(table = "article_content"))
+            // 해당 벨류 데이터가 저장된 테이블 이름을 지정
+    })
+    private ArticleContent content;
+}
+
+Article article = entityManager.find(Article.class, 1L);
+// 다음과 같이 조회할 때 @SecondaryTable 로 매핑된 article_content 테이블을 조인하여 조회한다
+```
+
+#### 벨류 컬렉션을 @Entity 로 매핑하기
+
+* JPA 는 @Embeddable 타입의 클래스 상속 매핑을 지원하지 않는다
+  * 상속 구조를 가지는 벨류 타입을 사용하려면 @Embeddable 대신 @Entity 를 이용한 상속 매핑으로 처리해야 한다
+  
+```java
+@Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "image_type")
+public abstract class Image {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @COlumn(name = "image_id")
+    private Long id;
+    
+    ...
+  
+    public abstract String getURL();
+    public abstract boolean hasThumbnail();
+    public abstract String getThumbnailURL();
+}
+
+@Entity
+@DiscriminatorValue("II")
+public class InternalImage extends Image { ... }
+
+@Entity
+@DiscriminatorValue("EI")
+public class ExternalImage extends Image { ... }
+
+@Entity
+public class Product {
+    @EmbeddedId
+    private ProductId id;
+    ...
+  
+    @OneToMany(casecade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
+    private List<Image> images = new ArrayList<>();
+    // 위와 같이 벨류 타입이지만, @Entity 로 지정하고 상속받은 객체를 사용할 수 있다
+    
+    ...
+  
+    public void changeImages(List<Image> newImages) {
+        images.clear();
+        // clear() 를 실행할 때, 프록시 객체이면 해당 객체를 찾기 위한 객체 수 만큼의 select 와
+        // 실제 객체를 하나하나 삭제하는 delete from xxx ... 가 객체 수 만큼 실행된다
+        // 연관된 객체의 수가 많다면 성능에 문제가 발생할 수 있다
+        
+        // @Embeddable 타입에 대한 컬렉션의 clear() 메서드 호출 시 컬렉션에 속한 객체를 로딩하지 않고 한번의 delete 쿼리로 삭제 처리를 수행할 수 있다
+        // 애그리거트의 특성을 유지하면서 해당 문제를 해소하려면 결국 상속을 포기하고 @Embeddable 로 매핑된 단일 클래스로 구현해야 한다
+        // 이경우 다형을 포기하고 if-else 로 구현해야 하는 경우가 발생한다
+        images.addAll(newImages);
+    }
+}
+```
+
+#### ID 참조와 조인 테이블을 이용한 단방향 M:N 매핑
+
+* 애그리거트 간 집한 연관은 성능상의 이유로 피해야 하지만, 필요로 하다면 단방향 집합 연관을 적용할 수 있다
+
+```java
+public class Product {
+    @ElementCollection
+    @CollectionTAble(name = "product_category", joinColumns = @JoinColumn(name = "product_id"))
+    private Set<CategoryId> categoryIds;
+}
+```
+
+* 위와 같이 Product 에서 Category 로의 단방향 M:N 연관을 ID 참조 방식으로 구현이 가능하다
+  * @ElementCollection 을 사용하였기 때문에, 해당 데이터가 삭제되면 조인 테이블의 데이터도 같이 삭제된다
+  
+### 애그리거트 로딩 전략
+
+* 애그리거트의 루트가 로딩될 때, 해당 객체와 객체에 속한 모든 객체가 완전한 상태이여야 한다
+  * 조회 시점에 애그리거트를 완전한 상태가 되도록 하려면 애그리거트 루트에서 연관 매핑의 조회 방식을 즉시 로딩(FetchType.EAGER) 으로 설정하면된다
+  * 즉시 로딩으로 설정하면 애그리거트 루트를 구할 때 연관된 구성요소를 DB 에서 함께 읽어온다
+* 즉시 로딩 방식으로 설정하면 애그리거트 루트를 로딩하는 시점에 애그리거트에 속한 모든 객체를 함께 로딩할 수 있지만, 다음과 같은 문제가 발생할 수 있다
+  * 
+
+```java
+public class Product {
+    ...
+  
+    @OneToMany(
+            casecade = {CascadeType.PERSIST, CascadeType.REMOVE},
+            orphanRemoval = true,
+            fetch = FetchType.EAGER
+    )
+    private List<Image> images = new ArrayList<>();
+    
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<Option> options = new ArrayList<>();
+}
+
+entityManager.find(Product.class, 1L);
+
+/*
+위와 같이 설정된 애그리거트를 조회하면 다음과 같은 쿼리가 발생한다
+
+select
+    p.product_id, ... img.product_id, img.xxx, ... opt.product_id, opt.xxx ...
+from
+    product p
+    left outer join image img on p.product_id = img.product_id
+    left outer join product_option opt on p.product_id = opt.product_id
+where p.product_id = ?
+
+해당 쿼리는 카타시안 조인을 사용하는데, 이는 쿼리 결과에 중복을 발생시킨다
+product 의 image 가 2개, option 이 2개라면, 해당 쿼리의 결과로 구해지는 행의 수는 4개이다
+즉, product 의 정보는 4번 중복되고, image 와 option 의 테이블은 2번 중복된다
+
+조회 성능 때문에 즉시 로딩 방식을 사용하지만, 이러한 경우에는 즉시 로딩 방식 때문에 조회 성능이 나빠지는 문제가 발생한다
+ */
+```
+
+* 애그리거트는 개념적으로 하나여야 한다
+  * 하지만, 루트 엔티티를 로딩하는 시점에 애그리거트에 속한 객체를 모두 로딩해야 하는 것은 아니다
+  * 애그리거트가 완전해야 하는 이유는 상태를 변경하는 기능을 실행할 때와 표현 영역에서 애그리거트의 상태 정보를 보여줄 때 필요하기 때문이다
+    * 표현 영역에서의 필요성은 조회 전용 기능을 구현하는 방식을 사용하는 좋은 방법이 존재한다
+    * 상태 변경 기능을 실행하기 위해 조회 시점에 즉시 로딩을 이용해서 애그리거트를 오나전한 상태로 로딩할 필요가 없는데, JPA 는 트랜잭션 범위 내에서 지연 로딩을 허용하기 때문에 상태를 변경하는 시점에 필요한 구성 요소만 로딩해도 문제가 되지 않는다
+    * 일반적인 애플리케이션은 상태를 변경하는 기능보다 조회하는 기능을 실행하는 빈도가 훨씬 높다
+    * 이러한 이유로 애그리거트 내의 모든 연관을 즉시 로딩으로 설정할 필요는 없으며, 애그리거트에 맞게 적절하게 설정하면 된다
+  
+### 애그리거트의 영속성 전파
+
+* 애그리거트가 완전한 상태여야 한다는 의미는 조회뿐 아니라 저장/삭제할 때도 하나로 처리해야 함을 의미한다
+  * 저장 메서드는 애그리거트 루트만 저장하면 안되고 애그리거트에 속한 객체를 저장해야 한다
+  * 삭제 메서드는 애그리거트 루트뿐만 아니라 애그리거트에 속한 모든 객체를 삭제해야 한다
+* @Embeddable 매핑 타입의 경우 함께 저장되고 삭제되므로 `cascade` 속성을 추가로 설정하지 않아도 된다
+* @Entity 타입에 대한 매핑은 `cascade` 속성을 사용해서 저장과 삭제 시에 함께 처리되도록 설정해야 한다
+  * @OneToOne, @OneToMany 의 경우 `cascade` 속서으이 기본값이 없으므로, 별도로 설정해줘야 한다
+
+> @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
+
+### 식별자 생성 기능
+
+* 식별자 생성 방식
+  1. 사용자가 직접 지정 (직접 입력한 이메일 등)
+  1. 도메인 로직으로 생성
+    * 생성 규칙이 존재한다면, 해당 규칙으로 식별자 생성
+    * 주문번호를 고객 id 와 타임스탬프로 구성하는 등의 방법이 존재함
+  1. DB 를 이용한 일련번호 사용
+    * @GeneratedValue 등과 같은 JPA 기능 이용
