@@ -433,3 +433,136 @@ product 의 image 가 2개, option 이 2개라면, 해당 쿼리의 결과로 �
   1. DB 를 이용한 일련번호 사용
     * @GeneratedValue 등과 같은 JPA 기능 이용
 
+## 정렬 구현
+
+* JPA 의 CriteriaQuery 를 사용 할 경우 `orderBy()` 를 사용하면 정렬을 할 수 있다
+  * 애그리거트의 타입을 이용해서 정렬 순서를 지정한다
+  * 정렬 순서를 지정하는 코드는 레파지토리를 사용하는 응용 서비스에 위치하는데, 응용 서비스는 CriteriaBuilder 에 접근할 수 없다
+    * 응용 서비스는 JPA 의 애그리거트가 아닌 다른 타입을 이용해서 레파지토리에 정렬 순서를 전달하고 JPA 는 이를 다시 JPA 애그리거트로 변환하는 작업을 해야 한다
+    * 문자열을 이용해서 정렬할 필드를 지정할 수 있다
+      > List<Order> orders = orderRepository.findAll(someSpec, "entity.field.foo");
+      * 개인적으로 문자열의 특정 구분자를 이용해서, 연관된 타겟 필드를 찾는건 type safe 하지 못하고 오류를 범할 수 있다고 생각한다.
+      * 이전에 예제로 보여준 `정적 메타 모델` 을 활용하거나 100% 모든 필드를 대응하는게 아닌 특정 필드만 정렬이나 쿼리가 필요한 경우, 해당 필드들을 넣을 수 있는 dto 등을 만들어서 값 여부를 확인하여 처리하는 방식이 더 좋을 것 같다
+* JPQL 을 사용하는 경우 `order by` 절을 사용할 수 있다
+
+## 페이징 개수 구하기
+
+* JPA 는 `setFirstResult()`/`setMaxResults()` 메서드를 제공한다
+
+```java
+public List<Order> findByOrdererId(String ordererID, int startRow, int fetchSize) {
+    TypedQuery<Order> query = entityManager.createQuery(...);
+    query.setParameter(...);
+    queryt.setFirstResult(startRow);
+    query.setMaxResult(fetchSize);
+    // 위와 같이 결과에 firstResult 와 maxResult 를 설정하면, 해당 인덱만큼 페이징되어 결과가 반환된다
+    // firstResult: 읽어올 첫 번째 행 번호
+    // maxResult: 일겅올 행 개수
+    
+    return query.getREsultList();
+}
+
+public Long counts(Specification<Order> spec) {
+    CriteriaBuilder cb = entityMAnager.getCriteriaBulder();
+    CriteriaQuery<Long> criteriaQuery = cb.createQuery(Long.class);
+    Root<Order> root = criteriaQuery.from(Order.class);
+    criteriaQuery.select(cb.count(root)).where(spec.toPredicate(root, cb));
+    TypedQuery<Long> query = entityManager.createQuery(criteriaQuery);
+    return query.getSingleResult();
+}
+// 위와 같이 sepc 조건의 전체 count 를 알 수 있다
+
+...
+
+findByOrdererId("123", 45, 15);
+// 위의 응답은 46번째 행의 데이터를 15개 불러온다
+// 즉, 페이지당 15개씩 표시되며, 4번째 데이터들을 호출한다
+```
+
+#### 짜잔, 지금까지는 이론이였습니다
+
+* 지금까지의 레파지토리의 `스펙`/`정렬 순서`/`페이징` 에 대한 구현을 대부분 자동으로 JPA 를 통해 구현할 수 있다
+* [spring data jpa](https://spring.io/projects/spring-data-jpa)
+
+## 조회 전용 기능 구현
+
+* 다음과 같은 레파지토리는 애그리거트의 저장소를 표현하기에 적합하지 않다
+  1. 여러 애그리거트를 조합해서 한 화면에 보여주는 데이터 제공
+    * 애그리거트에서 제공할 경우 JPA 의 로딩전략, 연관 매핑 등의 고려해야 할 부분이 많다
+    * 애그리거트 간에 직접 연관을 사용하면 ID 참조할 때의 장점을 활용할 수 없다
+  1. 각종 통계 데이터 제공
+    * 통계 데이터는 대부분 다양한 테이블을 조인하거나 DBMS 전용 기능을 사용한다
+    * 이는 JPQL 이나 Criteria 로 처리하기 힘들다
+* 위와 같은 이슈는 조회 전용 쿼리로 처리를 할 수 있다
+  * JPA 와 하이버네이트의 `동적 인스턴스 생성`/`하이버네이트의 @Subselect 확장기능`/`네이티브 쿼리` 등을 이용하여 조회 전용 기능을 구현할 수 있다
+  
+### 동적 인스턴스 생성
+
+* JPA 는 쿼리 결과에 임의의 객체를 동적으로 생성할 수 있는 기능을 제공한다
+
+```java
+@Repository
+public class JpaOrderViewDao implements OrderViewDat {
+    @Override
+    public List<OrderView> selectByOrderer(String ordererId) {
+        String selectQuery = "select new some.path.OrderView(o, m, p) " +
+                "from Order o join o.orderLines ol, Member m, Product p " +
+                "and o.orderer.memberId = m.id " +
+                "and index(ol) = 0 " +
+                "and ol.productId = p.id " +
+                "order by o.number.number desc";
+        TypedQuery<OrderView> query = em.createQuery(selectQuery, OrderView.class);
+        query.setParameter("ordererId", ordererId);
+        return query.getREsultList();
+    }
+}
+```
+
+* JPQL 의 `new` 키워드로 생성할 인스턴스의 완전한 클래스 이름과 생성자에 인자로 쿼리 결과를 넣어주면, 해당 값이 해당 인스턴스로 생성된다
+* 이러한 조회 전용 모델을 만드는 이유는 표현 영역을 통해 사용자에게 데이터를 보여주기 위함이다
+* 모델의 개별 프로퍼티를 생성자에 전달할 수 있다
+  > public OrderView(String val1, String val2, int val3, Date val4, ...) { // 생성자 }
+  > 
+  > select new some.path.OrderView(m.val1, m.val2, p.val3, d.val4, ...)
+
+### 하이버네이트 @Subselect
+
+* @Subselect 는 쿼리 결과를 @Entity 로 매핑할 수 있는 기능이다
+
+```java
+@Entity
+@Immutable
+@Subselect("select o.order_number as number, o.orderer_id .... from ... join ... where ...")
+@Synchronize({"purchase_order", "order_line", ...})
+public class OrderSummary {
+    @Id
+    private String number;
+    private String OrderId;
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "orderDate")
+    private Date orderDate;
+    ...
+}
+```
+
+* `@Immutable`/`@Subselect`/`@Synchronize` 는 하이버네이트 전용 어노테이션이며, 이를 통해 테이블이 아닌 쿼리 결과를 @Entity 로 매핑할 수 있다
+  * `@Subselect` 는 조회 쿼리를 값으로 가진다
+    * 하이버네이트는 select 쿼리의 결과를 매핑할 테이블처럼 사용한다
+    * DBMS 가 테이블들을 조인하여 한 테이블처럼 보여주는 view 와 비슷하다
+    * `@Subselect` 엔티티는 수정이 불가능하다
+      * 해당 엔티티를 수정할 경우 매핑한 테이블이 없으므로 에러가 발생하며, 이를 방지하기 위해 `@Immutable` 을 사용한다
+      * `@Immutable` 어노테이션을 사용하면, 해당 엔티티가 변경되어도 DB 에 반영하지 않고 무시한다
+  
+```java
+Order order = orderrepository.findById(orderNumber);
+order.changeShippingInfo(newInfo);
+
+List<OrderSummary> summaries = ordererSummaryRepository.findByOrdererId(userId);
+// 위와 같이 테이블의 값 변경이 commit 되기 전에 OrderSummary 를 조회하면 이전 데이터가 조회된다
+// 이를 해결하기 위해 @Synchronize 어노테이션을 사용한다
+```
+
+* `@Synchronize` 어노테이션을 사용하면 해당 엔티티와 관련된 테이블 목록을 명시한다
+* 하이버네이트는 엔티티를 로딩하기 전에 지정한 테이블과 관련된 변경이 발생하면 플러시를 먼저한다
+  * 위 예제에서는 `purchase_order`/`order_line` 등이 설정되어 있으며, 해당 필드가 변경된 이후 조회하면, 관련된 엔티티를 플러시한다
+* `@Subselect` 도 엔티티이기 때문에 `find()`/`JPQL`/`Criteria`/`Sepcification` 을 사용하여 조회할 수 있다
