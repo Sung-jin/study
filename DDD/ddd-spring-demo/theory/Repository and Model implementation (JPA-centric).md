@@ -432,3 +432,4 @@ product 의 image 가 2개, option 이 2개라면, 해당 쿼리의 결과로 �
     * 주문번호를 고객 id 와 타임스탬프로 구성하는 등의 방법이 존재함
   1. DB 를 이용한 일련번호 사용
     * @GeneratedValue 등과 같은 JPA 기능 이용
+
