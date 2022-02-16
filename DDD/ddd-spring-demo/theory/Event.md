@@ -307,3 +307,139 @@ public class CancelOrderService {
     }
 }
 ```
+
+### 동기 이벤트 처리 문제
+
+```java
+@Transactional
+// 외부 연동 과정 중 예외가 발생할 경우 트랜잭션 처리가 필요하다
+public void someFunc(OrderNo orderNo) {
+    Events.handle(...);
+    // 이벤트 처리가 외부 서비스와 연동 될 경우, 해당 처리가 문제가 발생하거나 느려질 경우
+    // 해당 함수 전체가 완료될 때 까지 대기한다
+}
+```
+
+* 성능저하와 트랜잭션처리에 대한 고려를 해야 한다
+    * 외부 서비스 실행 실패에 따라 무조건 롤백을 할 필요는 없다.
+    * 취소에 대한 처리하고, 후 처리는 수동으로 처리가 가능하다
+* 외부 시스템과의 연동을 비동기로 처리하는 형태로 성능과 트랜잭션 범위 문제를 해소할 수 있다
+
+#### 비동기 이벤트 처리
+
+* 회원가입 완료 검증 이메일과 같은 기능은 요청과 동시에 바로 도착 할 필요 없다
+    * 일부 시간이 지난 이후에 도착하여도 유효하고, 받지 못했을 경우에도 다시 발송요청할 수 있다
+* **'어떠한 기능' 을 하면 '무엇을 해라'** 는 결국 **'어떠한 기능' 을 하면 '언제까지 무엇을 해라'** 인 경우가 많다
+    * 이러한 요구사항은 실패시에도 재시도를 하거나 수동 처리해도 상관 없는 경우도 많다
+    * 이러한 요구사항은 비동기 이벤트로 처리할 수 있다
+* 비동기 방식으로 이벤트 처리를 구현하는 방법  
+    1. 로컬 핸들러를 비동기로 실행
+    1. 메시지 큐를 사용
+    1. 이벤트 저장소와 이벤트 포워더 사용
+    1. 이벤트 저장소와 이벤트 제공 API 사용
+    
+##### 로컬 핸들러의 비동기 실행
+
+* 이벤트 핸들러를 별도 스레드로 실행할 경우 비동기로 처리할 수 있다
+
+```java
+public class Events {
+    private static ThreadLocal<List<EventHandler<?>>> asyncHandlers = new ThreadLocal<>();
+    // 비동기로 실행할 이벤트 핸들러 목록을 보관
+    private static ExecutorService executorService;
+    // 비동기로 이벤트 핸들러를 실행할 서비스
+
+    public static void init(ExecutorService executorService) {
+        Events.executorService = executorService;
+    }
+    
+    public static void close() {
+        // excutor 를 셧다운
+        if (executorService != null) {
+            executor.shutdown();
+            try {
+                executor.awaitTermination(10, TimeUnit.SECONDS);
+            } catch (InterruptedException e) {}
+        }
+    }
+    
+    public static void raise(Object event) {
+        ...
+        
+        List<EventHandler<?>> asyncEventHandlers = asyncHandlers.get();
+        // 이벤트를 처리할 수 있는 핸들러를 비동기로 실행한다
+        if (asyncEventHandlers != null) {
+            for (EventHandler handler: asyncEventHandler) {
+                if (handler.canHandle(event)) {
+                    executor.submit(() -> handler.handle(event));
+                    // 기존 이벤트 핸들러와 비슷하지만, 이벤트 서비스의 submit 에 람다식을 전달한다
+                    // 이는 executorService 의 내부적으로 사용하는 스레드 풀을 이용해서 인자로 전달받은 람다식을 실행한다
+                    // 결과적으로 raise 메서드를 실행하는 스레드가 아닌 다른 스레드를 이용해서 이벤트 핸들러를 비동기로 실행한다
+                }
+            }
+        }
+        ...
+    }
+    
+    public static void handleAsync(EventHandler<?> handler) {
+        // 비동기로 처리할 이벤트 핸들러를 등록
+        if (publishing.get()) return;
+        
+        List<EventHandler<?>> eventHandlers = asyncHandlers.get();
+        if (eventHanlders == null) {
+            eventHandlers = new ArrayList<>();
+            asyncHandlers.set(eventHandlers);
+        }
+        eventHandlers.add(handler);
+    }
+    
+    public static void reset() {
+        if (!publishing.get()) {
+            asyncHandlers.remove();
+            // 비동기 핸들러에 보관된 값 제거
+        }
+    }
+}
+
+@Transactional
+public void someFunc(OrderNo orderNo) {
+    Events.handleAsync(...);
+    ...
+    Events.raise(new SomeEvent());
+    // 비동기로 실행 된 해당 별도의 스레드로 실행되므로
+    // raise 된 이벤트는 해당 트랜잭션 범위에 묶이지 않는다
+}
+```
+
+* 별도 스레드를 이용해서 이벤트 핸들러를 실행하면, 해당 이벤트의 트랜잭션과 실행한 메서드의 트랜잭션은 다른 트랜잭션이다
+    * 즉, 같은 트랜잭션으로 동작해야 한다면 비동기로 실행하면 안된다
+
+##### 메시징 시스템을 이용한 비동기 구현
+
+* 비동기로 이벤트를 처리할 때 RabbitMQ, Kafka 와 같은 메시징 큐를 사용할 수 있다
+* 이벤트가 발생하면 이벤트 디스패치는 이벤트 큐에 이벤트를 전송한다
+    * 메시지 큐는 이벤트를 메시지 리스너에 전달하고, 메시지 리스너는 알맞은 이벤트 핸들러를 이용해서 이벤트를 처리한다
+* 필요하다면 이벤트를 발생하는 도메인 기능과 메시지 큐에 이번테를 저장하는 절차를 한 트랜잭션으로 묶어야 한다
+* 메시징 시스템을 이용할 경우 보통 이벤트를 발생하는 주체와 이벤트 핸들러가 별도 프로세스에서 동작한다
+
+##### 이벤트 저장소를 이용한 비동기 처리
+
+* 이벤트를 DB 와 같은 별도의 스토리지에 저장하고, 별도 프로그램을 이용해서 이벤트 핸들러에 전달할 수 있다
+* 포워더를 이용한 방식
+    1. 이벤트가 발생하면 핸들러는 스토리지에 이벤트를 저장한다
+    1. 포워더는 주기적으로 이벤트 저장소에서 이벤트를 가져와 이벤트 핸들러를 실행한다
+    1. 포워더는 별도 스레드를 이용하기 때문에 이벤트 발행과 처리가 비동기로 처리된다
+    * 해당 방식은 이벤트가 물리적인 공간에 저장되므로, 이벤트 처리 실패시 포워더는 다시 이벤트를 가져와서 이벤트 핸들러를 실행시킬 수 있다
+* API 방식
+    * 모든 방식은 같으나, 포워더를 이용해서 이벤트를 외부에 전달하는 방식을 API 방식에서는 외부 핸들러가 API 를 통해 이벤트 목록을 가져온다
+    
+### 이벤트 적용 시 추가 고려사항
+
+* 이벤트 적용 시 소스에 대한 정보를 추가
+  * 특정 이벤트나 특정 소스만 처리하는 등의 처리를 할 수 있다
+* 포워더에서 전송 실패 retry 횟수 제한 설정 여부
+  * 대부분 특정 이벤트가 계속 반복하여 실패한다면, 그 이벤트는 시스템적으로 처리가 불가능 할 것이다
+  * 이러한 반복된 실패를 몇번까지 시도하는 지 등의 처리가 필요할 수 있다
+* 비동기 로컬 핸들러를 이용할 경우와 같은 상황에서, 이벤트 처리가 실패하면 해당 이벤트는 유실된다
+* 외부 이벤트, 내부 이벤트, 이벤트 우선 순위 등 처리 순서를 고려해야 할 수 있다
+* 동일한 이벤트를 재 처리 여부
