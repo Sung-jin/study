@@ -3,11 +3,12 @@ package com.example.understandingspringcoreprinciple;
 import com.example.understandingspringcoreprinciple.member.Grade;
 import com.example.understandingspringcoreprinciple.member.Member;
 import com.example.understandingspringcoreprinciple.member.MemberService;
-import com.example.understandingspringcoreprinciple.member.MemberServiceImpl;
 
 public class MemberApp {
     public static void main(String[] args) {
-        MemberService memberService = new MemberServiceImpl();
+        AppConfig appConfig = new AppConfig();
+//        MemberService memberService = new MemberServiceImpl();
+        MemberService memberService = appConfig.memberService();
         Member member = new Member(1L, "memberA", Grade.VIP);
 
         memberService.join(member);
