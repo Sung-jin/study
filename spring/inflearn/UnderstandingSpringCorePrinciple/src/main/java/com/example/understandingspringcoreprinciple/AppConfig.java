@@ -17,7 +17,7 @@ public class AppConfig {
     @Bean
     public MemberService memberService() {
         return new MemberServiceImpl(
-                getMemberRepository()
+                memberRepository()
         );
         // 위와 같이 AppConfig 가 전체적으로 필요한 구현체를 넣어준다
         // 위와 같은 경우는 MemberServiceImpl 의 생성자를 통해서 주입하므로 '생성자 주입' 이라고 한다
@@ -26,13 +26,13 @@ public class AppConfig {
     @Bean
     public OrderService orderService() {
         return new OrderServiceImpl(
-                getMemberRepository(),
-                getDiscountPolicy()
+                memberRepository(),
+                discountPolicy()
         );
     }
 
     @Bean
-    public MemberRepository getMemberRepository() {
+    public MemberRepository memberRepository() {
         return new MemoryMemberRepository();
         // 해당 new MemoryMemberRepository(); 이라는 중복이 제거되었다
     }
@@ -40,7 +40,7 @@ public class AppConfig {
     // 즉, 전체적인 구성이 어떻게 되었는지 빠르게 파악할 수 있다
 
     @Bean
-    public DiscountPolicy getDiscountPolicy() {
+    public DiscountPolicy discountPolicy() {
 //        return new FixDiscountPolicy();
         return new RateDiscountPolicy();
         // 위와 같이 변경만 하면, 사용하는 모든 곳에 알아서 해당 구현체가 주입되도록 변경된다
