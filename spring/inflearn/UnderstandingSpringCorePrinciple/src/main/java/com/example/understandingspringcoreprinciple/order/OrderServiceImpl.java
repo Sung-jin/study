@@ -3,7 +3,10 @@ package com.example.understandingspringcoreprinciple.order;
 import com.example.understandingspringcoreprinciple.discount.DiscountPolicy;
 import com.example.understandingspringcoreprinciple.member.Member;
 import com.example.understandingspringcoreprinciple.member.MemberRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class OrderServiceImpl implements OrderService {
 //    private final MemberRepository memberRepository = new MemoryMemberRepository();
 //    private final DiscountPolicy discountPolicy = new FixDiscountPolicy();
@@ -18,6 +21,7 @@ public class OrderServiceImpl implements OrderService {
     // 위와 같이 선언만 하고 실제 구현 객체를 대신 생성하고 주입해주는 무언가가 존재하면 가능하다
     // 이는 인터페이스만 사용하여 DIP 를 준수한다
 
+    @Autowired
     public OrderServiceImpl(MemberRepository memberRepository, DiscountPolicy discountPolicy) {
         this.memberRepository = memberRepository;
         this.discountPolicy = discountPolicy;

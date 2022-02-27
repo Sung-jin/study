@@ -1,5 +1,9 @@
 package com.example.understandingspringcoreprinciple.member;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+@Component
 public class MemberServiceImpl implements MemberService {
 //    private final MemberRepository memberRepository = new MemoryMemberRepository();
     // MemberRepository 라는 인터페이스를 의존한다
@@ -8,6 +12,9 @@ public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
 
+    @Autowired
+    // 기존에 별도로 의존관계 주입을 AppConfig 를 통하 였으나, AutoAppConfig 에는 의존관계 주입에 대한 내용이 없다
+    // 즉, @Autowired 라는 어노테이션을 통해 의존관계 주입을 할 수 있다
     public MemberServiceImpl(MemberRepository memberRepository) {
         this.memberRepository = memberRepository;
     }
