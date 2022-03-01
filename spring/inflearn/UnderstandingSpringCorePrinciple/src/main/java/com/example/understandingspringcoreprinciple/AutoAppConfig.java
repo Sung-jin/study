@@ -18,8 +18,8 @@ public class AutoAppConfig {
     // 기존의 AppConfig 파일과 다르게 @Bean 이라는 별도 설정과 의존관계 설정에 대한 정보가 없다
     // 이러한 정보가 없기 때문에, 등록한 컴포넌트에서 의존관계 주입에 대한 설정을 해결해야 한다
 
-    @Bean(name = "memoryMemberRepository")
-    MemberRepository memberRepository() {
-        return new MemoryMemberRepository();
-    }
+//    @Bean(name = "memoryMemberRepository")
+//    MemberRepository memberRepository() {
+//        return new MemoryMemberRepository();
+//    }
 }

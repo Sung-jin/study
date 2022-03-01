@@ -16,6 +16,8 @@ public class OrderServiceImpl implements OrderService {
     // 2. 다형성을 활용하고 인터페이스와 구현 객체를 분리
     // 3. DiscountPolicy 등과 같은 추상뿐 아니라 RateDiscountPolicy 와 같은 구현 클래스를 직접 의존하고 있다 -> DIP, OCP 위반
 
+//    private MemberRepository memberRepository;
+//    private DiscountPolicy discountPolicy;
     private final MemberRepository memberRepository;
     private final DiscountPolicy discountPolicy;
     // 위와 같이 선언만 하고 실제 구현 객체를 대신 생성하고 주입해주는 무언가가 존재하면 가능하다
@@ -26,6 +28,16 @@ public class OrderServiceImpl implements OrderService {
         this.memberRepository = memberRepository;
         this.discountPolicy = discountPolicy;
     }
+
+//    @Autowired
+//    public void setMemberRepository(MemberRepository memberRepository) {
+//        this.memberRepository = memberRepository;
+//    }
+//
+//    @Autowired
+//    public void setDiscountPolicy(DiscountPolicy discountPolicy) {
+//        this.discountPolicy = discountPolicy;
+//    }
 
     @Override
     public Order createOrder(Long memberId, String itemName, int itemPrice) {
