@@ -396,3 +396,39 @@ ApplicationContext applicationContext = new ApplicationConfigApplicationContext(
     * 기본적으로 생성자 주입을 사용하고, 필드 값이 아닌 경우에는 수정자 주입 방식을 옵션으로 부여하면 된다
         * 생성자 주입과 수정자 주입은 동시에 사용할 수 있다
     * 항상 생성자 주입 방식을 선택하는게 좋으며, 옵션이 필요하다면 수정자 주입을 선택하고, 필드 주입은 사용하지 않는게 좋다
+
+### 조회 빈이 2개 이상 문제
+
+* `@Autowired` 는 타입으로 조회한다
+    * `ac.getBean(xxx.class)` 와 같은 형태로 조회를 한다
+    * 타입으로 조회하기 때문에 조회된 타입이 2개 이상일 경우 문제가 발생한다
+        * `NoUniqueBeanDefinitionException` 오류가 발생한다
+    * 이때 하위 타입으로 지정할 수 있지만, 하위 타입으로 지정하는 것은 DIP 를 위배하고 유연성이 떨어진다
+    * 그리고 이름만 다르고 완전히 똑같은 타입의 스프링 빈이 2개 있을 때 해결이 안된다
+
+#### @Autowired 필드명, @Qualifier, @Primary
+
+* 조회 대상이 2개 이상일 때
+    1. @Autowired 필드명 매칭
+    1. @Qualifier -> @Qualifier 끼리 매칭 -> 빈 이름 매칭
+    1. @Primary 사용
+
+##### @Autowired 필드 명 매칭
+
+* `@Autowired` 는 타입 매칭을 시도하고, 이때 여러 빈이 있으면 필드 이름/파라미터 이름으로 빈 이름을 추가 매칭한다
+
+##### @Qualifier
+
+* `@Qualifier` 는 추가 구분자를 붙여주는 방법
+    * 추가적인 방법을 제공할 뿐, 빈 이름을 변경하는 것이 아니다
+* `@Qualifier` 로 주입할 때, 해당 이름으로 못찾을 경우 해당 이름의 스프링 빈을 추가로 찾는다
+* 빈을 등록할 때도 `@Qualifier` 를 사용할 수 있다
+* `@Qulifier` 를 사용하게 되면, 해당 주입이 필요할 때 마다 `@Qulifier` 를 붙여줘야 한다
+
+##### @Primary
+
+* 우선순위를 정할 수 있는 방법이며, `@Autowired` 시에 여러 빈이 매칭될 때 `@Primary` 가 우선권을 가지게 된다
+
+### 조회한 빈이 모두 필요할 때 (List, Map)
+
+* 의도적으로 해당 타입이 모두 필요할 수 있다
