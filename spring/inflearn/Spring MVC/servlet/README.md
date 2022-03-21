@@ -30,3 +30,24 @@ username=foo&age=20
     * 바디
         * form 파라미터 형식
         * message body 데이터
+
+### HTTP 요청 데이터
+
+* GET - 쿼리 파라미터
+    * `url?param1=xxx&param2=xxx` 와 같은 형태로 사용된다
+* POST - HTML Form
+    * content-type: application/x-www-form-urlencoded
+    * 메시지 바디에 쿼리 파라미터 형식으로 전달한다
+    * `param1=xxx&param2=xxx`
+* HTTP message body 에 데이터를 담아서 요청
+    * HTTP API 에서 주로 사용된다
+    * JSON, XML, TEXT...
+    * `POST`/`PUT`/`PATCH`
+
+### HTTP 응답
+
+* HttpServletResponse 를 통해 HTTP 응답 메시지를 생성할 수 있다
+    * HTTP 응답코드를 지정
+    * 헤더 생성
+    * 바디 생성
+    * 그외 편의 기능 (Content-Type, 쿠키, Redirect...)
