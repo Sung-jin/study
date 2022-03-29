@@ -15,7 +15,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 @WebServlet(name = "frontControllerServletV2", urlPatterns = "/front-controller/v2/*")
-// /front-controller/v1 를 포함한 모든 하위 요청을 받아들인다
 public class FrontControllerServletV2 extends HttpServlet {
     private final Map<String, ControllerV2> controllerMap = new HashMap<>();
 
