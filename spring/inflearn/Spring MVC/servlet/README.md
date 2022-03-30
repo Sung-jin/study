@@ -85,3 +85,36 @@ username=foo&age=20
 * 정리하면 공통 처리가 어렵다라는 문제점이 존재한다
     * 컨트롤러 호출 전에 공통 기능을 처리하는 어떠한 수문장과 같은 역할이 필요하다
     * 프론트 컨트롤러 패턴을 도입하면 이러한 문제를 깔끔히 해결할 수 있다
+
+## DispatcherServlet
+
+* `org.springframework.web.servlet.DispatcherServlet`
+* 스프링 MVC 는 프론트 컨트롤러 패턴으로 구현되어 있으며, DispatcherServlet 은 스프링 MVC 의 프론트 컨트롤러이다
+* DispatcherServlet 도 부모 클래스에서 `HttpServlet` 을 상속받아서 사용하고 서블릿으로서 동작한다
+    * `DispatcherServlet` -> `FramworkServlet` -> `HttpServletBean` -> `HttpServlet`
+* 스프링 부트는 DispatcherServlet 을 서블릿으로 자동으로 등록하면서 `urlPatterns="/"` 에 대해서 매핑한다
+    * 더 자세한 경로가 우선순위가 더 높다
+    
+### 요청의 흐름
+
+1. 서블릿 호출시 `HttpServlet` 이 제공하는 `service()` 가 호출
+1. 스프링 MVC 는 `DispatcherServlet` 의 부모인 `FrameworkServlet` 에서 오버라이드 된 `service()` 을 시작으로 여러 메소드가 호출되면서 `DispatcherServlet.doDispatch()` 가 호출
+
+### 동작 순서
+
+1. 핸들러 조회: 핸들러 매핑을 통해 요청 URL 에 매핑된 핸들러(컨트롤러)를 조회
+1. 핸들러 어뎁터 조회: 핸들러를 실행할 수 있는 핸들러 어뎁터를 조회
+1. 핸들러 어뎁터 실행: 핸들러 어뎁터를 실행
+1. 핸들러 실행: 핸들러 어뎁터가 실제 핸들러를 실행한다
+1. ModelAndView 반환: 핸들러 어뎁터는 핸들러가 반환하는 정보를 ModelAndView 로 변환해서 반환
+1. viewResolver 호출: 뷰 리졸버를 찾고 실행
+1. View 반환: viewResolver 는 뷰의 논리 이름을 물리 이름으로 바꾸고 렌더링 역할을 담당하는 뷰 객체를 반환
+1. 뷰 렌더링: 뷰를 통해 뷰를 렌더링
+
+### @RequestMapping
+
+* 스프링은 어노테이션을 활용한 유연하고 실용적인 컨트롤러인 `@RequestMapping` 을 사용할 수 있다
+    * 해당 어노테이션이 등장하기 전에는 스트럿츠와 같은 다른 프레임워크와 Spring 을 같이 사용했다
+* 매핑에 사용되는 핸들러와 어뎁터
+    * `RequestMappingHandlerMapping`
+    * `RequestMappingHandlerAdapter`
