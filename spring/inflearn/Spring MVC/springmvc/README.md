@@ -24,4 +24,46 @@
 #### 뷰 템플릿
 
 * 뷰 템플릿을 거쳐서 HTML 이 생성되고 뷰가 응답을 만들어서 전달한다
-* 
+
+### HTTP 메시지 컨버터
+
+* 뷰 템플릿으로 HTML 을 생성해서 응답하는 것이 아닌, JSON 데이터를 메시지 바디에 직접 읽거나 쓰는 경우 HTTP 메시지 컨버터를 사용하면 편리하다
+* `@ResponseBody` 사용
+    * HTTP 의 Body 에 문자 내용을 직접 변환
+    * `viewResolver` 대신 `HttpMessageConverter` 가 동작
+    * 기본 문자처리: `StringHttpMessageConverter`
+    * 기본 객체처리: `MappingJackson2HttpMessageConverter`
+    * byte 등 처리: `HttpMessageConverter`
+  
+#### 스프링 부트 기본 메시지 컨버터
+
+```
+0 = ByteArrayHttpMessageConverter
+1 = StringHttpMessageConverter
+2 = MappingJackson2HttpMessageConverter
+...
+```
+
+* 스프링 부트는 다양한 메시지 컨버터를 제공하며, 대상 클래스 타입과 미디어 타입을 체크하여 사용여부를 결정한다
+    * `ByteArrayHttpMessageConverter`: `byte[]` 데이터를 처리한다
+        * 클래스 타입: byte[], 미디어 타입: \*/*
+    * `StringHttpMessageConverter`: `String` 문자로 데이터를 처리한다
+        * 클래스 타입: String, 미디어 타입: \*/*
+    * `MappingJackson2HttpMessageConverter`: application/json
+        * 클래스 타입: 객체 또는 HashMap, 미디어 타입: application/json
+  
+#### HTTP 요청 데이터 읽기
+
+* 컨트롤러에서 `@RequestBody`, `HttpEntity` 파라미터를 사용
+* 메시지 컨버터가 메시지를 읽을 수 있는지 확인하기 위해 `canRead()` 호출
+    * 대상 클래스 타입을 지원하는가
+    * HTTP 요청의 Content-Type 미디어 타입을 지원하는가
+* `canRead()` 조건을 만족하면 `read()` 를 호출해서 객체를 생성하고 변환
+
+#### HTTP 응답 데이터 생성
+
+* 컨트롤러에서 `@ResponseBody`, `HttpEntity` 로 값이 반환
+* 메시지 컨버터가 메시지를 쓸 수 있는지 확인하기 위해 `canWrite()` 를 호출
+    * 대상 클래스 타입을 지원하는가
+    * HTTP 요청의 Accept 미디어 타입을 지원하는가
+* `canWrite()` 조건을 만족하면 `write()` 를 호출해서 HTTP 응답 메시지 바디에 데이터를 생성
