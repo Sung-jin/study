@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
@@ -86,13 +87,36 @@ public class BasicItemController {
 //        return "basic/item";
 //    }
 
+//    @PostMapping("/add")
+//    public String addItemV4(Item item) {
+//        // 최종적으로 @ModelAttribute 를 생략이 가능하므로 위와 같이 표현할 수 있다
+//
+//        itemRepository.save(item);
+//
+//        return "basic/item";
+//    }
+    // 브라우저에서는 마지막으로 요청한 곳이 [POST] /add 이므로, 해당 end point 에서 새로고침을 할 경우
+    // 다시 이전에 요청한 값과 함께 [POST] /add 로 요청을 하면서 중복된 데이터를 생성한다
+    // 이를 해결하기 위해 Post/Redirect/Get 을 사용할 수 있다
+
+//    @PostMapping("/add")
+//    public String addItemV5(Item item) {
+//        itemRepository.save(item);
+//
+//        return "redirect:basic/item/" + item.getId();
+//    }
+
     @PostMapping("/add")
-    public String addItemV4(Item item) {
-        // 최종적으로 @ModelAttribute 를 생략이 가능하므로 위와 같이 표현할 수 있다
+    public String addItemV6(Item item, RedirectAttributes redirectAttributes) {
+        // RedirectAttributes 은 PathVariable 치환과 QueryParam 셋팅을 자동으로 해준다
+        // PathVariable 치환은 같은 이름의 attribute key 가 있으면 해당 값으로 치환하고
+        // 그 외에는 쿼리 파라미터로 만들어준다
 
-        itemRepository.save(item);
+        Item savedItem = itemRepository.save(item);
+        redirectAttributes.addAttribute("itemId", savedItem.getId());
+        redirectAttributes.addAttribute("status", true);
 
-        return "basic/item";
+        return "redirect:/basic/items/{itemId}";
     }
 
     @GetMapping("/{itemId}/edit")
