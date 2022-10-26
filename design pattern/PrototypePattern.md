@@ -35,7 +35,7 @@ public static void main(String[] args) {
         BigObject bigObject = httpCall("url");
         bigObject.doSomething();
         
-        BigObject deepCopiedObject = bigObject.clone();
+        BigObject deepCopiedObject = (BigObject) bigObject.clone();
         deepCopiedObject.doOtherSomething();
     } catch (CloneNotSupportedException e) { // checked exception }
 }
@@ -45,3 +45,4 @@ public static void main(String[] args) {
 
 * 많은 프로토타입 패턴에서 예제로 DB 조회 결과 객체를 활용한 예제였으나, JPA 부터 관련된 ORM 등 DB 객체를 담당해주는 좋은 프레임워크가 많아서 와닿지가 않았다
 * 그나마 http call 이나 배치성 데이터 등의 데이터의 경우 재활용할 일이 있다면 사용할만 하지만, 최근 좋아진 컴퓨팅 파워랑, 객체의 scope block 안에서 다시 재활용 되는 케이스는 거의 없을 것 같아서 활용성은 낮아 보인다
+* 그리고 checked exception 인 `CloneNotSupportedException` 예외가 발생하기도 하며, return value 가 Object 인 `clone()` 메소드를 override 해야 한다
