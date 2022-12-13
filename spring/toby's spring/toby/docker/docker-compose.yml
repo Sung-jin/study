@@ -7,7 +7,6 @@ services:
       - "13306:3306"
     volumes:
       - ./mysql/conf.d:/etc/mysql/conf.d
-      - ./mysql/data:/var/lib/mysql
       - ./mysql/initdb.d:/docker-entrypoint-initdb.d
     env_file: ./mysql/.env
     restart: always
