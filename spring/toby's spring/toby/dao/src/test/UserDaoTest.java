@@ -1,17 +1,15 @@
 package test;
 
-import dao.ConnectionMaker;
-import dao.SimpleConnectionMaker;
+import dao.DaoFactory;
 import dao.UserDao;
 import domain.User;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.sql.SQLException;
 
 public class UserDaoTest {
     public static void main(String[] args) throws ClassNotFoundException, SQLException {
-        ConnectionMaker connectionMaker = new SimpleConnectionMaker();
-        UserDao dao = new UserDao(connectionMaker);
-        // connection 필요에 따라 ConnectionMaker 를 구현한 클래스를 변경만 하면 언제든 확장가능하게 사용할 수 있다
+        UserDao dao = new AnnotationConfigApplicationContext(DaoFactory.class).getBean("userDao", UserDao.class);
 
         User user = new User();
         user.setId("id");
