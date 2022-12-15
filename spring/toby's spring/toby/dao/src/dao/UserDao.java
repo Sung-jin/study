@@ -11,6 +11,19 @@ public class UserDao {
         simpleConnectionMaker = connectionMaker;
     }
 
+    /*
+    private static UserDao INSTANCE;
+
+    모든 생성자는 private 으로..
+
+    public static synchronized UserDao getInstance() {
+        if (INSTANCE == null) INSTANCE = new UserDao(...);
+        return INSTANCE;
+    }
+    싱글톤을 위해서는 모든 생성자(대부분 기본 생성자 하나만 정의 및 private 으로)가 private 이고
+    단 하나의 인스턴스를 위한 static 인 자기 자신을 가지고, 해당 인스턴스로만 활용하는 형태이다
+     */
+
     public void add(User user) throws ClassNotFoundException, SQLException {
         Connection c = simpleConnectionMaker.makeConnection();
 
