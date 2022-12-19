@@ -1,0 +1,6 @@
+<beans>
+    <bean id="connectionMaker" class="dao.SimpleConnectionMaker" />
+    <bean id="userDao" class="dao.UserDao">
+        <property name="connectionMaker" ref="connectionMaker" />
+    </bean>
+</beans>

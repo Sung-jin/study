@@ -13,7 +13,7 @@ public class SimpleConnectionMaker implements ConnectionMaker {
         // 이를 통해 환경별 DB 연결을 DAO 레벨이 아닌 주입해주는 코드 하나 변경으로 모두 적용시킬수 있다
     }
 
-    private class LocalDBConnectionMaker implements ConnectionMaker {
+    public static class LocalDBConnectionMaker implements ConnectionMaker {
         @Override
         public Connection makeConnection() throws ClassNotFoundException, SQLException {
             Class.forName("com.mysql.jdbc.Driver");
@@ -21,7 +21,7 @@ public class SimpleConnectionMaker implements ConnectionMaker {
         }
     }
 
-    private class ProductionDBConnection implements ConnectionMaker {
+    public static class ProductionDBConnection implements ConnectionMaker {
         @Override
         public Connection makeConnection() throws ClassNotFoundException, SQLException {
             Class.forName("com.mysql.jdbc.Driver");
