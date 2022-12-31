@@ -36,18 +36,18 @@ public class UserDao {
      */
 
     public void add(User user) throws SQLException {
-//        Connection c = simpleConnectionMaker.makeConnection();
-        Connection c = dataSource.getConnection();
+//        StatementStrategy st = new AddStatement(user);
+//        jdbcContextWithStatementStrategy(st);
 
-        PreparedStatement ps = c.prepareStatement("insert into user(id, name, password) values(?, ?, ?)");
-        ps.setString(1, user.getId());
-        ps.setString(2, user.getName());
-        ps.setString(3, user.getPassword());
+        jdbcContextWithStatementStrategy(c -> {
+            PreparedStatement ps = c.prepareStatement("insert into users(id, name, password)");
+            ps.setString(1, user.getId());
+            ps.setString(2, user.getName());
+            ps.setString(3, user.getPassword());
 
-        ps.executeUpdate();
-
-        ps.close();
-        c.close();
+            return ps;
+        });
+        // 익명 클래스를 통해 바로 전략을 생성하여 셋팅할 수 있다
     }
 
     public User get(String id) throws SQLException {
@@ -77,8 +77,10 @@ public class UserDao {
     }
 
     public void deleteAll() throws SQLException {
-        StatementStrategy st = new DeleteAllStrategy();
-        jdbcContextWithStatementStrategy(st);
+//        StatementStrategy st = new DeleteAllStrategy();
+//        jdbcContextWithStatementStrategy(st);
+
+        jdbcContextWithStatementStrategy(c -> c.prepareStatement("delete from users"));
     }
 
     public void jdbcContextWithStatementStrategy(StatementStrategy stmt) throws SQLException {
