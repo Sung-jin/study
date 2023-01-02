@@ -2,6 +2,7 @@ package dao;
 
 import domain.User;
 import error.EmptyResultDataAccessException;
+import jdbc.JdbcContext;
 
 import javax.sql.DataSource;
 import java.sql.*;
@@ -20,6 +21,10 @@ public class UserDao {
 
     public void setDataSource(DataSource dataSource) {
         this.dataSource = dataSource;
+
+        this.jdbcContext = new JdbcContext();
+        this.jdbcContext.setDataSource(dataSource);
+        // 수동 DI
     }
 
     /*
@@ -35,11 +40,18 @@ public class UserDao {
     단 하나의 인스턴스를 위한 static 인 자기 자신을 가지고, 해당 인스턴스로만 활용하는 형태이다
      */
 
+    private JdbcContext jdbcContext;
+
+//    public void setJdbcContext(JdbcContext jdbcContext) {
+//        this.jdbcContext = jdbcContext;
+//    }
+
     public void add(User user) throws SQLException {
 //        StatementStrategy st = new AddStatement(user);
 //        jdbcContextWithStatementStrategy(st);
 
-        jdbcContextWithStatementStrategy(c -> {
+//        jdbcContextWithStatementStrategy(c -> {
+        jdbcContext.workWithStatementStrategy(c -> {
             PreparedStatement ps = c.prepareStatement("insert into users(id, name, password)");
             ps.setString(1, user.getId());
             ps.setString(2, user.getName());
@@ -80,24 +92,25 @@ public class UserDao {
 //        StatementStrategy st = new DeleteAllStrategy();
 //        jdbcContextWithStatementStrategy(st);
 
-        jdbcContextWithStatementStrategy(c -> c.prepareStatement("delete from users"));
+//        jdbcContextWithStatementStrategy(c -> c.prepareStatement("delete from users"));
+        jdbcContext.workWithStatementStrategy(c -> c.prepareStatement("delete from users"));
     }
 
-    public void jdbcContextWithStatementStrategy(StatementStrategy stmt) throws SQLException {
-        Connection c = null;
-        PreparedStatement ps = null;
-
-        try {
-            c = dataSource.getConnection();
-            ps = stmt.makePreparedStatement(c);
-            ps.execute();
-        } catch (SQLException e) {
-            throw e;
-        } finally {
-            if (ps != null) try { ps.close(); } catch (SQLException e) {}
-            if (c != null) try { c.close(); } catch (SQLException e) {}
-        }
-    }
+//    public void jdbcContextWithStatementStrategy(StatementStrategy stmt) throws SQLException {
+//        Connection c = null;
+//        PreparedStatement ps = null;
+//
+//        try {
+//            c = dataSource.getConnection();
+//            ps = stmt.makePreparedStatement(c);
+//            ps.execute();
+//        } catch (SQLException e) {
+//            throw e;
+//        } finally {
+//            if (ps != null) try { ps.close(); } catch (SQLException e) {}
+//            if (c != null) try { c.close(); } catch (SQLException e) {}
+//        }
+//    }
 
     public int getCount() throws SQLException {
         Connection c = dataSource.getConnection();
