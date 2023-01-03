@@ -51,15 +51,16 @@ public class UserDao {
 //        jdbcContextWithStatementStrategy(st);
 
 //        jdbcContextWithStatementStrategy(c -> {
-        jdbcContext.workWithStatementStrategy(c -> {
-            PreparedStatement ps = c.prepareStatement("insert into users(id, name, password)");
-            ps.setString(1, user.getId());
-            ps.setString(2, user.getName());
-            ps.setString(3, user.getPassword());
-
-            return ps;
-        });
+//        jdbcContext.workWithStatementStrategy(c -> {
+//            PreparedStatement ps = c.prepareStatement("insert into users(id, name, password)");
+//            ps.setString(1, user.getId());
+//            ps.setString(2, user.getName());
+//            ps.setString(3, user.getPassword());
+//
+//            return ps;
+//        });
         // 익명 클래스를 통해 바로 전략을 생성하여 셋팅할 수 있다
+        jdbcContext.executeSql("insert into users(id, name, password)", user.getId(), user.getName(), user.getPassword());
     }
 
     public User get(String id) throws SQLException {
@@ -93,7 +94,9 @@ public class UserDao {
 //        jdbcContextWithStatementStrategy(st);
 
 //        jdbcContextWithStatementStrategy(c -> c.prepareStatement("delete from users"));
-        jdbcContext.workWithStatementStrategy(c -> c.prepareStatement("delete from users"));
+//        jdbcContext.workWithStatementStrategy(c -> c.prepareStatement("delete from users"));
+//        executeSql("delete from users");
+        jdbcContext.executeSql("delete from users");
     }
 
 //    public void jdbcContextWithStatementStrategy(StatementStrategy stmt) throws SQLException {
@@ -126,5 +129,9 @@ public class UserDao {
         c.close();
 
         return count;
+    }
+
+    private void executeSql(final String query) throws SQLException {
+        this.jdbcContext.workWithStatementStrategy(c -> c.prepareStatement(query));
     }
 }
