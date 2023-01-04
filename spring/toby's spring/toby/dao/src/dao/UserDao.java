@@ -3,13 +3,27 @@ package dao;
 import domain.User;
 import error.EmptyResultDataAccessException;
 import jdbc.JdbcContext;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.ResultSetExtractor;
+import org.springframework.jdbc.core.RowMapper;
 
 import javax.sql.DataSource;
 import java.sql.*;
+import java.util.List;
 
 public class UserDao {
 //    private ConnectionMaker simpleConnectionMaker;
-    private DataSource dataSource;
+//    private DataSource dataSource;
+    private JdbcTemplate jdbcTemplate;
+
+    private RowMapper<User> userMapper = (rs, rowNum) -> {
+        User user = new User();
+        user.setId(rs.getString("id"));
+        user.setName(rs.getString("name"));
+        user.setPassword(rs.getString("password"));
+
+        return user;
+    };
 
 //    public void setConnectionMaker(ConnectionMaker connectionMaker) {
 //        this.simpleConnectionMaker = connectionMaker;
@@ -20,10 +34,9 @@ public class UserDao {
 //    }
 
     public void setDataSource(DataSource dataSource) {
-        this.dataSource = dataSource;
+//        this.dataSource = dataSource;
 
-        this.jdbcContext = new JdbcContext();
-        this.jdbcContext.setDataSource(dataSource);
+        this.jdbcTemplate = new JdbcTemplate(dataSource);
         // 수동 DI
     }
 
@@ -40,13 +53,13 @@ public class UserDao {
     단 하나의 인스턴스를 위한 static 인 자기 자신을 가지고, 해당 인스턴스로만 활용하는 형태이다
      */
 
-    private JdbcContext jdbcContext;
+//    private JdbcContext jdbcContext;
 
 //    public void setJdbcContext(JdbcContext jdbcContext) {
 //        this.jdbcContext = jdbcContext;
 //    }
 
-    public void add(User user) throws SQLException {
+    public void add(User user) {
 //        StatementStrategy st = new AddStatement(user);
 //        jdbcContextWithStatementStrategy(st);
 
@@ -60,43 +73,51 @@ public class UserDao {
 //            return ps;
 //        });
         // 익명 클래스를 통해 바로 전략을 생성하여 셋팅할 수 있다
-        jdbcContext.executeSql("insert into users(id, name, password)", user.getId(), user.getName(), user.getPassword());
+//        jdbcContext.executeSql("insert into users(id, name, password)", user.getId(), user.getName(), user.getPassword());
+        jdbcTemplate.update("insert into users(id, name, password)", user.getId(), user.getName(), user.getPassword());
     }
 
     public User get(String id) throws SQLException {
 //        Connection c = simpleConnectionMaker.makeConnection();
-        Connection c = dataSource.getConnection();
+//        Connection c = dataSource.getConnection();
+//
+//        PreparedStatement ps = c.prepareStatement("select * from user where id = ?");
+//        ps.setString(1, id);
+//
+//        ResultSet rs = ps.executeQuery();
+//
+//        User user = null;
+//        if (rs.next()) {
+//            user = new User();
+//            user.setId(rs.getString("id"));
+//            user.setName(rs.getString("name"));
+//            user.setPassword(rs.getString("password"));
+//        }
+//
+//        rs.close();
+//        ps.close();
+//        c.close();
+//
+//        if (user == null) throw new EmptyResultDataAccessException();
+//
+//        return user;
 
-        PreparedStatement ps = c.prepareStatement("select * from user where id = ?");
-        ps.setString(1, id);
-
-        ResultSet rs = ps.executeQuery();
-
-        User user = null;
-        if (rs.next()) {
-            user = new User();
-            user.setId(rs.getString("id"));
-            user.setName(rs.getString("name"));
-            user.setPassword(rs.getString("password"));
-        }
-
-        rs.close();
-        ps.close();
-        c.close();
-
-        if (user == null) throw new EmptyResultDataAccessException();
-
-        return user;
+        return jdbcTemplate.queryForObject("select * from user where id = ?", new Object[] {id}, userMapper);
     }
 
-    public void deleteAll() throws SQLException {
+    public List<User> getAll() {
+        return jdbcTemplate.query("select * from users order by id", userMapper);
+    }
+
+    public void deleteAll() {
 //        StatementStrategy st = new DeleteAllStrategy();
 //        jdbcContextWithStatementStrategy(st);
 
 //        jdbcContextWithStatementStrategy(c -> c.prepareStatement("delete from users"));
 //        jdbcContext.workWithStatementStrategy(c -> c.prepareStatement("delete from users"));
 //        executeSql("delete from users");
-        jdbcContext.executeSql("delete from users");
+//        jdbcContext.executeSql("delete from users");
+        jdbcTemplate.update("delete from users");
     }
 
 //    public void jdbcContextWithStatementStrategy(StatementStrategy stmt) throws SQLException {
@@ -115,23 +136,28 @@ public class UserDao {
 //        }
 //    }
 
-    public int getCount() throws SQLException {
-        Connection c = dataSource.getConnection();
-
-        PreparedStatement ps = c.prepareStatement("select count(*) from users");
-
-        ResultSet rs = ps.executeQuery();
-        rs.next();
-        int count = rs.getInt(1);
-
-        rs.close();
-        ps.close();
-        c.close();
-
-        return count;
+    public int getCount() {
+//        Connection c = dataSource.getConnection();
+//
+//        PreparedStatement ps = c.prepareStatement("select count(*) from users");
+//
+//        ResultSet rs = ps.executeQuery();
+//        rs.next();
+//        int count = rs.getInt(1);
+//
+//        rs.close();
+//        ps.close();
+//        c.close();
+//
+//        return count;
+//        return jdbcTemplate.query("select count(*) from users", rs -> {
+//            rs.next();
+//            return rs.getInt(1);
+//        });
+        return jdbcTemplate.queryForObject("select count(*) from users", Integer.class);
     }
 
-    private void executeSql(final String query) throws SQLException {
-        this.jdbcContext.workWithStatementStrategy(c -> c.prepareStatement(query));
-    }
+//    private void executeSql(final String query) throws SQLException {
+//        this.jdbcContext.workWithStatementStrategy(c -> c.prepareStatement(query));
+//    }
 }
