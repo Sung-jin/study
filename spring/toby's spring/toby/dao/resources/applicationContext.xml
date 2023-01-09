@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="...">
     <bean id="connectionMaker" class="dao.SimpleConnectionMaker" />
-    <bean id="userDao" class="dao.UserDao">
+    <bean id="userDaoJdbc" class="dao.UserDaoJdbc">
         <property name="connectionMaker" ref="connectionMaker" />
     </bean>
 </beans>

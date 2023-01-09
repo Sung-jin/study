@@ -1,6 +1,6 @@
 <beans>
     <bean id="connectionMaker" class="dao.SimpleConnectionMaker" />
-    <bean id="userDao" class="dao.UserDao">
+    <bean id="userDaoJdbc" class="dao.UserDaoJdbc">
         <property name="connectionMaker" ref="connectionMaker" />
     </bean>
 </beans>

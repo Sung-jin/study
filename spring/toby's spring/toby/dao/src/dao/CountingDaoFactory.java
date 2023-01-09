@@ -6,10 +6,10 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class CountingDaoFactory {
     @Bean
-    public UserDao userDao() {
-        UserDao userDao = new UserDao();
-        userDao.setDataSource(new DaoFactory().dataSource());
-        return userDao;
+    public UserDaoJdbc userDao() {
+        UserDaoJdbc userDaoJdbc = new UserDaoJdbc();
+        userDaoJdbc.setDataSource(new DaoFactory().dataSource());
+        return userDaoJdbc;
     }
 
     @Bean

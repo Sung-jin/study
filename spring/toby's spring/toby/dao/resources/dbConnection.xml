@@ -2,7 +2,7 @@
     <bean id="localDBConnectionMaker" class="dao.SimpleConnectionMaker.LocalDBConnectionMaker" />
     <bean id="productDBConnectionMaker" class="dao.SimpleConnectionMaker.ProductionDBConnection" />
 
-    <bean id="userDao" class="dao.UserDao">
+    <bean id="userDaoJdbc" class="dao.UserDaoJdbc">
         <property name="connectionMaker" ref="localDBConnectionMaker" />
     </bean>
 </beans>

@@ -1,6 +1,6 @@
 package test;
 
-import dao.UserDao;
+import dao.UserDaoJdbc;
 import domain.User;
 import org.springframework.context.support.GenericXmlApplicationContext;
 
@@ -10,7 +10,7 @@ public class UserDaoXmlTest {
     public static void main(String[] args) throws ClassNotFoundException, SQLException {
 //        GenericXmlApplicationContext context = new GenericXmlApplicationContext("applicationContext.xml");
         GenericXmlApplicationContext context = new GenericXmlApplicationContext("dataSource.xml");
-        UserDao dao = context.getBean("userDao", UserDao.class);
+        UserDaoJdbc dao = context.getBean("userDao", UserDaoJdbc.class);
 
         User user = new User();
         user.setId("id");

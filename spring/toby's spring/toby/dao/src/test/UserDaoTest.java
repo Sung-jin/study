@@ -2,19 +2,14 @@ package test;
 
 import dao.DaoFactory;
 import dao.UserDao;
+import dao.UserDaoJdbc;
 import domain.User;
 import error.EmptyResultDataAccessException;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.jdbc.datasource.SingleConnectionDataSource;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import javax.sql.DataSource;
 import java.sql.SQLException;
@@ -27,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 //@ContextConfiguration(locations = "/test-applicationContext.xml")
 public class UserDaoTest {
     public static void main(String[] args) throws SQLException {
-        UserDao dao = new AnnotationConfigApplicationContext(DaoFactory.class).getBean("userDao", UserDao.class);
+        UserDaoJdbc dao = new AnnotationConfigApplicationContext(DaoFactory.class).getBean("userDao", UserDaoJdbc.class);
 
         User user = new User();
         user.setId("id");
@@ -48,7 +43,7 @@ public class UserDaoTest {
         // 위와 같이 단순히 특정 실패에 대해 로직으로 정상 여부를 테스트할 수 있다
     }
 
-//    @Autowired
+    @Autowired
     private UserDao dao;
     private User user1;
     private User user2;
@@ -56,9 +51,9 @@ public class UserDaoTest {
 
     @BeforeEach
     public void setUp() {
-        dao = new UserDao();
-        DataSource dataSource = new SingleConnectionDataSource("jdbc:mysql://localhost:13306", "test", "1q2w3e4r", true);
-        dao.setDataSource(dataSource);
+//        dao = new UserDaoJdbc();
+//        DataSource dataSource = new SingleConnectionDataSource("jdbc:mysql://localhost:13306", "test", "1q2w3e4r", true);
+//        dao.setDataSource(dataSource);
         // 필요 상황에 따라 스프링 콘텍스트를 통한 DI 없이 필요한 정보를 직접 추가하여 테스트를 진행해도 된다
 
         user1 = new User("id1", "foo", "1234");
@@ -129,6 +124,14 @@ public class UserDaoTest {
         checkSameUser(user1, users3.get(0));
         checkSameUser(user2, users3.get(1));
         checkSameUser(user3, users3.get(2));
+    }
+
+    @Test
+    public void duplicateKey() {
+        dao.deleteAll();
+
+        dao.add(user1);
+        assertThrows(DataAccessException.class, () -> dao.add(user1));
     }
 
     private void checkSameUser(User user1, User user2) {
