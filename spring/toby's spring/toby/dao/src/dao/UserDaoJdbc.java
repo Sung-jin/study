@@ -1,5 +1,6 @@
 package dao;
 
+import domain.Level;
 import domain.User;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -18,6 +19,9 @@ public class UserDaoJdbc implements UserDao {
         user.setId(rs.getString("id"));
         user.setName(rs.getString("name"));
         user.setPassword(rs.getString("password"));
+        user.setLevel(Level.valueOf(rs.getInt("level")));
+        user.setLogin(rs.getInt("login"));
+        user.setRecommend(rs.getInt("recommend"));
 
         return user;
     };
@@ -71,7 +75,10 @@ public class UserDaoJdbc implements UserDao {
 //        });
         // 익명 클래스를 통해 바로 전략을 생성하여 셋팅할 수 있다
 //        jdbcContext.executeSql("insert into users(id, name, password)", user.getId(), user.getName(), user.getPassword());
-        jdbcTemplate.update("insert into users(id, name, password)", user.getId(), user.getName(), user.getPassword());
+        jdbcTemplate.update(
+                "insert into users(id, name, password, level, login, recommend)",
+                user.getId(), user.getName(), user.getPassword(), user.getLevel().intValue(), user.getLogin(), user.getRecommend()
+        );
     }
 
     public User get(String id) {
@@ -154,7 +161,15 @@ public class UserDaoJdbc implements UserDao {
         return jdbcTemplate.queryForObject("select count(*) from users", Integer.class);
     }
 
-//    private void executeSql(final String query) throws SQLException {
+    @Override
+    public void update(User user) {
+        this.jdbcTemplate.update(
+                "update users set name = ?, password = ?, level = ?, login = ?, recommend = ? where id = ?",
+                user.getName(), user.getPassword(), user.getLevel().intValue(), user.getLogin(), user.getRecommend(), user.getId()
+        );
+    }
+
+    //    private void executeSql(final String query) throws SQLException {
 //        this.jdbcContext.workWithStatementStrategy(c -> c.prepareStatement(query));
 //    }
 }

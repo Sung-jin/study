@@ -3,6 +3,7 @@ package test;
 import dao.DaoFactory;
 import dao.UserDao;
 import dao.UserDaoJdbc;
+import domain.Level;
 import domain.User;
 import error.EmptyResultDataAccessException;
 import org.junit.jupiter.api.BeforeEach;
@@ -56,7 +57,7 @@ public class UserDaoTest {
 //        dao.setDataSource(dataSource);
         // 필요 상황에 따라 스프링 콘텍스트를 통한 DI 없이 필요한 정보를 직접 추가하여 테스트를 진행해도 된다
 
-        user1 = new User("id1", "foo", "1234");
+        user1 = new User("id1", "foo", "1234", Level.BASIC, 1, 0);
         user2 = new User("id2", "bar", "1234");
         user3 = new User("id3", "fuz", "1234");
         // 반복되는 부분을 텍스트 픽스처로 처리하면 모든 테스트에서 편리하게 공통으로 사용할 수 있다
@@ -72,8 +73,7 @@ public class UserDaoTest {
         assertEquals(dao.getCount(), 2);
 
         User user = dao.get(user1.getId());
-        assertEquals(user.getName(), user1.getName());
-        assertEquals(user.getPassword(), user1.getPassword());
+        checkSameUser(user, user1);
         // 위와 같이 테스트 프레임워크를 통해 간편하게 테스트를 위한 코드를 작성할 수 있다
     }
 
@@ -134,9 +134,32 @@ public class UserDaoTest {
         assertThrows(DataAccessException.class, () -> dao.add(user1));
     }
 
+    @Test
+    public void update() {
+        dao.deleteAll();
+
+        dao.add(user1);
+        dao.add(user2);
+
+        user1.setName("change");
+        user1.setPassword("change-password");
+        user1.setLevel(Level.GOLD);
+        user1.setLogin(1000);
+        user1.setRecommend(999);
+        dao.update(user1);
+
+        User user1Update = dao.get(user1.getId());
+        checkSameUser(user1, user1Update);
+        User user2Same = dao.get(user2.getId());
+        checkSameUser(user2, user2Same);
+    }
+
     private void checkSameUser(User user1, User user2) {
         assertEquals(user1.getId(), user2.getId());
         assertEquals(user1.getName(), user2.getName());
         assertEquals(user1.getPassword(), user2.getPassword());
+        assertEquals(user1.getLevel(), user2.getLevel());
+        assertEquals(user1.getLogin(), user2.getLogin());
+        assertEquals(user1.getRecommend(), user2.getRecommend());
     }
 }
