@@ -3,6 +3,7 @@ package service;
 import dao.UserDao;
 import domain.Level;
 import domain.User;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.DataSourceUtils;
 
 import javax.sql.DataSource;
@@ -14,6 +15,7 @@ public class UserService {
     public static final int MIN_RECOMMEND_FOR_GOLD = 30;
 
     private DataSource dataSource;
+    PlatformTransactionManager transactionManager;
     UserDao userDao;
 
     public void setUserDao(UserDao userDao) {
@@ -22,11 +24,16 @@ public class UserService {
     public void setDataSource(DataSource dataSource) {
         this.dataSource = dataSource;
     }
+    public void setTransactionManager(PlatformTransactionManager transactionManager) {
+        this.transactionManager = transactionManager;
+    }
 
     public void upgradeLevels() {
-        TransactionSynchronizationManager.initSynchronization();
-        Connection c = DataSourceUtils.getConnection(dataSource);
-        c.setAutoCommit(false);
+        TransactionStatus status = transactionManager.getTransactionManager(new DefaultTransactionDefinition());
+
+//        TransactionSynchronizationManager.initSynchronization();
+//        Connection c = DataSourceUtils.getConnection(dataSource);
+//        c.setAutoCommit(false);
 
         try {
             List<User> users = userDao.getAll();
@@ -36,13 +43,15 @@ public class UserService {
                 }
             }
 
-            c.commit();
+//            c.commit();
+            transactionManager.commit();
         } catch (Exception e) {
-            c.rollback();
+//            c.rollback();
+            transactionManager.rollback(status);
         } finally {
-            DataSourceUtils.releaseConnection(c, dataSource);
-            TransactionSynchronizationManager.unbindResource(this.dataSource);
-            TransactionSynchronizationManager.clearSynchronization();
+//            DataSourceUtils.releaseConnection(c, dataSource);
+//            TransactionSynchronizationManager.unbindResource(this.dataSource);
+//            TransactionSynchronizationManager.clearSynchronization();
         }
     }
 

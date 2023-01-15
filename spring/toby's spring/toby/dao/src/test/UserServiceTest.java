@@ -35,6 +35,9 @@ public class UserServiceTest {
     @Autowired
     DataSource dataSource;
 
+    @Autowired
+    PlatformTransactionManager transactionManager;
+
     List<User> users;
 
     @BeforeEach
@@ -85,6 +88,7 @@ public class UserServiceTest {
         UserService testUserService = new TestUserService(users.get(3).getId());
         testUserService.setUserDao(userDao);
         testUserService.setDataSource(dataSource);
+        testUserService.setTransactionManager(transactionManager);
         userDao.deleteAll();
         for (User user: users) userDao.add(user);
 
