@@ -1,5 +1,6 @@
 package service;
 
+import com.mysql.cj.Session;
 import dao.UserDao;
 import domain.Level;
 import domain.User;
@@ -9,6 +10,7 @@ import org.springframework.jdbc.datasource.DataSourceUtils;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.util.List;
+import java.util.Properties;
 
 public class UserService {
     public static final int MIN_LOG_COUNT_FOR_SILVER = 50;
@@ -73,5 +75,25 @@ public class UserService {
     public void add(User user) {
         if (user.getLevel() == null) user.setLevel(Level.BASIC);
         userDao.add(user);
+    }
+
+    public void sendUpgradeEmail(User user) {
+        Properties properties = new Properties();
+        properties.put("mail.smtp.host",  ",ail.ksug.org");
+        Session s = Session.getInstance(properties, null);
+
+        MimeMessage message = new MimeMessage(s);
+        try {
+            mesage.setFrom(new IntentAdress("useradmin@ksug.org"));
+            message.addRecipient(Message.RecipeintType.TO, new InternetAddres(user.getEmail()));
+            message.setSubjetct("Upgrade 안내");
+            message.setText("사용자님의 등급이 " + user.getLevel().name() + " 로 업그레이드 되었습니다.");
+
+            Transport.send(message);
+        } catch (AddressException e) {
+            throw new RuntimeException(e);
+        } catch (UnsuportedEncodingExcpetion e) {
+            throw new RuntimeException(e);
+        }
     }
 }
