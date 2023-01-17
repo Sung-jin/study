@@ -38,6 +38,9 @@ public class UserServiceTest {
     @Autowired
     PlatformTransactionManager transactionManager;
 
+    @Autowired
+    MailSender mailSender;
+
     List<User> users;
 
     @BeforeEach
@@ -89,6 +92,7 @@ public class UserServiceTest {
         testUserService.setUserDao(userDao);
         testUserService.setDataSource(dataSource);
         testUserService.setTransactionManager(transactionManager);
+        testUserService.setMailSender(mailSender);
         userDao.deleteAll();
         for (User user: users) userDao.add(user);
 

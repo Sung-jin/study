@@ -3,6 +3,7 @@ package domain;
 public class User {
     String id;
     String name;
+    String email;
     String password;
     Level level;
     int login;
@@ -42,6 +43,9 @@ public class User {
         this.name = name;
     }
 
+    public void setEmail(String email) {
+        this.email = email;
+    }
     public void setPassword(String password) {
         this.password = password;
     }
@@ -64,6 +68,10 @@ public class User {
 
     public String getName() {
         return name;
+    }
+
+    public String getEmail() {
+        return email;
     }
 
     public String getPassword() {
