@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import service.UserService;
+import service.UserServiceImpl;
 
 import javax.sql.DataSource;
 import java.util.ArrayList;
@@ -21,15 +21,15 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
-import static service.UserService.MIN_LOG_COUNT_FOR_SILVER;
-import static service.UserService.MIN_RECOMMEND_FOR_GOLD;
+import static service.UserServiceImpl.MIN_LOG_COUNT_FOR_SILVER;
+import static service.UserServiceImpl.MIN_RECOMMEND_FOR_GOLD;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(locations = "/test-applicationContext.xml")
 public class UserServiceTest {
 
     @Autowired
-    UserService userService;
+    UserServiceImpl userServiceImpl;
 
     @Autowired
     UserDao userDao;
@@ -63,9 +63,9 @@ public class UserServiceTest {
         for (User user: users) userDao.add(user);
 
         MockMailSender mockMailSender = new MockMailSender();
-        userService.setMailSender(mockMailSender);
+        userServiceImpl.setMailSender(mockMailSender);
 
-        userService.upgradeLevels();
+        userServiceImpl.upgradeLevels();
 
         checkLevel(users.get(0), false);
         checkLevel(users.get(1), true);
@@ -87,8 +87,8 @@ public class UserServiceTest {
         User userWithoutLevel = users.get(0);
         userWithoutLevel.setLevel(null);
 
-        userService.add(userWithLevel);
-        userService.add(userWithoutLevel);
+        userServiceImpl.add(userWithLevel);
+        userServiceImpl.add(userWithoutLevel);
 
         User userWithLevelRead = userDao.get(userWithLevel.getId());
         User userWithoutLevelRead = userDao.get(userWithoutLevel.getId());
@@ -99,16 +99,16 @@ public class UserServiceTest {
 
     @Test
     public void upgradeAllOrNothing() {
-        UserService testUserService = new TestUserService(users.get(3).getId());
-        testUserService.setUserDao(userDao);
-        testUserService.setDataSource(dataSource);
-        testUserService.setTransactionManager(transactionManager);
-        testUserService.setMailSender(mailSender);
+        UserServiceImpl testUserServiceImpl = new TestUserServiceImpl(users.get(3).getId());
+        testUserServiceImpl.setUserDao(userDao);
+        testUserServiceImpl.setDataSource(dataSource);
+        testUserServiceImpl.setTransactionManager(transactionManager);
+        testUserServiceImpl.setMailSender(mailSender);
         userDao.deleteAll();
         for (User user: users) userDao.add(user);
 
         try {
-            testUserService.upgradeLevels();
+            testUserServiceImpl.upgradeLevels();
             fail("TestUserServiceException expected");
         } catch(TestUserServiceException e) {}
 
@@ -124,10 +124,10 @@ public class UserServiceTest {
         }
     }
 
-    static class TestUserService extends UserService {
+    static class TestUserServiceImpl extends UserServiceImpl {
         private String id;
 
-        public TestUserService(String id) {
+        public TestUserServiceImpl(String id) {
             this.id = id;
         }
 
