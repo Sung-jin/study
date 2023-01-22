@@ -12,7 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import service.UserService;
 import service.UserServiceImpl;
+import service.UserServiceTx;
 
 import javax.sql.DataSource;
 import java.util.ArrayList;
@@ -27,6 +29,9 @@ import static service.UserServiceImpl.MIN_RECOMMEND_FOR_GOLD;
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(locations = "/test-applicationContext.xml")
 public class UserServiceTest {
+
+    @Autowired
+    UserService userService;
 
     @Autowired
     UserServiceImpl userServiceImpl;
@@ -65,7 +70,7 @@ public class UserServiceTest {
         MockMailSender mockMailSender = new MockMailSender();
         userServiceImpl.setMailSender(mockMailSender);
 
-        userServiceImpl.upgradeLevels();
+        userService.upgradeLevels();
 
         checkLevel(users.get(0), false);
         checkLevel(users.get(1), true);
@@ -87,8 +92,8 @@ public class UserServiceTest {
         User userWithoutLevel = users.get(0);
         userWithoutLevel.setLevel(null);
 
-        userServiceImpl.add(userWithLevel);
-        userServiceImpl.add(userWithoutLevel);
+        userService.add(userWithLevel);
+        userService.add(userWithoutLevel);
 
         User userWithLevelRead = userDao.get(userWithLevel.getId());
         User userWithoutLevelRead = userDao.get(userWithoutLevel.getId());
@@ -99,16 +104,19 @@ public class UserServiceTest {
 
     @Test
     public void upgradeAllOrNothing() {
-        UserServiceImpl testUserServiceImpl = new TestUserServiceImpl(users.get(3).getId());
-        testUserServiceImpl.setUserDao(userDao);
-        testUserServiceImpl.setDataSource(dataSource);
-        testUserServiceImpl.setTransactionManager(transactionManager);
-        testUserServiceImpl.setMailSender(mailSender);
+        TestUserService testUserService = new TestUserService(users.get(3).getId());
+        testUserService.setUserDao(userDao);
+        testUserService.setMailSender(mailSender);
+
+        UserServiceTx txUserService = new UserServiceTx();
+        txUserService.setTransactionManager(transactionManager);
+        txUserService.setUserService(testUserService);
+
         userDao.deleteAll();
         for (User user: users) userDao.add(user);
 
         try {
-            testUserServiceImpl.upgradeLevels();
+            txUserService.upgradeLevels();
             fail("TestUserServiceException expected");
         } catch(TestUserServiceException e) {}
 
@@ -124,10 +132,10 @@ public class UserServiceTest {
         }
     }
 
-    static class TestUserServiceImpl extends UserServiceImpl {
+    static class TestUserService extends UserServiceImpl {
         private String id;
 
-        public TestUserServiceImpl(String id) {
+        public TestUserService(String id) {
             this.id = id;
         }
 
