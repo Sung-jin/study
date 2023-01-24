@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans>
+    <!--  데코레이터  -->
     <bean id="userService" class="service.UserServiceTx">
         <property name="transactionManager" ref="transactionManager" />
         <property name="userService" ref="userServiceImpl" />
     </bean>
+    <!--  타깃  -->
     <bean id="userServiceImpl" class="service.UserServiceImpl">
         <property name="userDao" ref="userDao" />
         <property name="mailSender" ref="mailSender" />
