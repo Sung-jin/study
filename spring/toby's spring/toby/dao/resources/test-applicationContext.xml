@@ -5,7 +5,7 @@
         <property name="transactionManager" ref="transactionManager" />
         <property name="userService" ref="userServiceImpl" />
     </bean>
-    <!--  타깃  -->
+    <!--  타깃s  -->
     <bean id="userServiceImpl" class="service.UserServiceImpl">
         <property name="userDao" ref="userDao" />
         <property name="mailSender" ref="mailSender" />
@@ -27,5 +27,9 @@
         <property name="url" value="jdbc:mysql://localhost:13306/testdb" />
         <property name="username" value="test" />
         <property name="password" value="1q2w3e4r" />
+    </bean>
+
+    <bean id="message" class="bean.MessageFactoryBean">
+        <property name="text" value="Factory Bean" />
     </bean>
 </beans>
