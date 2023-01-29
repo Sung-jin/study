@@ -28,8 +28,4 @@
         <property name="username" value="test" />
         <property name="password" value="1q2w3e4r" />
     </bean>
-
-    <bean id="message" class="bean.MessageFactoryBean">
-        <property name="text" value="Factory Bean" />
-    </bean>
 </beans>

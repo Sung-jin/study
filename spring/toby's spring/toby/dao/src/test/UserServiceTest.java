@@ -9,9 +9,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import proxy.TransactionHandler;
+import service.TxProxyFactoryBean;
 import service.UserService;
 import service.UserServiceImpl;
 
@@ -47,6 +50,9 @@ public class UserServiceTest {
 
     @Autowired
     MailSender mailSender;
+
+    @Autowired
+    ApplicationContext context;
 
     List<User> users;
 
@@ -103,7 +109,8 @@ public class UserServiceTest {
     }
 
     @Test
-    public void upgradeAllOrNothing() {
+    @DirtiesContext
+    public void upgradeAllOrNothing() throws Exception {
         TestUserService testUserService = new TestUserService(users.get(3).getId());
         testUserService.setUserDao(userDao);
         testUserService.setMailSender(mailSender);
@@ -111,15 +118,19 @@ public class UserServiceTest {
 //        UserServiceTx txUserService = new UserServiceTx();
 //        txUserService.setTransactionManager(transactionManager);
 //        txUserService.setUserService(testUserService);
-        TransactionHandler txHandler = new TransactionHandler();
-        txHandler.setTarget(testUserService);
-        txHandler.setTransactionManager(transactionManager);
-        txHandler.setPattern("upgradeLevels");
-        UserService txUserService = (UserService) Proxy.newProxyInstance(
-                getClass().getClassLoader(),
-                new Class[] { UserService.class },
-                txHandler
-        );
+//        TransactionHandler txHandler = new TransactionHandler();
+//        txHandler.setTarget(testUserService);
+//        txHandler.setTransactionManager(transactionManager);
+//        txHandler.setPattern("upgradeLevels");
+//        UserService txUserService = (UserService) Proxy.newProxyInstance(
+//                getClass().getClassLoader(),
+//                new Class[] { UserService.class },
+//                txHandler
+//        );
+
+        TxProxyFactoryBean txProxyFactoryBean = context.getBean("&userService", TxProxyFactoryBean.class);
+        txProxyFactoryBean.setTarget(testUserService);
+        UserService txUserService = (UserService) txProxyFactoryBean.getObject();
 
         userDao.deleteAll();
         for (User user: users) userDao.add(user);

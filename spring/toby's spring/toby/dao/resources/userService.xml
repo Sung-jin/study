@@ -1,9 +1,15 @@
 <beans>
-    <bean id="userService" class="service.UserServiceImpl">
-        <property name="userDao" ref="userDao" />
-        <property name="dataSource" ref="dataSource" />
+<!--    <bean id="userService" class="service.UserServiceImpl">-->
+<!--        <property name="userDao" ref="userDao" />-->
+<!--        <property name="dataSource" ref="dataSource" />-->
+<!--        <property name="transactionManager" ref="transactionManager" />-->
+<!--        <property name="mailSender" ref="mailSender" />-->
+<!--    </bean>-->
+    <bean id="userService" class="service.TxProxyFactoryBean">
+        <property name="target" ref="userServiceImpl" />
         <property name="transactionManager" ref="transactionManager" />
-        <property name="mailSender" ref="mailSender" />
+        <property name="pattern" value="upgradeLevel" />
+        <property name="serviceInterface" value="service.UserService" />
     </bean>
     <bean id="userDao" class="dao.UserDaoJdbc">
         <property name="dataSource" ref="dataSource"/>
