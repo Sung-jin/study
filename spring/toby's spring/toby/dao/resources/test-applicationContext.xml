@@ -2,10 +2,17 @@
 <beans>
     <!--  데코레이터  -->
     <bean id="userService" class="service.UserServiceTx">
-        <property name="transactionManager" ref="transactionManager" />
-        <property name="userService" ref="userServiceImpl" />
+<!--        <property name="transactionManager" ref="transactionManager" />-->
+<!--        <property name="userService" ref="userServiceImpl" />-->
+
+        <property name="target" ref="userServiceImpl" />
+        <property name="interceptorNAmes">
+            <list>
+                <value>transactionAdvisor</value>
+            </list>
+        </property>
     </bean>
-    <!--  타깃s  -->
+    <!--  타깃  -->
     <bean id="userServiceImpl" class="service.UserServiceImpl">
         <property name="userDao" ref="userDao" />
         <property name="mailSender" ref="mailSender" />
@@ -27,5 +34,16 @@
         <property name="url" value="jdbc:mysql://localhost:13306/testdb" />
         <property name="username" value="test" />
         <property name="password" value="1q2w3e4r" />
+    </bean>
+
+    <bean id="transactionAdvice" class="service.TransactionAdvice">
+        <property name="transactionManager" ref="transactionManager" />
+    </bean>
+    <bean id="transactionPointcut" class="org.springframework.aop.support.NameMatchMethodPointcut">
+        <property name="mappedName" value="upgrade*" />
+    </bean>
+    <bean id="transactionAdvisor" class="org.springframework.aop.support.DefaultPointcutAdvisor">
+        <property name="advice" ref="transactionAdvice" />
+        <property name="pointcut" ref="transactionPointcut" />
     </bean>
 </beans>
