@@ -38,6 +38,9 @@ public class UserServiceTest {
     UserService userService;
 
     @Autowired
+    UserService testUserService;
+
+    @Autowired
     UserServiceImpl userServiceImpl;
 
     @Autowired
@@ -109,38 +112,51 @@ public class UserServiceTest {
         assertEquals(userWithoutLevelRead.getLevel(), Level.BASIC);
     }
 
+//    @Test
+//    @DirtiesContext
+//    public void upgradeAllOrNothing() throws Exception {
+//        TestUserService testUserService = new TestUserService(users.get(3).getId());
+//        testUserService.setUserDao(userDao);
+//        testUserService.setMailSender(mailSender);
+//
+////        UserServiceTx txUserService = new UserServiceTx();
+////        txUserService.setTransactionManager(transactionManager);
+////        txUserService.setUserService(testUserService);
+////        TransactionHandler txHandler = new TransactionHandler();
+////        txHandler.setTarget(testUserService);
+////        txHandler.setTransactionManager(transactionManager);
+////        txHandler.setPattern("upgradeLevels");
+////        UserService txUserService = (UserService) Proxy.newProxyInstance(
+////                getClass().getClassLoader(),
+////                new Class[] { UserService.class },
+////                txHandler
+////        );
+//
+////        TxProxyFactoryBean txProxyFactoryBean = context.getBean("&userService", TxProxyFactoryBean.class);
+//        ProxyFactoryBean txProxyFactoryBean = context.getBean("&userService", ProxyFactoryBean.class);
+//        txProxyFactoryBean.setTarget(testUserService);
+//        UserService txUserService = (UserService) txProxyFactoryBean.getObject();
+//
+//        userDao.deleteAll();
+//        for (User user: users) userDao.add(user);
+//
+//        try {
+//            txUserService.upgradeLevels();
+//            fail("TestUserServiceException expected");
+//        } catch(TestUserServiceException e) {}
+//
+//        checkLevel(users.get(1), false);
+//    }
+
     @Test
-    @DirtiesContext
-    public void upgradeAllOrNothing() throws Exception {
-        TestUserService testUserService = new TestUserService(users.get(3).getId());
-        testUserService.setUserDao(userDao);
-        testUserService.setMailSender(mailSender);
-
-//        UserServiceTx txUserService = new UserServiceTx();
-//        txUserService.setTransactionManager(transactionManager);
-//        txUserService.setUserService(testUserService);
-//        TransactionHandler txHandler = new TransactionHandler();
-//        txHandler.setTarget(testUserService);
-//        txHandler.setTransactionManager(transactionManager);
-//        txHandler.setPattern("upgradeLevels");
-//        UserService txUserService = (UserService) Proxy.newProxyInstance(
-//                getClass().getClassLoader(),
-//                new Class[] { UserService.class },
-//                txHandler
-//        );
-
-//        TxProxyFactoryBean txProxyFactoryBean = context.getBean("&userService", TxProxyFactoryBean.class);
-        ProxyFactoryBean txProxyFactoryBean = context.getBean("&userService", ProxyFactoryBean.class);
-        txProxyFactoryBean.setTarget(testUserService);
-        UserService txUserService = (UserService) txProxyFactoryBean.getObject();
-
+    public void upgradeAllOrNothing() {
         userDao.deleteAll();
-        for (User user: users) userDao.add(user);
+        for (User user : users) userDao.add(user);
 
         try {
-            txUserService.upgradeLevels();
+            this.testUserService.upgradeLevels();
             fail("TestUserServiceException expected");
-        } catch(TestUserServiceException e) {}
+        } catch (TestUserServiceException e) {}
 
         checkLevel(users.get(1), false);
     }
@@ -160,7 +176,7 @@ public class UserServiceTest {
     }
 
     static class TestUserService extends UserServiceImpl {
-        private String id;
+        private String id = "fuz";
 
         public TestUserService(String id) {
             this.id = id;

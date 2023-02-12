@@ -1,23 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans>
-    <!--  데코레이터  -->
-    <bean id="userService" class="service.UserServiceTx">
-<!--        <property name="transactionManager" ref="transactionManager" />-->
-<!--        <property name="userService" ref="userServiceImpl" />-->
+<!--    &lt;!&ndash;  데코레이터  &ndash;&gt;-->
+<!--    <bean id="userService" class="service.UserServiceTx">-->
+<!--&lt;!&ndash;        <property name="transactionManager" ref="transactionManager" />&ndash;&gt;-->
+<!--&lt;!&ndash;        <property name="userService" ref="userServiceImpl" />&ndash;&gt;-->
 
-        <property name="target" ref="userServiceImpl" />
-        <property name="interceptorNAmes">
-            <list>
-                <value>transactionAdvisor</value>
-            </list>
-        </property>
-    </bean>
-    <!--  타깃  -->
-    <bean id="userServiceImpl" class="service.UserServiceImpl">
+<!--        <property name="target" ref="userServiceImpl" />-->
+<!--        <property name="interceptorNAmes">-->
+<!--            <list>-->
+<!--                <value>transactionAdvisor</value>-->
+<!--            </list>-->
+<!--        </property>-->
+<!--    </bean>-->
+<!--    &lt;!&ndash;  타깃  &ndash;&gt;-->
+    <bean id="userService" class="service.UserServiceImpl">
         <property name="userDao" ref="userDao" />
         <property name="mailSender" ref="mailSender" />
     </bean>
 
+    <bean id="testUserSerivce" class="test.UserServiceTest$TestUserService" parent="userService" />
 
     <bean id="userDao" class="dao.UserDaoJdbc">
         <property name="dataSource" ref="dataSource"/>
@@ -45,5 +46,12 @@
     <bean id="transactionAdvisor" class="org.springframework.aop.support.DefaultPointcutAdvisor">
         <property name="advice" ref="transactionAdvice" />
         <property name="pointcut" ref="transactionPointcut" />
+    </bean>
+
+    <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator" />
+
+    <bean id="transactionPointcut" class="proxy.NameMatchClassMethodPointcut">
+        <property name="mappedClassName" value="*ServiceImpl" />
+        <property name="mappedName" value="upgrade*" />
     </bean>
 </beans>
