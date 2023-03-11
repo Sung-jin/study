@@ -34,3 +34,12 @@
 * TransactionDefinition 오브젝트를 생성하고 사용하는 코드는 트랜잭션 경계설정 기능을 가진 TransactionAdvice 이다
 * 기본 설정인 DefaultTransactionDefinition 대신 외부에서 정의된 TransactionDefinition 오브젝트를 DI 받아서 사용하도록 만들면 기본 정의를 변경할 수 있다
   * 빈을 통해 TransactionDefinition 타입을 정의하면, 원하는 속성을 지정할 수 있으나, TransactionAdvice 를 사용하는 모든 트랜잭션의 속성이 변경된다
+
+## 트랜잭션 인터셉터와 트랜잭션 속성
+
+### TransactionInterceptor
+
+* `PlatformTransactionManager`/`Properties` 타입의 두 가지 프로퍼틸르 가지고 있다
+  * Properties 는 transactionAttributes 로, 트랜잭션 속성을 정의한 프로퍼티이다
+  * transactionAttributes 는 TransactionDefinition 네 가지 기본 항목에 rollbackOn() 메소드를 하나더 가지고 있는 인터페이스로 정의된다
+  * 이러한 transactionAttributes 를 이용하면 트랜잭션 부가기능의 동작 방식을 모두 제어할 수 있다
