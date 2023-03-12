@@ -43,3 +43,30 @@
   * Properties 는 transactionAttributes 로, 트랜잭션 속성을 정의한 프로퍼티이다
   * transactionAttributes 는 TransactionDefinition 네 가지 기본 항목에 rollbackOn() 메소드를 하나더 가지고 있는 인터페이스로 정의된다
   * 이러한 transactionAttributes 를 이용하면 트랜잭션 부가기능의 동작 방식을 모두 제어할 수 있다
+
+### 메소드 이름 패턴을 이용한 트랜잭션 속성 지정
+
+* Properties 타입의 transactionAttributes 프로퍼티는 메소드 패턴과 트랜잭션 속성을 키와 값으로 가지는 컬렉션이며, 다음과 같은 문자열로 정의할 수 있다
+  * `PROPAGATION_NAME, ISOLATION_NAME, readOnly, timeout_NNNN, -Exception1, +Exception2`
+  * PROPAGATION_NAME: 트랜잭션 전파 방식이며, 필수항목이고, `PROPAGATION_` 으로 시작한다
+  * ISOLATION_NAME: 격리수준을 나타내며, `ISOLATION`_ 으로 시작하고 생략이 가능하며, 디폴트는 결리 수준으로 지정된다
+  * readOnly: 읽기전용 항목이며, 생략이 가능하고, 기본은 읽기전용이 아니다
+  * timeout_NNNN: 제한 시간이며, `timeout_` 으로 시작하고 초 단위 시간을 뒤에 붙이며, 생략 가능하다
+  * -Exception1: 체크 예외 중 롤백 대상으로 추가할 것을 넣으며, 한개 이상 등록할 수 있다
+  * +Exception2: 런타임 예외지만 롤백시키지 않을 예외들을 넣을 수 있으며, 한개 이상 등록할 수 있다
+
+```xml
+<bean id="transactionAdvice" class="...TransactionInterceptor">
+  <property name="transactionManager" ref="transactionManager" />
+  <property name="transactionAttributes">
+    <props>
+      <prop key="get*">PROPAGATION_REQUIRED,readonly,timeout_30</prop>
+      <prop key="upgrade*">PROPAGATION_REQUIRES_NEW,ISOLATION_SERIALIZABLE</prop>
+      <prop key="*">PROPAGATION_REQUIRED</prop>
+    </props>
+  </property>
+</bean>
+```
+
+* 위와 같이 메소드 이름 패턴과 문자열로 된 트랜잭션 속성을 정의할 수 있다
+* readOnly 와 timeout 속성은 트랜잭션이 처음 시작된 곳이 아니라면 적용되지 않는다
