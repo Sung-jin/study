@@ -25,8 +25,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.*;
 import static service.UserServiceImpl.MIN_LOG_COUNT_FOR_SILVER;
 import static service.UserServiceImpl.MIN_RECOMMEND_FOR_GOLD;
 
@@ -161,6 +160,11 @@ public class UserServiceTest {
         checkLevel(users.get(1), false);
     }
 
+    @Test
+    public void readOnlyTransactionAttribute() {
+        assertThrows(TransientDataAccessResourceException.class, () -> testUserService.getAll());
+    }
+
     private void checkLevel(User user, boolean upgraded) {
         User userUpdate = userDao.get(user.getId());
         if (upgraded) {
@@ -186,6 +190,13 @@ public class UserServiceTest {
         protected void upgradeLevel(User user) {
             if (user.getId().equals(this.id)) throw new TestUserServiceException();
             super.upgradeLevel(user);
+        }
+
+        public List<User> getAll() {
+            for (User user: super.getAll()) {
+                super.update(user);
+            }
+            return null;
         }
     }
 
