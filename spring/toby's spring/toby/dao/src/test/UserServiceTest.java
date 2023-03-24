@@ -12,6 +12,7 @@ import org.springframework.aop.framework.ProxyFactoryBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import proxy.TransactionHandler;
@@ -31,6 +32,8 @@ import static service.UserServiceImpl.MIN_RECOMMEND_FOR_GOLD;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(locations = "/test-applicationContext.xml")
+@Transactional
+@TransactionConfiguration(defaultRollback = false)
 public class UserServiceTest {
 
     @Autowired
@@ -94,6 +97,7 @@ public class UserServiceTest {
     }
 
     @Test
+    @Rollback
     public void add() {
         userDao.deleteAll();
 
@@ -166,27 +170,17 @@ public class UserServiceTest {
     }
 
     @Test
+    @Transactional
     public void transactionSync() {
         userDao.deleteAll();
+
         assertEquals(userDao.getCount(), 0);
-
-        DefaultTransactionDefinition txDefinition = new DefaultTransactionDefinition();
-        TransactionStatus txStatus = new transactionManager.getTransaction(txDefinition);
-        // 트랜잭션 매니저에게 트랜잭션을 요청함으로써, 아래의 각 REQUIRED 속성의 트랜잭션이 요청된 트랜잭션에 전파된다
-        // txDefinition.setReadOnly(true); 이와 같이 읽기 전용 트랜잭션으로 할 경우, deleteAll, add 와 같이 쓰기작업에서 예외가 발생하게 된다
-        // userDao.deleteAll(); JdbcTemplate 을 통해 이미 시작된 트랜잭션이 있다면, 자동으로 참여하고, 위와 같이 읽기 전용에 참여하게 될 경우 예외가 발생하게 된다
-
-//        userService.deleteAll();
 
         userService.add(users.get(0));
         userService.add(users.get(1));
         // 위와 같은 기존의 트랜잭션이 없다면, 각각의 메소드마다 트랜잭션이 설정되어 있으므로, 총 3번의 트랜잭션이 만들어진다
 
         assertEquals(userDao.getCount(), 2);
-
-        transactionManager.rollback(txStatus);
-
-        assertEquals(userDao.getCount(), 0);
     }
 
     private void checkLevel(User user, boolean upgraded) {
