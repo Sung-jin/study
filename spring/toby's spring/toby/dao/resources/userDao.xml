@@ -3,4 +3,16 @@
     <bean id="userDaoJdbc" class="dao.UserDaoJdbc">
         <property name="connectionMaker" ref="connectionMaker" />
     </bean>
+    <bean id="userDao" class="dao.UserDaoJdbc">
+        <property name="sqlAdd">
+            <map>
+                <entity key="add" value="insert into users(id, name, password, level, login, recommend) values(?,?,?,?,?,?,?)" />
+                <entity key="get" value="select * from user where id = ?" />
+                <entity key="getAll" value="select * from users order by id" />
+                <entity key="deleteAll" value="delete from users" />
+                <entity key="getCount" value="select count(*) from users" />
+                <entity key="update" value="update users set name = ?, password = ?, level = ?, login = ?, recommend = ? where id = ?" />
+            </map>
+        </property>
+    </bean>
 </beans>
