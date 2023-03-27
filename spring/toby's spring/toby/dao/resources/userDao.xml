@@ -1,17 +1,23 @@
 <beans>
-    <bean id="connectionMaker" class="dao.SimpleConnectionMaker" />
-    <bean id="userDaoJdbc" class="dao.UserDaoJdbc">
-        <property name="connectionMaker" ref="connectionMaker" />
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
+        <property name="driverClass" value="com.mysql.jdbc.Driver" />
+        <property name="url" value="jdbc:mysql://localhost:13306/testdb" />
+        <property name="username" value="test" />
+        <property name="password" value="1q2w3e4r" />
     </bean>
-    <bean id="userDao" class="dao.UserDaoJdbc">
-        <property name="sqlAdd">
+    <bean id="userDaoJdbc" class="dao.UserDaoJdbc">
+        <property name="dataSource" ref="dataSource" />
+        <property name="sqlService" ref="sqlService" />
+    </bean>
+    <bean id="sqlService" class="sql.SimpleSqlService">
+        <property name="sqlMap">
             <map>
-                <entity key="add" value="insert into users(id, name, password, level, login, recommend) values(?,?,?,?,?,?,?)" />
-                <entity key="get" value="select * from user where id = ?" />
-                <entity key="getAll" value="select * from users order by id" />
-                <entity key="deleteAll" value="delete from users" />
-                <entity key="getCount" value="select count(*) from users" />
-                <entity key="update" value="update users set name = ?, password = ?, level = ?, login = ?, recommend = ? where id = ?" />
+                <entity key="userAdd" value="insert into users(id, name, password, level, login, recommend) values(?,?,?,?,?,?,?)" />
+                <entity key="userGet" value="select * from user where id = ?" />
+                <entity key="userGetAll" value="select * from users order by id" />
+                <entity key="userDeleteAll" value="delete from users" />
+                <entity key="userGetCount" value="select count(*) from users" />
+                <entity key="userUpdate" value="update users set name = ?, password = ?, level = ?, login = ?, recommend = ? where id = ?" />
             </map>
         </property>
     </bean>
