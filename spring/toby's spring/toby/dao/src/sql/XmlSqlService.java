@@ -1,8 +1,6 @@
 package sql;
 
 import dao.UserDao;
-import sql.SqlRetrievalFailureException;
-import sql.SqlService;
 import sql.sqlservice.jaxb.SqlType;
 import sql.sqlservice.jaxb.Sqlmap;
 
@@ -12,13 +10,21 @@ import java.util.Map;
 
 public class XmlSqlService implements SqlService {
     private Map<String, String> sqlMap = new HashMap<>();
+    private String sqlmapFile;
 
-    public XmlSqlService() {
+    public void setSqlmapFile(String sqlmapFile) {
+        this.sqlmapFile = sqlmapFile;
+    }
+
+    public XmlSqlService() { }
+
+    @PostConstruct
+    public void loadSql() {
         String contextPath = Sqlmap.class.getPackage().getName();
         try {
             JAXBContext context = JAXBContext.newInstance(contextPath);
             Unmarshaller unmarshaller = context.createUnmarshaller();
-            InputStream is = UserDao.class.getResourceAsStream("xml/sqlmap.xml");
+            InputStream is = UserDao.class.getResourceAsStream(this.sqlmapFile);
             Sqlmap sqlmap = (Sqlmap)unmarshaller.unmarshal(is);
 
             for(SqlType sql: sqlmap.getSql()) {

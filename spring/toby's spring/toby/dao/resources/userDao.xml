@@ -20,5 +20,6 @@
 <!--                <entity key="userUpdate" value="update users set name = ?, password = ?, level = ?, login = ?, recommend = ? where id = ?" />-->
 <!--            </map>-->
 <!--        </property>-->
+        <property name="sqlmapFile" value="sqlmap.xml"/>
     </bean>
 </beans>
