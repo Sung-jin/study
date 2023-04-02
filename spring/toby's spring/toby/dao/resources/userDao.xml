@@ -21,5 +21,7 @@
 <!--            </map>-->
 <!--        </property>-->
         <property name="sqlmapFile" value="sqlmap.xml"/>
+        <property name="sqlReader" ref="sqlService"/>
+        <property name="sqlRegistry" ref="sqlService"/>
     </bean>
 </beans>
