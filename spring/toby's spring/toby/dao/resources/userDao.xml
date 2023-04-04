@@ -20,8 +20,14 @@
 <!--                <entity key="userUpdate" value="update users set name = ?, password = ?, level = ?, login = ?, recommend = ? where id = ?" />-->
 <!--            </map>-->
 <!--        </property>-->
-        <property name="sqlmapFile" value="sqlmap.xml"/>
-        <property name="sqlReader" ref="sqlService"/>
-        <property name="sqlRegistry" ref="sqlService"/>
+        <property name="sqlReader" ref="sqlReader"/>
+        <property name="sqlRegistry" ref="sqlRegistry"/>
     </bean>
+
+    <bean id="sqlReader" class="sql.JaxbXmlSqlReader">
+        <property name="sqlmapFile" value="sqlmap.xml" />
+    </bean>
+    <bean id="sqlRegistry" class="sql.HashMapSqlRegistry" />
+
+<!--    <bean id="sqlService" class="sql.DefaultSqlService" /> 디폴트 의존관계 빈 설정 -->
 </beans>
