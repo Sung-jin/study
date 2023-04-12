@@ -6,7 +6,14 @@
 <!--    <bean id="unmarshaller" class="org.springframework.oxm.jaxb.Jaxb2Marshaller">-->
 <!--        <property name="contextPath" value="sql.sqlservice.jaxb" />-->
 <!--    </bean>-->
-    <bean id="unmarshaller" class="org.springframework.oxm.castor.CastorMarshaller">
-        <property name="mappingLocation" value="mapping.xml" />
+<!--    <bean id="unmarshaller" class="org.springframework.oxm.castor.CastorMarshaller">-->
+<!--        <property name="mappingLocation" value="mapping.xml" />-->
+<!--    </bean>-->
+
+    <bean id="sqlService" class="sql.OxmSqlService">
+        <property name="unmarshaller" ref="unmarshaller"/>
+    </bean>
+    <bean id="unmarshaller" class="org.springframework.oxm.jaxb.Jaxb2Marshaller">
+        <property name="contextPath" value="sql.sqlservice.jaxb" />
     </bean>
 </beans>
