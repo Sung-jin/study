@@ -13,9 +13,11 @@
     <bean id="sqlService" class="sql.OxmSqlService">
         <property name="unmarshaller" ref="unmarshaller"/>
         <property name="sqlmap" value="classpath:sqlmap.xml"/>
+        <property name="sqlRegistry" ref="sqlRegistry"/>
 <!--        <property name="sqlmap" value="file:/path/to/directory/toby/dao/resources/sqlmap.xml"/>-->
     </bean>
     <bean id="unmarshaller" class="org.springframework.oxm.jaxb.Jaxb2Marshaller">
         <property name="contextPath" value="sql.sqlservice.jaxb" />
     </bean>
+    <bean id="sqlRegistry" class="sql.ConcurrentHashMapSqlRegistry" />
 </beans>
