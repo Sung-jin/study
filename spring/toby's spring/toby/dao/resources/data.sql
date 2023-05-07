@@ -1,0 +1,3 @@
+INSERT INTO SQLMAP(KEY_, SQL_) values
+('KEY1', 'SQL1'),
+('KEY2', 'SQL2');
