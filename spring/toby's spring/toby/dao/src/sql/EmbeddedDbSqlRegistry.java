@@ -1,15 +1,20 @@
 package sql;
 
 import error.EmptyResultDataAccessException;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 
 import javax.sql.DataSource;
 import java.util.Map;
 
 public class EmbeddedDbSqlRegistry implements UpdatableSqlRegistry {
     SimpleJdbcTemplate jdbc;
+    TransactionTemplate transactionTemplate;
 
-    public void setDataSource(DataSource jdbc) {
-        this.jdbc = new SimpleJdbcTemplate(jdbc);
+    public void setDataSource(DataSource dataSource) {
+        this.jdbc = new SimpleJdbcTemplate(dataSource);
+        this.transactionTemplate = new TransactionTemplate(
+                new DataSourceTransactionManager(dataSource)
+        );
     }
 
     @Override
@@ -34,9 +39,11 @@ public class EmbeddedDbSqlRegistry implements UpdatableSqlRegistry {
     }
 
     @Override
-    public void updateSql(Map<String, String> sqlmap) throws SqlUpdateFailureException {
-        for(Map.Entry<String, String> entry: sqlmap.entrySet()) {
-            updateSql(entry.getKey(), entry.getValue());
-        }
+    public void updateSql(final Map<String, String> sqlmap) throws SqlUpdateFailureException {
+        transactionTemplate.execute(new TransactionCallbackWithoutResult() {
+            for(Map.Entry<String, String> entry: sqlmap.entrySet()) {
+                updateSql(entry.getKey(), entry.getValue());
+            }
+        });
     }
 }
