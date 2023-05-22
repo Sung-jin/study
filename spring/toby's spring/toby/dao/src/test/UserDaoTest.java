@@ -8,9 +8,12 @@ import domain.User;
 import error.EmptyResultDataAccessException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.jdbc.datasource.SingleConnectionDataSource;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import javax.sql.DataSource;
 import java.sql.SQLException;
@@ -19,8 +22,8 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-//@ExtendWith(SpringExtension.class)
-//@ContextConfiguration(locations = "/test-applicationContext.xml")
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = TestApplicationContext.class)
 public class UserDaoTest {
     public static void main(String[] args) throws SQLException {
         UserDaoJdbc dao = new AnnotationConfigApplicationContext(DaoFactory.class).getBean("userDao", UserDaoJdbc.class);
