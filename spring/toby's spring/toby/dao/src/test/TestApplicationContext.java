@@ -3,23 +3,32 @@ package test;
 import dao.UserDao;
 import dao.UserDaoJdbc;
 import org.hsqldb.Database;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import service.DummyMailSender;
 import service.UserService;
 import service.UserServiceImpl;
-import sql.OxmSqlService;
-import sql.SqlService;
-import sql.XmlSqlService;
+import sql.*;
 
 import javax.sql.DataSource;
 import java.sql.Driver;
 
 @Configuration
+@EnableTransactionManagement
 public class TestApplicationContext {
-    @Resource Database embeddedDatabase;
+//    @Resource Database embeddedDatabase;
+
+    @Autowired
+    SqlService sqlService;
+
+    /**
+     * db 연결 및 트랜잭션
+     */
 
     @Bean
     public DataSource dataSource() {
@@ -40,12 +49,16 @@ public class TestApplicationContext {
         return tm;
     }
 
+    /**
+     * 애플리케이션 로직 테스트
+     */
+
     @Bean
     public UserDao userDao() {
         UserDao dao = new UserDaoJdbc();
         dao.setDataSource(dataSource());
         dao.setSqlService(sqlService);
-        dao.setSqlService(this.sqlService)
+        dao.setSqlService(this.sqlService);
 
         return dao;
     }
@@ -54,23 +67,27 @@ public class TestApplicationContext {
     public UserService userService() {
         UserServiceImpl service = new UserServiceImpl();
         service.setUserDao(userDao());
-        service.setMailSender(sqlService());
-        return dao;
+        service.setMailSender(mailSender());
+        return service;
     }
 
     @Bean
     public UserService testUserService() {
-        UserServiceTest.TestUserService TestService = new UserServiceTest.TestUserService();
-        testUserService(userDao());
-        testService.setMetth;
+        UserServiceTest.TestUserService testService = new UserServiceTest.TestUserService();
+        testService.setUserDao(userDao());
+        testService.setMailSender(mailSender());
 
-        return testUserService;
+        return testService;
     }
 
     @Bean
     public MailSender mailSender() {
         return new DummyMailSender();
     }
+
+    /**
+     * SQL 서비스
+     */
 
     @Bean
     public SqlService sqlService() {
@@ -95,6 +112,22 @@ public class TestApplicationContext {
         marshaller.setContestPath("sql.sqlservice.jaxb");
 
         return marshaller;
+    }
+
+    @Bean
+    public DataSource embeddedDatabase() {
+        return new EmbeddedDatabaseBuilder()
+                .setName("embeddedDatabase")
+                .setType(EmbeddedDatabaseType.HSQL)
+                .addScript("classpath:sqlRegistrySchema.sql")
+                .build();
+    }
+
+    @Bean
+    public SqlRegistry sqlRegistry() {
+        EmbeddedDbSqlRegistry sqlRegistry = new EmbeddedDbSqlRegistry();
+        sqlRegistry.setDataSource(embeddedDatabase());
+        return sqlRegistry;
     }
 
 }
