@@ -3,27 +3,23 @@ package service;
 import dao.UserDao;
 import domain.Level;
 import domain.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import javax.sql.DataSource;
 import java.util.List;
 
+@Service("userService")
 public class UserServiceImpl implements UserService {
     public static final int MIN_LOG_COUNT_FOR_SILVER = 50;
     public static final int MIN_RECOMMEND_FOR_GOLD = 30;
 
-    private DataSource dataSource;
+    @Autowired
     private MailSender mailSender;
-    UserDao userDao;
 
-    public void setUserDao(UserDao userDao) {
-        this.userDao = userDao;
-    }
-    public void setDataSource(DataSource dataSource) {
-        this.dataSource = dataSource;
-    }
-    public void setMailSender(MailSender mailSender) {
-        this.mailSender = mailSender;
-    }
+    @Autowired
+    UserDao userDao;
 
     @Override
     public void upgradeLevels() {

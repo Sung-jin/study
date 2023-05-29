@@ -5,6 +5,7 @@ import dao.UserDaoJdbc;
 import org.hsqldb.Database;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
@@ -20,11 +21,11 @@ import java.sql.Driver;
 
 @Configuration
 @EnableTransactionManagement
+@ComponentScan(basePackages = "dao")
 public class TestApplicationContext {
-//    @Resource Database embeddedDatabase;
 
     @Autowired
-    SqlService sqlService;
+    UserDao userDao;
 
     /**
      * db 연결 및 트랜잭션
@@ -52,24 +53,6 @@ public class TestApplicationContext {
     /**
      * 애플리케이션 로직 테스트
      */
-
-    @Bean
-    public UserDao userDao() {
-        UserDao dao = new UserDaoJdbc();
-        dao.setDataSource(dataSource());
-        dao.setSqlService(sqlService);
-        dao.setSqlService(this.sqlService);
-
-        return dao;
-    }
-
-    @Bean
-    public UserService userService() {
-        UserServiceImpl service = new UserServiceImpl();
-        service.setUserDao(userDao());
-        service.setMailSender(mailSender());
-        return service;
-    }
 
     @Bean
     public UserService testUserService() {
