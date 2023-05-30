@@ -8,20 +8,15 @@ import error.TestUserServiceException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.aop.framework.ProxyFactoryBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import proxy.TransactionHandler;
-import service.TxProxyFactoryBean;
 import service.UserService;
 import service.UserServiceImpl;
 
 import javax.sql.DataSource;
-import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -31,7 +26,7 @@ import static service.UserServiceImpl.MIN_LOG_COUNT_FOR_SILVER;
 import static service.UserServiceImpl.MIN_RECOMMEND_FOR_GOLD;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = TestApplicationContext.class)
+@ContextConfiguration(classes = AppContext.class)
 @Transactional
 @TransactionConfiguration(defaultRollback = false)
 public class UserServiceTest {
@@ -199,6 +194,8 @@ public class UserServiceTest {
 
     static class TestUserService extends UserServiceImpl {
         private String id = "fuz";
+
+        public TestUserService() {}
 
         public TestUserService(String id) {
             this.id = id;

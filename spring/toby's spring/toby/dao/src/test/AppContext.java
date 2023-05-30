@@ -1,19 +1,17 @@
 package test;
 
 import dao.UserDao;
-import dao.UserDaoJdbc;
-import org.hsqldb.Database;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import service.DummyMailSender;
 import service.UserService;
-import service.UserServiceImpl;
 import sql.*;
 
 import javax.sql.DataSource;
@@ -22,7 +20,8 @@ import java.sql.Driver;
 @Configuration
 @EnableTransactionManagement
 @ComponentScan(basePackages = "dao")
-public class TestApplicationContext {
+@Import(SqlServiceContext.class)
+public class AppContext {
 
     @Autowired
     UserDao userDao;
@@ -55,62 +54,8 @@ public class TestApplicationContext {
      */
 
     @Bean
-    public UserService testUserService() {
-        UserServiceTest.TestUserService testService = new UserServiceTest.TestUserService();
-        testService.setUserDao(userDao());
-        testService.setMailSender(mailSender());
-
-        return testService;
-    }
-
-    @Bean
     public MailSender mailSender() {
         return new DummyMailSender();
-    }
-
-    /**
-     * SQL 서비스
-     */
-
-    @Bean
-    public SqlService sqlService() {
-        OxmSqlService sqlService = new OxmSqlService();
-        sqlService.setUnmarshaller(unmarshaller());
-        sqlService.setSqlRegistry(sqlRegistry());
-
-        return sqlService;
-    }
-
-    @Bean
-    public sqlRegistry() {
-        EmbeddedDbSqlREgistry sqlRegistry = new XmlSqlService();
-        sqlRegistry.setDataSource(this.embeddedDatabase);
-
-        return sqlRegis.sqlRegistry;
-    }
-
-    @Bean
-    public Unmarshaller unmarshaller() {
-        Jaxb2Marshaller marshaller = new Jaxb2Marshaller();
-        marshaller.setContestPath("sql.sqlservice.jaxb");
-
-        return marshaller;
-    }
-
-    @Bean
-    public DataSource embeddedDatabase() {
-        return new EmbeddedDatabaseBuilder()
-                .setName("embeddedDatabase")
-                .setType(EmbeddedDatabaseType.HSQL)
-                .addScript("classpath:sqlRegistrySchema.sql")
-                .build();
-    }
-
-    @Bean
-    public SqlRegistry sqlRegistry() {
-        EmbeddedDbSqlRegistry sqlRegistry = new EmbeddedDbSqlRegistry();
-        sqlRegistry.setDataSource(embeddedDatabase());
-        return sqlRegistry;
     }
 
 }
