@@ -1,6 +1,7 @@
 package test;
 
 
+import context.AppContext;
 import dao.UserDao;
 import domain.Level;
 import domain.User;
@@ -11,6 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import service.UserService;
@@ -29,6 +31,7 @@ import static service.UserServiceImpl.MIN_RECOMMEND_FOR_GOLD;
 @ContextConfiguration(classes = AppContext.class)
 @Transactional
 @TransactionConfiguration(defaultRollback = false)
+@ActiveProfiles("test")
 public class UserServiceTest {
 
     @Autowired
@@ -192,7 +195,7 @@ public class UserServiceTest {
         assertEquals(updated.getLevel(), expectedLevel);
     }
 
-    static class TestUserService extends UserServiceImpl {
+    public static class TestUserService extends UserServiceImpl {
         private String id = "fuz";
 
         public TestUserService() {}

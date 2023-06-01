@@ -1,5 +1,6 @@
 package test;
 
+import context.AppContext;
 import dao.DaoFactory;
 import dao.UserDao;
 import dao.UserDaoJdbc;
@@ -10,6 +11,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -21,8 +23,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {AppContext.class, TestAppContext.class})
+@ContextConfiguration(classes = AppContext.class)
 public class UserDaoTest {
+
+    @Autowired
+    DefaultListableBeanFactory bf;
+
     public static void main(String[] args) throws SQLException {
         UserDaoJdbc dao = new AnnotationConfigApplicationContext(DaoFactory.class).getBean("userDao", UserDaoJdbc.class);
 
@@ -153,6 +159,13 @@ public class UserDaoTest {
         checkSameUser(user1, user1Update);
         User user2Same = dao.get(user2.getId());
         checkSameUser(user2, user2Same);
+    }
+
+    @Test
+    public void beans() {
+        for (String n: bf.getBeanDefinitionNames()) {
+            System.out.println(n + " \t " + bf.getBean(n).getClass().getName());
+        }
     }
 
     private void checkSameUser(User user1, User user2) {

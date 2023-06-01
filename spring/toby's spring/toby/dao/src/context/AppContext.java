@@ -1,18 +1,14 @@
-package test;
+package context;
 
 import dao.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.*;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import service.DummyMailSender;
 import service.UserService;
-import sql.*;
+import sql.SqlServiceContext;
+import test.UserServiceTest;
 
 import javax.sql.DataSource;
 import java.sql.Driver;
@@ -55,7 +51,38 @@ public class AppContext {
 
     @Bean
     public MailSender mailSender() {
-        return new DummyMailSender();
+        JavaMailSenderImpl mailSender = snew JavaMailSenderImpl();
+        mailSender.setHost("some.host");
+
+        return mailSender;
     }
 
+    @Configuration
+    @Profile("production")
+    public static class ProductionAppContext {
+        @Bean
+        public MailSender mailSender() {
+            JavaMailSenderImpl mailSender = snew JavaMailSenderImpl();
+            mailSender.setHost("some.host");
+
+            return mailSender;
+        }
+    }
+
+    @Configuration
+    @Profile("test")
+    public static class TestAppContext {
+        @Autowired
+        UserDao userdao;
+
+        @Bean
+        public UserService testUserService() {
+            return new UserServiceTest.TestUserService();
+        }
+
+        @Bean
+        public MailSender mailSender() {
+            return new DummyMailSender();
+        }
+    }
 }
