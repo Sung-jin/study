@@ -2,7 +2,9 @@ package context;
 
 import dao.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.*;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import service.DummyMailSender;
@@ -17,10 +19,23 @@ import java.sql.Driver;
 @EnableTransactionManagement
 @ComponentScan(basePackages = "dao")
 @Import(SqlServiceContext.class)
+@PropertySource("../../resources/database.properties")
 public class AppContext {
 
     @Autowired
     UserDao userDao;
+
+    @Value("${db.driverClass")
+    Class<? extends Driver> driverClass;
+
+    @Value("${db.url}")
+    String url;
+
+    @Value("${db.username}")
+    String username;
+
+    @Value("${db.password}")
+    String password;
 
     /**
      * db 연결 및 트랜잭션
@@ -28,14 +43,14 @@ public class AppContext {
 
     @Bean
     public DataSource dataSource() {
-        SimpleDriverDataSource dataSource = new SimpleDriverDataSource();
+        SimpleDriverDataSource ds = new SimpleDriverDataSource();
 
-        dataSource.setDriverClass(Driver.class);
-        dataSource.setUrl("jdbc:mysql://localhost:13306/testdb");
-        dataSource.setUsername("test");
-        dataSource.setPassword("1q2w3e4r");
+        ds.setDriverClass(this.driverClass);
+        ds.setUrl(this.url);
+        ds.setUsername(this.username);
+        ds.setPassword(this.password);
 
-        return dataSource;
+        return ds;
     }
 
     @Bean
@@ -84,5 +99,10 @@ public class AppContext {
         public MailSender mailSender() {
             return new DummyMailSender();
         }
+    }
+
+    @Bean
+    public static PropertySourcesPlaceholderConfigurer placeholderConfigurer() {
+        return new PropertySourcesPlaceholderConfigurer();
     }
 }
