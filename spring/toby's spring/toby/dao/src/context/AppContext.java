@@ -1,5 +1,6 @@
 package context;
 
+import annotation.EnableSqlService;
 import dao.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -9,7 +10,7 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import service.DummyMailSender;
 import service.UserService;
-import sql.SqlServiceContext;
+import sql.SqlMapConfig;
 import test.UserServiceTest;
 
 import javax.sql.DataSource;
@@ -18,9 +19,9 @@ import java.sql.Driver;
 @Configuration
 @EnableTransactionManagement
 @ComponentScan(basePackages = "dao")
-@Import(SqlServiceContext.class)
+@EnableSqlService
 @PropertySource("../../resources/database.properties")
-public class AppContext {
+public class AppContext implements SqlMapConfig {
 
     @Autowired
     UserDao userDao;
@@ -104,5 +105,10 @@ public class AppContext {
     @Bean
     public static PropertySourcesPlaceholderConfigurer placeholderConfigurer() {
         return new PropertySourcesPlaceholderConfigurer();
+    }
+
+    @Override
+    public Resource getSqlMapResource() {
+        return new ClassPathResource("sqlmap.xml", UserDao.class);
     }
 }
