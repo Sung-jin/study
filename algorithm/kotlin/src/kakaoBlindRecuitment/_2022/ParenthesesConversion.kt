@@ -1,4 +1,4 @@
-// 2020 KAKAO BLIND RECRUITMENT
+package kakaoBlindRecuitment._2022// 2020 KAKAO BLIND RECRUITMENT
 // https://programmers.co.kr/learn/challenges?selected_part_id=17214
 // https://programmers.co.kr/learn/courses/30/lessons/60058
 
