@@ -1,6 +1,9 @@
+import highScoreKit.hash.BestAlbum;
 import highScoreKit.hash.PhoneNumberList;
 import highScoreKit.hash.Pokemon;
 import highScoreKit.hash.UnreachedAthlete;
+
+import java.util.Arrays;
 
 public class Main {
     public static void main(String[] args) {
@@ -8,6 +11,7 @@ public class Main {
         Pokemon pokemon = new Pokemon();
         PhoneNumberList phoneNumberList = new PhoneNumberList();
         UnreachedAthlete unreachedAthlete = new UnreachedAthlete();
+        BestAlbum bestAlbum = new BestAlbum();
 
         System.out.println(
                 "phoneNumberList > [119, 97674223, 1195524421] -> false: " +
@@ -42,6 +46,14 @@ public class Main {
                                 new String[]{"mislav", "stanko", "mislav", "ana"},
                                 new String[]{"stanko", "ana", "mislav"}
                         )
+        );
+        System.out.println("------");
+        System.out.println(
+                "bestAlbum > [classic, pop, classic, classic, pop] | [500, 600, 150, 800, 2500] -> [4, 1, 3, 0]: " +
+                        Arrays.toString(bestAlbum.solution(
+                                new String[]{"classic", "pop", "classic", "classic", "pop"},
+                                new int[]{500, 600, 150, 800, 2500}
+                        ))
         );
     }
 }
