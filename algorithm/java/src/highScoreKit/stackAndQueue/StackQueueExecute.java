@@ -9,6 +9,8 @@ public class StackQueueExecute {
         FeatureDevelopment featureDevelopment = new FeatureDevelopment();
         Process process = new Process();
         TruckPassingTheBridge truckPassingTheBridge = new TruckPassingTheBridge();
+        CorrectParentheses correctParentheses = new CorrectParentheses();
+        StockPrice stockPrice = new StockPrice();
 
         System.out.println(
                 "hateSameNumber > [1,1,3,3,0,1,1] -> [1,3,0,1]: " +
@@ -48,6 +50,28 @@ public class StackQueueExecute {
         System.out.println(
                 "truckPassingTheBridge > 100 | 100 | [10,10,10,10,10,10,10,10,10,10] -> 110: " +
                         truckPassingTheBridge.solution(100, 100, new int[]{10,10,10,10,10,10,10,10,10,10})
+        );
+        System.out.println("------");
+        System.out.println(
+                "correctParentheses > ()() -> true: " +
+                        correctParentheses.solution("()()")
+        );
+        System.out.println(
+                "correctParentheses > (())() -> true: " +
+                        correctParentheses.solution("(())()")
+        );
+        System.out.println(
+                "correctParentheses > )()( -> false: " +
+                        correctParentheses.solution(")()(")
+        );
+        System.out.println(
+                "correctParentheses > (()( -> false: " +
+                        correctParentheses.solution("(()(")
+        );
+        System.out.println("------");
+        System.out.println(
+                "stockPrice > [1, 2, 3, 2, 3] -> [4, 3, 1, 1, 0]: " +
+                        Arrays.toString(stockPrice.solution(new int[]{1, 2, 3, 2, 3}))
         );
     }
 }

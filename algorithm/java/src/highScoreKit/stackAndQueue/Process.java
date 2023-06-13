@@ -58,3 +58,45 @@ public class Process {
         }
     }
 }
+
+/*
+// 자료구조/알고리즘: 큐 & 정렬
+// 시간 복잡도: O(nlogn)
+// 공간 복잡도: O(n)
+
+class Solution {
+    public int solution(int[] priorities, int location) {
+        Queue<PrintItem> waitList = new LinkedList<>();
+        for (int i = 0; i < priorities.length; i++) {
+            waitList.offer(new PrintItem(i, priorities[i]));
+        }
+        Arrays.sort(priorities);
+
+        int currentIndex = 0;
+        int priorityIndex = priorities.length - 1;
+        while (!waitList.isEmpty()) {
+            PrintItem currentItem = waitList.poll();
+            if (currentItem.priority == priorities[priorityIndex]) {
+                currentIndex++;
+                priorityIndex--;
+                if (currentItem.location == location) {
+                    break;
+                }
+            } else {
+                waitList.offer(currentItem);
+            }
+        }
+        return currentIndex;
+    }
+
+    class PrintItem {
+        int location;
+        int priority;
+
+        public PrintItem(int location, int priority) {
+            this.location = location;
+            this.priority = priority;
+        }
+    }
+}
+ */
