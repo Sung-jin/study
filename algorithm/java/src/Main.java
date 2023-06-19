@@ -1,3 +1,4 @@
+import highScoreKit.binarySearch.BinarySearchExecution;
 import highScoreKit.fullExploration.FullExplorationExecution;
 import highScoreKit.hash.HashExecute;
 import highScoreKit.heap.HeapExecute;
@@ -11,6 +12,7 @@ public class Main {
         HeapExecute heapExecute = new HeapExecute();
         SortingExecute sortingExecute = new SortingExecute();
         FullExplorationExecution fullExplorationExecution = new FullExplorationExecution();
+        BinarySearchExecution binarySearchExecution = new BinarySearchExecution();
 
         System.out.println("Hash");
         hashExecute.execute();
@@ -26,5 +28,8 @@ public class Main {
         System.out.println("------");
         System.out.println("Full Exploration");
         fullExplorationExecution.execute();
+        System.out.println("------");
+        System.out.println("Binary Search");
+        binarySearchExecution.execute();
     }
 }
