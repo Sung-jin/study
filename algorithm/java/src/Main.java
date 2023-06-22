@@ -1,4 +1,5 @@
 import highScoreKit.binarySearch.BinarySearchExecution;
+import highScoreKit.dfsAndBfs.DfsAndBfsExecute;
 import highScoreKit.fullExploration.FullExplorationExecution;
 import highScoreKit.grahp.GraphExecution;
 import highScoreKit.hash.HashExecute;
@@ -15,6 +16,7 @@ public class Main {
         FullExplorationExecution fullExplorationExecution = new FullExplorationExecution();
         BinarySearchExecution binarySearchExecution = new BinarySearchExecution();
         GraphExecution graphExecution = new GraphExecution();
+        DfsAndBfsExecute dfsAndBfsExecute = new DfsAndBfsExecute();
 
         System.out.println("Hash");
         hashExecute.execute();
@@ -36,5 +38,8 @@ public class Main {
         System.out.println("------");
         System.out.println("Graph");
         graphExecution.execute();
+        System.out.println("------");
+        System.out.println("Dfs and Bfs");
+        dfsAndBfsExecute.execute();
     }
 }
