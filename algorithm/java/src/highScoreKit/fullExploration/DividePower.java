@@ -1,5 +1,7 @@
 package highScoreKit.fullExploration;
 
+import java.util.*;
+
 /*
 n개의 송전탑이 전선을 통해 하나의 트리 형태로 연결되어 있습니다. 당신은 이 전선들 중 하나를 끊어서 현재의 전력망 네트워크를 2개로 분할하려고 합니다. 이때, 두 전력망이 갖게 되는 송전탑의 개수를 최대한 비슷하게 맞추고자 합니다.
 
@@ -14,8 +16,52 @@ wires의 각 원소는 [v1, v2] 2개의 자연수로 이루어져 있으며, 이
  */
 public class DividePower {
     public int solution(int n, int[][] wires) {
-        int answer = -1;
+        int answer = n;
+
+        Arrays.sort(wires, Comparator.comparingInt(a -> a[0]));
+
+        for (int i = 0; i < wires.length; i++) {
+            answer = Math.min(answer, getDiffWhenDivided(wires, i));
+        }
+
         return answer;
+    }
+
+    int getDiffWhenDivided(int[][] wires, int index) {
+        int[][] left = Arrays.copyOfRange(wires, 0, index);
+        int[][] right = Arrays.copyOfRange(wires, index + 1, wires.length);
+        Set<Integer> connected1 = new HashSet<>();
+        Set<Integer> connected2 = new HashSet<>();
+
+        connected1.add(wires[index][0]);
+        connected2.add(wires[index][1]);
+
+        for (int[] value : left) {
+            int from = value[0];
+            int to = value[1];
+
+            if (connected1.contains(from) || connected1.contains(to)) {
+                connected1.add(from);
+                connected1.add(to);
+            } else {
+                connected2.add(from);
+                connected2.add(to);
+            }
+        }
+        for (int[] value : right) {
+            int from = value[0];
+            int to = value[1];
+
+            if (connected1.contains(from) || connected1.contains(to)) {
+                connected1.add(from);
+                connected1.add(to);
+            } else {
+                connected2.add(from);
+                connected2.add(to);
+            }
+        }
+
+        return Math.abs(left.length - right.length);
     }
 }
 

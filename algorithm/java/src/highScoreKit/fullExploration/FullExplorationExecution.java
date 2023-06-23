@@ -9,6 +9,7 @@ public class FullExplorationExecution {
         MockExam mockExam = new MockExam();
         FindPrimeNumber findPrimeNumber = new FindPrimeNumber();
         Carpet carpet = new Carpet();
+        DividePower dividePower = new DividePower();
         VowelDictionary vowelDictionary = new VowelDictionary();
 
         System.out.println(
@@ -44,6 +45,19 @@ public class FullExplorationExecution {
         System.out.println("carpet > 10 | 2 -> [4, 3]: " + Arrays.toString(carpet.solution(10, 2)));
         System.out.println("carpet > 8 | 1 -> [3, 3]: " + Arrays.toString(carpet.solution(8, 1)));
         System.out.println("carpet > 24 | 24 -> [8, 6]: " + Arrays.toString(carpet.solution(24, 24)));
+        System.out.println("------");
+        System.out.println(
+                "dividePower > 9 | [[1,3],[2,3],[3,4],[4,5],[4,6],[4,7],[7,8],[7,9]] -> 3: " +
+                        dividePower.solution(9, new int[][]{{1,3},{2,3},{3,4},{4,5},{4,6},{4,7},{7,8},{7,9}})
+        );
+        System.out.println(
+                "dividePower > 4 | [[1,2],[2,3],[3,4]] -> 0: " +
+                        dividePower.solution(9, new int[][]{{1,2},{2,3},{3,4}})
+        );
+        System.out.println(
+                "dividePower > 7 | [[1,2],[2,7],[3,7],[3,4],[4,5],[6,7]] -> 1: " +
+                        dividePower.solution(9, new int[][]{{1,2},{2,7},{3,7},{3,4},{4,5},{6,7}})
+        );
         System.out.println("------");
         System.out.println("vowelDictionary > AAAAE -> 6: " + vowelDictionary.solution("AAAAE"));
         System.out.println("vowelDictionary > AAAE -> 10: " + vowelDictionary.solution("AAAE"));

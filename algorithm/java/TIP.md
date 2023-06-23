@@ -49,3 +49,32 @@ class Node {
     LinkedList<Node> adjacency = new LinkedList<>();
 }
 ```
+
+### DFS
+
+* 재귀를 이용하여 깊이 우선 탐색
+* **모든 가능성 탐색, ~하는 방법의 개수**
+
+```java
+class Graph {
+    Node[] nodes;
+
+    Graph(int size) {
+        this.nodes = new Node[size];
+        // init code
+    }
+    
+    void dfs(args1, args2, ...) {
+        Node findSomething = ...;
+        
+        if (target) {
+            System.out.println(findSomething.value);
+            return;
+        }
+        
+        // ... do something
+        
+        dfs(args1`, args2`, ...);
+    }
+}
+```
