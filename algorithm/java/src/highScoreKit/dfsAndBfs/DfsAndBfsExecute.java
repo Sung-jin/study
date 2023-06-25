@@ -1,5 +1,7 @@
 package highScoreKit.dfsAndBfs;
 
+import java.util.Arrays;
+
 public class DfsAndBfsExecute {
     public void execute() {
         MapShortestDistance mapShortestDistance = new MapShortestDistance();
@@ -7,6 +9,7 @@ public class DfsAndBfsExecute {
         Network network = new Network();
         ConvertWord convertWord = new ConvertWord();
         PickUpItem pickUpItem = new PickUpItem();
+        TravelRoute travelRoute = new TravelRoute();
 
         System.out.println(
                 "mapShortestDistance > [[1,0,1,1,1],[1,0,1,0,1],[1,0,1,1,1],[1,1,1,0,1],[0,0,0,0,1]] -> 11: " +
@@ -55,6 +58,15 @@ public class DfsAndBfsExecute {
         System.out.println(
                 "pickUpItem > [[2,2,5,5],[1,3,6,4],[3,1,4,6]] | 1 | 3 | 7 | 8 -> 10: " +
                         pickUpItem.solution(new int[][]{{2,2,5,5},{1,3,6,4},{3,1,4,6}}, 1, 4, 6, 3)
+        );
+        System.out.println("------");
+        System.out.println(
+                "travelRoute > [[ICN, JFK], [HND, IAD], [JFK, HND]] -> [ICN, JFK, HND, IAD]: " +
+                        Arrays.toString(travelRoute.solution(new String[][]{{"ICN", "JFK"}, {"HND", "IAD"}, {"JFK", "HND"}}))
+        );
+        System.out.println(
+                "travelRoute > [[ICN, SFO], [ICN, ATL], [SFO, ATL], [ATL, ICN], [ATL,SFO]] -> [ICN, ATL, ICN, SFO, ATL, SFO]: " +
+                        Arrays.toString(travelRoute.solution(new String[][]{{"ICN", "SFO"}, {"ICN", "ATL"}, {"SFO", "ATL"}, {"ATL", "ICN"}, {"ATL","SFO"}}))
         );
     }
 }

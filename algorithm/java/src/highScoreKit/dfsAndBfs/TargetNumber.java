@@ -30,3 +30,53 @@ public class TargetNumber {
         P, S
     }
 }
+
+/*
+DFS
+- 재귀
+- 모든 가능성 탐색, ~하는 방법의 개수
+
+            A
+
+        B       C
+
+     D
+
+A -> B -> D -> C
+
+--------
+DFS 구조
+
+solution() {
+    dfsHelper(arg1, arg2, ..)
+    return
+}
+
+dfsHelper(arg1, arg2, ...) {
+    if (target) {
+        return
+    }
+    dfsHelper(arg1', arg2', ...)
+}
+--------
+
+// 자료구조/알고리즘: DFS
+// 시간 복잡도: O(2^n)
+// 공간 복잡도: O(1)
+
+class Solution {
+    public int solution(int[] numbers, int target) {
+        return getTotalWays(numbers, target, 0, 0);
+    }
+
+    private int getTotalWays(int[] numbers, int target, int index, int sum) {
+        if (index == numbers.length) {
+            return sum == target ? 1 : 0;
+        }
+        int totalWays = 0;
+        totalWays += getTotalWays(numbers, target, index + 1, sum + numbers[index]);
+        totalWays += getTotalWays(numbers, target, index + 1, sum - numbers[index]);
+        return totalWays;
+    }
+}
+ */
