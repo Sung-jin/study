@@ -1,5 +1,6 @@
 import highScoreKit.binarySearch.BinarySearchExecution;
 import highScoreKit.dfsAndBfs.DfsAndBfsExecute;
+import highScoreKit.dynamicProgramming.DynamicProgrammingExecute;
 import highScoreKit.fullExploration.FullExplorationExecution;
 import highScoreKit.fullExploration.MockExam;
 import highScoreKit.grahp.GraphExecution;
@@ -23,6 +24,7 @@ public class Main {
         GraphExecution graphExecution = new GraphExecution();
         DfsAndBfsExecute dfsAndBfsExecute = new DfsAndBfsExecute();
         GreedyExecute greedyExecute = new GreedyExecute();
+        DynamicProgrammingExecute dynamicProgrammingExecute = new DynamicProgrammingExecute();
 
         MockExamExecute mockExamExecute = new MockExamExecute();
 
@@ -52,6 +54,9 @@ public class Main {
         System.out.println("------");
         System.out.println("greedy");
         greedyExecute.execute();
+        System.out.println("------");
+        System.out.println("dynamic programming");
+        dynamicProgrammingExecute.execute();;
 
 
         System.out.println("------");
