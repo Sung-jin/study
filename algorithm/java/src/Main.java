@@ -1,3 +1,4 @@
+import leetcode.binarySearch.SearchInsertPosition;
 import leetcode.bruteForce.TwoSum;
 import leetcode.bruteForce.BuddyStrings;
 
@@ -23,6 +24,20 @@ public class Main {
         System.out.println("ccccda, acccdc -> true: " + buddyStrings.buddyStrings("ccccda", "acccdc"));
         System.out.println("ccccda, accccd -> false: " + buddyStrings.buddyStrings("ccccda", "accccd"));
         System.out.println("ab, ca -> false: " + buddyStrings.buddyStrings("ab", "ca"));
+
+        // binary search
+        SearchInsertPosition searchInsertPosition = new SearchInsertPosition();
+
+        System.out.println("binary search");
+        System.out.println("Q.35 Search Insert Position");
+        System.out.println("[1,3,5,6], 5 -> 2: " + searchInsertPosition.searchInsert(new int[]{1,3,5,6}, 5));
+        System.out.println("[1,3,5,6], 2 -> 1: " + searchInsertPosition.searchInsert(new int[]{1,3,5,6}, 2));
+        System.out.println("[1,3,5,6], 7 -> 4: " + searchInsertPosition.searchInsert(new int[]{1,3,5,6}, 7));
+        System.out.println("[1,3,5,6], 0 -> 0: " + searchInsertPosition.searchInsert(new int[]{1,3,5,6}, 0));
+        System.out.println("[1,3], 2 -> 1: " + searchInsertPosition.searchInsert(new int[]{1,3}, 2));
+        System.out.println("[1,3], 0 -> 0: " + searchInsertPosition.searchInsert(new int[]{1,3}, 0));
+        System.out.println("[1,3], 2 -> 1: " + searchInsertPosition.searchInsert(new int[]{1,3}, 2));
+        System.out.println("[1,3], 1 -> 0: " + searchInsertPosition.searchInsert(new int[]{1,3}, 1));
     }
 
 //    public static void main(String[] args) {
