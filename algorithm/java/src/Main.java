@@ -1,4 +1,6 @@
 import leetcode.binarySearch.SearchInsertPosition;
+import leetcode.binarySearch.Sqrt;
+import leetcode.bruteForce.RomanToInteger;
 import leetcode.bruteForce.SingleNumber2;
 import leetcode.bruteForce.TwoSum;
 import leetcode.bruteForce.BuddyStrings;
@@ -12,6 +14,7 @@ public class Main {
         // leet-code
         // brute force
         TwoSum twoSum = new TwoSum();
+        RomanToInteger romanToInteger = new RomanToInteger();
         SingleNumber2 singleNumber2 = new SingleNumber2();
         BuddyStrings buddyStrings = new BuddyStrings();
 
@@ -20,6 +23,11 @@ public class Main {
         System.out.println("[2,7,11,15], 9 -> [0,1]: " + Arrays.toString(twoSum.twoSum(new int[]{2, 7, 11, 15}, 9)));
         System.out.println("[3,2,4], 6 -> [1,2]: " + Arrays.toString(twoSum.twoSum(new int[]{3,2,4}, 6)));
         System.out.println("[3,3], 6 -> [0,1]: " + Arrays.toString(twoSum.twoSum(new int[]{3,3}, 6)));
+        System.out.println("------");
+        System.out.println("Q.13 roman to integer");
+        System.out.println("III -> 3: " + romanToInteger.romanToInt("III"));
+        System.out.println("LVIII -> 58: " + romanToInteger.romanToInt("LVIII"));
+        System.out.println("MCMXCIV -> 1994: " + romanToInteger.romanToInt("MCMXCIV"));
         System.out.println("------");
         System.out.println("Q.137 single number 2");
         System.out.println("[2,2,3,2] -> 3: " + singleNumber2.singleNumber(new int[]{2, 2, 3, 2}));
@@ -37,6 +45,7 @@ public class Main {
 
         // binary search
         SearchInsertPosition searchInsertPosition = new SearchInsertPosition();
+        Sqrt sqrt = new Sqrt();
 
         System.out.println("binary search");
         System.out.println("Q.35 Search Insert Position");
@@ -48,6 +57,11 @@ public class Main {
         System.out.println("[1,3], 0 -> 0: " + searchInsertPosition.searchInsert(new int[]{1,3}, 0));
         System.out.println("[1,3], 2 -> 1: " + searchInsertPosition.searchInsert(new int[]{1,3}, 2));
         System.out.println("[1,3], 1 -> 0: " + searchInsertPosition.searchInsert(new int[]{1,3}, 1));
+        System.out.println("------");
+        System.out.println("Q.69 sqrt(x)");
+//        System.out.println("4 -> 2: " + sqrt.mySqrt(4));
+//        System.out.println("8 -> 2: " + sqrt.mySqrt(8));
+        System.out.println("2147395599 -> 2: " + sqrt.mySqrt(2147395599));
 
         // dfs
         MaximumNumberOfAchievableTransferRequests maximumNumberOfAchievableTransferRequests = new MaximumNumberOfAchievableTransferRequests();
