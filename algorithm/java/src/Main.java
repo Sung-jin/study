@@ -1,9 +1,13 @@
+import leetcode.TreeNode;
+import leetcode.bfs.SameTree;
+import leetcode.bfs.SymmetricTree;
 import leetcode.binarySearch.SearchInsertPosition;
 import leetcode.binarySearch.Sqrt;
 import leetcode.bruteForce.RomanToInteger;
 import leetcode.bruteForce.SingleNumber2;
 import leetcode.bruteForce.TwoSum;
 import leetcode.bruteForce.BuddyStrings;
+import leetcode.dfs.BinaryTreeInorderTraversal;
 import leetcode.dfs.FairDistributionOfCookies;
 import leetcode.dfs.MaximumNumberOfAchievableTransferRequests;
 
@@ -59,15 +63,21 @@ public class Main {
         System.out.println("[1,3], 1 -> 0: " + searchInsertPosition.searchInsert(new int[]{1,3}, 1));
         System.out.println("------");
         System.out.println("Q.69 sqrt(x)");
-//        System.out.println("4 -> 2: " + sqrt.mySqrt(4));
-//        System.out.println("8 -> 2: " + sqrt.mySqrt(8));
+        System.out.println("4 -> 2: " + sqrt.mySqrt(4));
+        System.out.println("8 -> 2: " + sqrt.mySqrt(8));
         System.out.println("2147395599 -> 2: " + sqrt.mySqrt(2147395599));
 
         // dfs
+        BinaryTreeInorderTraversal binaryTreeInorderTraversal = new BinaryTreeInorderTraversal();
         MaximumNumberOfAchievableTransferRequests maximumNumberOfAchievableTransferRequests = new MaximumNumberOfAchievableTransferRequests();
         FairDistributionOfCookies fairDistributionOfCookies = new FairDistributionOfCookies();
 
         System.out.println("dfs");
+        System.out.println("Q.94 Binary Tree Inorder Traversal");
+        System.out.println("[1,null,2,3] -> [1,3,2]: " + binaryTreeInorderTraversal.inorderTraversal(TreeNode.generateNode(new Integer[]{1,null,2,3})));
+        System.out.println("[] -> []: " + binaryTreeInorderTraversal.inorderTraversal(TreeNode.generateNode(new Integer[]{})));
+        System.out.println("[1] -> [1]: " + binaryTreeInorderTraversal.inorderTraversal(TreeNode.generateNode(new Integer[]{1})));
+        System.out.println("------");
         System.out.println("Q.1601 Maximum Number of Achievable Transfer Requests");
         System.out.println(
                 "5, [[0,1],[1,0],[0,1],[1,2],[2,0],[3,4]] -> 5: " +
@@ -82,6 +92,19 @@ public class Main {
         System.out.println("[8,15,10,20,8], 2 -> 31: " + fairDistributionOfCookies.distributeCookies(new int[]{8,15,10,20,8}, 2));
         System.out.println("[6,1,3,2,2,4,1,2], 3 -> 7: " + fairDistributionOfCookies.distributeCookies(new int[]{6,1,3,2,2,4,1,2}, 3));
         System.out.println("[941,797,1475,638,191,712], 3 -> 1653: " + fairDistributionOfCookies.distributeCookies(new int[]{941,797,1475,638,191,712}, 3)); // 이해가 안되네..
+
+        // bfs
+        SameTree sameTree = new SameTree();
+        SymmetricTree symmetricTree = new SymmetricTree();
+
+        System.out.println("bfs");
+        System.out.println("Q.100 Same Tree");
+        System.out.println("[1,2,3], [1,2,3] -> true: " + sameTree.isSameTree(TreeNode.generateNode(new Integer[]{1,2,3}), TreeNode.generateNode(new Integer[]{1,2,3})));
+        System.out.println("[1,2], [1,null,2] -> false: " + sameTree.isSameTree(TreeNode.generateNode(new Integer[]{1,2}), TreeNode.generateNode(new Integer[]{1,null,2})));
+        System.out.println("------");
+        System.out.println("Q.101 Symmetric Tree");
+        System.out.println("[1,2,2,3,4,4,3] -> true: " + symmetricTree.isSymmetric(TreeNode.generateNode(new Integer[]{1,2,2,3,4,4,3})));
+        System.out.println("[1,2,2,3,4,4,3] -> true: " + symmetricTree.isSymmetric(TreeNode.generateNode(new Integer[]{1,2,2,null,3,null,3})));
     }
 
 //    public static void main(String[] args) {

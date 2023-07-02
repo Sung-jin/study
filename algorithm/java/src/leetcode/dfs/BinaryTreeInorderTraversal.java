@@ -1,5 +1,7 @@
 package leetcode.dfs;
 
+import leetcode.TreeNode;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,35 +25,18 @@ public class TreeNode {
 }
  */
 public class BinaryTreeInorderTraversal {
-    /**
-     *
-     */
-    class Solution {
-        public List<Integer> inorderTraversal(TreeNode root) {
-            List<Integer> result = new ArrayList<>();
-            inorder(root, result);
+    public List<Integer> inorderTraversal(TreeNode root) {
+        List<Integer> result = new ArrayList<>();
+        inorder(root, result);
 
-            return result;
-        }
-
-        private void inorder(TreeNode node, List<Integer> result) {
-            System.out.println(node.val);
-            result.add(node.val);
-            if (node.left != null) inorder(node.left, result);
-            if (node.right != null) inorder(node.right, result);
-        }
+        return result;
     }
 
-    public static class TreeNode {
-        int val;
-        TreeNode left;
-        TreeNode right;
-        TreeNode() {}
-        public TreeNode(int val) { this.val = val; }
-        TreeNode(int val, TreeNode left, TreeNode right) {
-            this.val = val;
-            this.left = left;
-            this.right = right;
+    private void inorder(TreeNode node, List<Integer> result) {
+        if (node != null) {
+            if (node.left != null) inorder(node.left, result);
+            result.add(node.val);
+            if (node.right != null) inorder(node.right, result);
         }
     }
 }

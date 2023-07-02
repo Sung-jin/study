@@ -22,6 +22,8 @@ public class TreeNode {
 }
 */
 
+import leetcode.TreeNode;
+
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -55,25 +57,12 @@ public class SameTree {
 
                 if (nowP.left != null) queueP.add(nowP.left);
                 if (nowP.right != null) queueP.add(nowP.right);
-                if (nowQ.left != null) queueP.add(nowQ.left);
-                if (nowQ.right != null) queueP.add(nowQ.right);
+                if (nowQ.left != null) queueQ.add(nowQ.left);
+                if (nowQ.right != null) queueQ.add(nowQ.right);
             }
         }
 
         return true;
-    }
-
-    public class TreeNode {
-        int val;
-        TreeNode left;
-        TreeNode right;
-        TreeNode() {}
-        TreeNode(int val) { this.val = val; }
-        TreeNode(int val, TreeNode left, TreeNode right) {
-            this.val = val;
-            this.left = left;
-            this.right = right;
-        }
     }
 }
 
