@@ -1,6 +1,7 @@
 import leetcode.TreeNode;
 import leetcode.bfs.SameTree;
 import leetcode.bfs.SymmetricTree;
+import leetcode.binarySearch.MissingNumber;
 import leetcode.binarySearch.SearchInsertPosition;
 import leetcode.binarySearch.Sqrt;
 import leetcode.bruteForce.RomanToInteger;
@@ -11,6 +12,7 @@ import leetcode.dfs.BinaryTreeInorderTraversal;
 import leetcode.dfs.FairDistributionOfCookies;
 import leetcode.dfs.MaximumNumberOfAchievableTransferRequests;
 import leetcode.dynamicProgramming.LongestSubArray;
+import leetcode.greedy.LongestPalindrome;
 import leetcode.sorting.MergeSortedArray;
 
 import java.util.Arrays;
@@ -56,12 +58,12 @@ public class Main {
 
         System.out.println("sorting");
         System.out.println("Q.88 Merge Sorted Array");
-//        System.out.println("[1,2,3,0,0,0], 3, [2,5,6], 3 -> [1,2,2,3,5,6]: ");
-//        mergeSortedArray.merge(new int[]{1,2,3,0,0,0}, 3, new int[]{2,5,6}, 3);
-//        System.out.println("[1], 1, [], 0 -> [1]: ");
-//        mergeSortedArray.merge(new int[]{1}, 1, new int[]{}, 0);
-//        System.out.println("[0], 0, [1], 1 -> [1]: ");
-//        mergeSortedArray.merge(new int[]{0}, 0, new int[]{1}, 1);
+        System.out.println("[1,2,3,0,0,0], 3, [2,5,6], 3 -> [1,2,2,3,5,6]: ");
+        mergeSortedArray.merge(new int[]{1,2,3,0,0,0}, 3, new int[]{2,5,6}, 3);
+        System.out.println("[1], 1, [], 0 -> [1]: ");
+        mergeSortedArray.merge(new int[]{1}, 1, new int[]{}, 0);
+        System.out.println("[0], 0, [1], 1 -> [1]: ");
+        mergeSortedArray.merge(new int[]{0}, 0, new int[]{1}, 1);
         System.out.println("[4,5,6,0,0,0], 3, [1,2,3], 3 -> [1,2,3,4,5,6]: ");
         mergeSortedArray.merge(new int[]{4,5,6,0,0,0}, 3, new int[]{1,2,3}, 3);
 
@@ -70,6 +72,7 @@ public class Main {
         // binary search
         SearchInsertPosition searchInsertPosition = new SearchInsertPosition();
         Sqrt sqrt = new Sqrt();
+        MissingNumber missingNumber = new MissingNumber();
 
         System.out.println("binary search");
         System.out.println("Q.35 Search Insert Position");
@@ -86,6 +89,16 @@ public class Main {
         System.out.println("4 -> 2: " + sqrt.mySqrt(4));
         System.out.println("8 -> 2: " + sqrt.mySqrt(8));
         System.out.println("2147395599 -> 2: " + sqrt.mySqrt(2147395599));
+        System.out.println("------\n");
+        System.out.println("Q.268 Missing Number");
+        System.out.println("[3,0,1] -> 2: " + missingNumber.missingNumber(new int[]{3,0,1}));
+        System.out.println("[0,1] -> 2: " + missingNumber.missingNumber(new int[]{0,1}));
+        System.out.println("[9,6,4,2,3,5,7,0,1] -> 8: " + missingNumber.missingNumber(new int[]{9,6,4,2,3,5,7,0,1}));
+        System.out.println("[0,2,3] -> 1: " + missingNumber.missingNumber(new int[]{0,2,3}));
+        System.out.println("[1,2,3] -> 0: " + missingNumber.missingNumber(new int[]{1,2,3}));
+        System.out.println("[0,1,2,3,5,6,7] -> 4: " + missingNumber.missingNumber(new int[]{0,1,2,3,5,6,7}));
+        System.out.println("[1,2] -> 0: " + missingNumber.missingNumber(new int[]{1,2}));
+        System.out.println("[9,3,7,1,5,4,8,0,2] -> 6: " + missingNumber.missingNumber(new int[]{9,3,7,1,5,4,8,0,2}));
 
         System.out.println("----------\n\n");
 
@@ -140,6 +153,17 @@ public class Main {
         System.out.println("[1,1,0,1] -> 3: " + longestSubArray.longestSubarray(new int[]{1,1,0,1}));
         System.out.println("[0,1,1,1,0,1,1,0,1] -> 5: " + longestSubArray.longestSubarray(new int[]{0,1,1,1,0,1,1,0,1}));
         System.out.println("[1,1,1] -> 2: " + longestSubArray.longestSubarray(new int[]{1,1,1}));
+
+        System.out.println("----------\n\n");
+
+        // greedy
+        LongestPalindrome longestPalindrome = new LongestPalindrome();
+
+        System.out.println("greedy");
+        System.out.println("Q.409 Longest Palindrome");
+        System.out.println("abccccdd -> 7: " + longestPalindrome.longestPalindrome("abccccdd"));
+        System.out.println("a -> 1: " + longestPalindrome.longestPalindrome("a"));
+        System.out.println("civilwartestingwhetherthatnaptionoranynartionsoconceivedandsodedicatedcanlongendureWeareqmetonagreatbattlefiemldoftzhatwarWehavecometodedicpateaportionofthatfieldasafinalrestingplaceforthosewhoheregavetheirlivesthatthatnationmightliveItisaltogetherfangandproperthatweshoulddothisButinalargersensewecannotdedicatewecannotconsecratewecannothallowthisgroundThebravelmenlivinganddeadwhostruggledherehaveconsecrateditfaraboveourpoorponwertoaddordetractTgheworldadswfilllittlenotlenorlongrememberwhatwesayherebutitcanneverforgetwhattheydidhereItisforusthelivingrathertobededicatedheretotheulnfinishedworkwhichtheywhofoughtherehavethusfarsonoblyadvancedItisratherforustobeherededicatedtothegreattdafskremainingbeforeusthatfromthesehonoreddeadwetakeincreaseddevotiontothatcauseforwhichtheygavethelastpfullmeasureofdevotionthatweherehighlyresolvethatthesedeadshallnothavediedinvainthatthisnationunsderGodshallhaveanewbirthoffreedomandthatgovernmentofthepeoplebythepeopleforthepeopleshallnotperishfromtheearth -> 983: " + longestPalindrome.longestPalindrome("civilwartestingwhetherthatnaptionoranynartionsoconceivedandsodedicatedcanlongendureWeareqmetonagreatbattlefiemldoftzhatwarWehavecometodedicpateaportionofthatfieldasafinalrestingplaceforthosewhoheregavetheirlivesthatthatnationmightliveItisaltogetherfangandproperthatweshoulddothisButinalargersensewecannotdedicatewecannotconsecratewecannothallowthisgroundThebravelmenlivinganddeadwhostruggledherehaveconsecrateditfaraboveourpoorponwertoaddordetractTgheworldadswfilllittlenotlenorlongrememberwhatwesayherebutitcanneverforgetwhattheydidhereItisforusthelivingrathertobededicatedheretotheulnfinishedworkwhichtheywhofoughtherehavethusfarsonoblyadvancedItisratherforustobeherededicatedtothegreattdafskremainingbeforeusthatfromthesehonoreddeadwetakeincreaseddevotiontothatcauseforwhichtheygavethelastpfullmeasureofdevotionthatweherehighlyresolvethatthesedeadshallnothavediedinvainthatthisnationunsderGodshallhaveanewbirthoffreedomandthatgovernmentofthepeoplebythepeopleforthepeopleshallnotperishfromtheearth"));
     }
 
 //    public static void main(String[] args) {
