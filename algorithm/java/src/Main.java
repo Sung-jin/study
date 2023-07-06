@@ -4,15 +4,15 @@ import leetcode.bfs.SymmetricTree;
 import leetcode.binarySearch.MissingNumber;
 import leetcode.binarySearch.SearchInsertPosition;
 import leetcode.binarySearch.Sqrt;
-import leetcode.bruteForce.RomanToInteger;
-import leetcode.bruteForce.SingleNumber2;
-import leetcode.bruteForce.TwoSum;
-import leetcode.bruteForce.BuddyStrings;
+import leetcode.bruteForce.*;
 import leetcode.dfs.BinaryTreeInorderTraversal;
 import leetcode.dfs.FairDistributionOfCookies;
 import leetcode.dfs.MaximumNumberOfAchievableTransferRequests;
 import leetcode.dynamicProgramming.LongestSubArray;
+import leetcode.dynamicProgramming.NumberOfGoodWaysToSplitAString;
 import leetcode.greedy.LongestPalindrome;
+import leetcode.slidingWindow.MaximumNumberOfVowelsInASubstringOfGivenLength;
+import leetcode.slidingWindow.MinimumSizeSubArraySum;
 import leetcode.sorting.MergeSortedArray;
 
 import java.util.Arrays;
@@ -50,6 +50,25 @@ public class Main {
         System.out.println("ccccda, acccdc -> true: " + buddyStrings.buddyStrings("ccccda", "acccdc"));
         System.out.println("ccccda, accccd -> false: " + buddyStrings.buddyStrings("ccccda", "accccd"));
         System.out.println("ab, ca -> false: " + buddyStrings.buddyStrings("ab", "ca"));
+
+        System.out.println("----------\n\n");
+
+        // sliding window
+        MinimumSizeSubArraySum minimumSizeSubArraySum = new MinimumSizeSubArraySum();
+        MaximumNumberOfVowelsInASubstringOfGivenLength maximumNumberOfVowelsInASubstringOfGivenLength = new MaximumNumberOfVowelsInASubstringOfGivenLength();
+
+        System.out.println("sliding window");
+        System.out.println("Q.209 Minimum Size Subarray Sum");
+        System.out.println("7, [2,3,1,2,4,3] -> 2: " + minimumSizeSubArraySum.minSubArrayLen(7, new int[]{2,3,1,2,4,3}));
+        System.out.println("4, [1,4,4] -> 1: " + minimumSizeSubArraySum.minSubArrayLen(4, new int[]{1,4,4}));
+        System.out.println("11, [1,1,1,1,1,1,1,1] -> 0: " + minimumSizeSubArraySum.minSubArrayLen(11, new int[]{1,1,1,1,1,1,1,1}));
+        System.out.println("11, [1,2,3,4,5] -> 3: " + minimumSizeSubArraySum.minSubArrayLen(11, new int[]{1,2,3,4,5}));
+        System.out.println("11, [1,2,3,4,5] -> 3: " + minimumSizeSubArraySum.minSubArrayLen(11, new int[]{1,2,3,4,5}));
+        System.out.println("------\n");
+        System.out.println("Q.1456 Maximum Number of Vowels in a Substring of Given Length");
+        System.out.println("abciiidef, 3 -> 3: " + maximumNumberOfVowelsInASubstringOfGivenLength.maxVowels("abciiidef", 3));
+        System.out.println("aeiou, 2 -> 2: " + maximumNumberOfVowelsInASubstringOfGivenLength.maxVowels("aeiou", 2));
+        System.out.println("leetcode, 3 -> 2: " + maximumNumberOfVowelsInASubstringOfGivenLength.maxVowels("leetcode", 3));
 
         System.out.println("----------\n\n");
 
@@ -147,12 +166,20 @@ public class Main {
 
         // dynamic programming
         LongestSubArray longestSubArray = new LongestSubArray();
+        NumberOfGoodWaysToSplitAString numberOfGoodWaysToSplitAString = new NumberOfGoodWaysToSplitAString();
 
         System.out.println("dynamic programming");
         System.out.println("Q.1493 Longest Subarray of 1's After Deleting One Element");
         System.out.println("[1,1,0,1] -> 3: " + longestSubArray.longestSubarray(new int[]{1,1,0,1}));
         System.out.println("[0,1,1,1,0,1,1,0,1] -> 5: " + longestSubArray.longestSubarray(new int[]{0,1,1,1,0,1,1,0,1}));
         System.out.println("[1,1,1] -> 2: " + longestSubArray.longestSubarray(new int[]{1,1,1}));
+        System.out.println("------\n");
+        System.out.println("Q.1525. Number of Good Ways to Split a String");
+        System.out.println("aacaba -> 2: " + numberOfGoodWaysToSplitAString.numSplits("aacaba"));
+        System.out.println("abcd -> 1: " + numberOfGoodWaysToSplitAString.numSplits("abcd"));
+        System.out.println("aabbaa -> 1: " + numberOfGoodWaysToSplitAString.numSplits("aabbaa"));
+        System.out.println("aaaaa -> 4: " + numberOfGoodWaysToSplitAString.numSplits("aaaaa"));
+        System.out.println("abdacaddbddab -> 0: " + numberOfGoodWaysToSplitAString.numSplits("abdacaddbddab"));
 
         System.out.println("----------\n\n");
 
