@@ -11,6 +11,8 @@ import leetcode.dfs.MaximumNumberOfAchievableTransferRequests;
 import leetcode.dynamicProgramming.LongestSubArray;
 import leetcode.dynamicProgramming.NumberOfGoodWaysToSplitAString;
 import leetcode.greedy.LongestPalindrome;
+import leetcode.greedy.MaximizeGreatnessOfAnArray;
+import leetcode.slidingWindow.MaximizeTheConfusionOfAnExam;
 import leetcode.slidingWindow.MaximumNumberOfVowelsInASubstringOfGivenLength;
 import leetcode.slidingWindow.MinimumSizeSubArraySum;
 import leetcode.sorting.MergeSortedArray;
@@ -56,6 +58,7 @@ public class Main {
         // sliding window
         MinimumSizeSubArraySum minimumSizeSubArraySum = new MinimumSizeSubArraySum();
         MaximumNumberOfVowelsInASubstringOfGivenLength maximumNumberOfVowelsInASubstringOfGivenLength = new MaximumNumberOfVowelsInASubstringOfGivenLength();
+        MaximizeTheConfusionOfAnExam maximizeTheConfusionOfAnExam = new MaximizeTheConfusionOfAnExam();
 
         System.out.println("sliding window");
         System.out.println("Q.209 Minimum Size Subarray Sum");
@@ -69,6 +72,11 @@ public class Main {
         System.out.println("abciiidef, 3 -> 3: " + maximumNumberOfVowelsInASubstringOfGivenLength.maxVowels("abciiidef", 3));
         System.out.println("aeiou, 2 -> 2: " + maximumNumberOfVowelsInASubstringOfGivenLength.maxVowels("aeiou", 2));
         System.out.println("leetcode, 3 -> 2: " + maximumNumberOfVowelsInASubstringOfGivenLength.maxVowels("leetcode", 3));
+        System.out.println("------\n");
+        System.out.println("Q.2024 Maximize the Confusion of an Exam");
+        System.out.println("TTFF, 2 -> 4: " + maximizeTheConfusionOfAnExam.maxConsecutiveAnswers("TTFF", 2));
+        System.out.println("TFFT, 1 -> 3: " + maximizeTheConfusionOfAnExam.maxConsecutiveAnswers("TFFT", 1));
+        System.out.println("TTFTTFTT, 1 -> 5: " + maximizeTheConfusionOfAnExam.maxConsecutiveAnswers("TTFTTFTT", 1));
 
         System.out.println("----------\n\n");
 
@@ -185,12 +193,17 @@ public class Main {
 
         // greedy
         LongestPalindrome longestPalindrome = new LongestPalindrome();
+        MaximizeGreatnessOfAnArray maximizeGreatnessOfAnArray = new MaximizeGreatnessOfAnArray();
 
         System.out.println("greedy");
         System.out.println("Q.409 Longest Palindrome");
         System.out.println("abccccdd -> 7: " + longestPalindrome.longestPalindrome("abccccdd"));
         System.out.println("a -> 1: " + longestPalindrome.longestPalindrome("a"));
         System.out.println("civilwartestingwhetherthatnaptionoranynartionsoconceivedandsodedicatedcanlongendureWeareqmetonagreatbattlefiemldoftzhatwarWehavecometodedicpateaportionofthatfieldasafinalrestingplaceforthosewhoheregavetheirlivesthatthatnationmightliveItisaltogetherfangandproperthatweshoulddothisButinalargersensewecannotdedicatewecannotconsecratewecannothallowthisgroundThebravelmenlivinganddeadwhostruggledherehaveconsecrateditfaraboveourpoorponwertoaddordetractTgheworldadswfilllittlenotlenorlongrememberwhatwesayherebutitcanneverforgetwhattheydidhereItisforusthelivingrathertobededicatedheretotheulnfinishedworkwhichtheywhofoughtherehavethusfarsonoblyadvancedItisratherforustobeherededicatedtothegreattdafskremainingbeforeusthatfromthesehonoreddeadwetakeincreaseddevotiontothatcauseforwhichtheygavethelastpfullmeasureofdevotionthatweherehighlyresolvethatthesedeadshallnothavediedinvainthatthisnationunsderGodshallhaveanewbirthoffreedomandthatgovernmentofthepeoplebythepeopleforthepeopleshallnotperishfromtheearth -> 983: " + longestPalindrome.longestPalindrome("civilwartestingwhetherthatnaptionoranynartionsoconceivedandsodedicatedcanlongendureWeareqmetonagreatbattlefiemldoftzhatwarWehavecometodedicpateaportionofthatfieldasafinalrestingplaceforthosewhoheregavetheirlivesthatthatnationmightliveItisaltogetherfangandproperthatweshoulddothisButinalargersensewecannotdedicatewecannotconsecratewecannothallowthisgroundThebravelmenlivinganddeadwhostruggledherehaveconsecrateditfaraboveourpoorponwertoaddordetractTgheworldadswfilllittlenotlenorlongrememberwhatwesayherebutitcanneverforgetwhattheydidhereItisforusthelivingrathertobededicatedheretotheulnfinishedworkwhichtheywhofoughtherehavethusfarsonoblyadvancedItisratherforustobeherededicatedtothegreattdafskremainingbeforeusthatfromthesehonoreddeadwetakeincreaseddevotiontothatcauseforwhichtheygavethelastpfullmeasureofdevotionthatweherehighlyresolvethatthesedeadshallnothavediedinvainthatthisnationunsderGodshallhaveanewbirthoffreedomandthatgovernmentofthepeoplebythepeopleforthepeopleshallnotperishfromtheearth"));
+        System.out.println("------\n");
+        System.out.println("Q.2592 Maximize Greatness of an Array");
+        System.out.println("[1,3,5,2,1,3,1] -> 4: " + maximizeGreatnessOfAnArray.maximizeGreatness(new int[]{1,3,5,2,1,3,1}));
+        System.out.println("[1,2,3,4] -> 3: " + maximizeGreatnessOfAnArray.maximizeGreatness(new int[]{1,2,3,4}));
     }
 
 //    public static void main(String[] args) {
