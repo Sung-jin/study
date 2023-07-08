@@ -1,3 +1,4 @@
+import leetcode.ListNode;
 import leetcode.TreeNode;
 import leetcode.bfs.SameTree;
 import leetcode.bfs.SymmetricTree;
@@ -12,6 +13,7 @@ import leetcode.dynamicProgramming.LongestSubArray;
 import leetcode.dynamicProgramming.NumberOfGoodWaysToSplitAString;
 import leetcode.greedy.LongestPalindrome;
 import leetcode.greedy.MaximizeGreatnessOfAnArray;
+import leetcode.greedy.TwoCityScheduling;
 import leetcode.slidingWindow.MaximizeTheConfusionOfAnExam;
 import leetcode.slidingWindow.MaximumNumberOfVowelsInASubstringOfGivenLength;
 import leetcode.slidingWindow.MinimumSizeSubArraySum;
@@ -27,6 +29,7 @@ public class Main {
         RomanToInteger romanToInteger = new RomanToInteger();
         SingleNumber2 singleNumber2 = new SingleNumber2();
         BuddyStrings buddyStrings = new BuddyStrings();
+        DeleteTheMiddleNodeOfALinkedList deleteTheMiddleNodeOfALinkedList = new DeleteTheMiddleNodeOfALinkedList();
 
         System.out.println("brute force");
         System.out.println("Q.1 two sum");
@@ -52,6 +55,9 @@ public class Main {
         System.out.println("ccccda, acccdc -> true: " + buddyStrings.buddyStrings("ccccda", "acccdc"));
         System.out.println("ccccda, accccd -> false: " + buddyStrings.buddyStrings("ccccda", "accccd"));
         System.out.println("ab, ca -> false: " + buddyStrings.buddyStrings("ab", "ca"));
+        System.out.println("------\n");
+        System.out.println("Q.2095 Delete the Middle Node of a Linked List");
+        System.out.println("[1,3,4,7,1,2,6] -> [1,3,4,1,2,6]: " + deleteTheMiddleNodeOfALinkedList.deleteMiddle(ListNode.generateNode(new Integer[]{1,3,4,7,1,2,6})).getAllNode());
 
         System.out.println("----------\n\n");
 
@@ -193,6 +199,7 @@ public class Main {
 
         // greedy
         LongestPalindrome longestPalindrome = new LongestPalindrome();
+        TwoCityScheduling twoCityScheduling = new TwoCityScheduling();
         MaximizeGreatnessOfAnArray maximizeGreatnessOfAnArray = new MaximizeGreatnessOfAnArray();
 
         System.out.println("greedy");
@@ -200,6 +207,10 @@ public class Main {
         System.out.println("abccccdd -> 7: " + longestPalindrome.longestPalindrome("abccccdd"));
         System.out.println("a -> 1: " + longestPalindrome.longestPalindrome("a"));
         System.out.println("civilwartestingwhetherthatnaptionoranynartionsoconceivedandsodedicatedcanlongendureWeareqmetonagreatbattlefiemldoftzhatwarWehavecometodedicpateaportionofthatfieldasafinalrestingplaceforthosewhoheregavetheirlivesthatthatnationmightliveItisaltogetherfangandproperthatweshoulddothisButinalargersensewecannotdedicatewecannotconsecratewecannothallowthisgroundThebravelmenlivinganddeadwhostruggledherehaveconsecrateditfaraboveourpoorponwertoaddordetractTgheworldadswfilllittlenotlenorlongrememberwhatwesayherebutitcanneverforgetwhattheydidhereItisforusthelivingrathertobededicatedheretotheulnfinishedworkwhichtheywhofoughtherehavethusfarsonoblyadvancedItisratherforustobeherededicatedtothegreattdafskremainingbeforeusthatfromthesehonoreddeadwetakeincreaseddevotiontothatcauseforwhichtheygavethelastpfullmeasureofdevotionthatweherehighlyresolvethatthesedeadshallnothavediedinvainthatthisnationunsderGodshallhaveanewbirthoffreedomandthatgovernmentofthepeoplebythepeopleforthepeopleshallnotperishfromtheearth -> 983: " + longestPalindrome.longestPalindrome("civilwartestingwhetherthatnaptionoranynartionsoconceivedandsodedicatedcanlongendureWeareqmetonagreatbattlefiemldoftzhatwarWehavecometodedicpateaportionofthatfieldasafinalrestingplaceforthosewhoheregavetheirlivesthatthatnationmightliveItisaltogetherfangandproperthatweshoulddothisButinalargersensewecannotdedicatewecannotconsecratewecannothallowthisgroundThebravelmenlivinganddeadwhostruggledherehaveconsecrateditfaraboveourpoorponwertoaddordetractTgheworldadswfilllittlenotlenorlongrememberwhatwesayherebutitcanneverforgetwhattheydidhereItisforusthelivingrathertobededicatedheretotheulnfinishedworkwhichtheywhofoughtherehavethusfarsonoblyadvancedItisratherforustobeherededicatedtothegreattdafskremainingbeforeusthatfromthesehonoreddeadwetakeincreaseddevotiontothatcauseforwhichtheygavethelastpfullmeasureofdevotionthatweherehighlyresolvethatthesedeadshallnothavediedinvainthatthisnationunsderGodshallhaveanewbirthoffreedomandthatgovernmentofthepeoplebythepeopleforthepeopleshallnotperishfromtheearth"));
+        System.out.println("------\n");
+        System.out.println("Q.1029 Two City Scheduling");
+        System.out.println("[[259,770],[448,54],[926,667],[184,139],[840,118],[577,469]] -> 1859: " + twoCityScheduling.twoCitySchedCost(new int[][]{{259,770},{448,54},{926,667},{184,139},{840,118},{577,469}}));
+        System.out.println("[[515,563],[451,713],[537,709],[343,819],[855,779],[457,60],[650,359],[631,42]] -> 3086: " + twoCityScheduling.twoCitySchedCost(new int[][]{{515,563},{451,713},{537,709},{343,819},{855,779},{457,60},{650,359},{631,42}}));
         System.out.println("------\n");
         System.out.println("Q.2592 Maximize Greatness of an Array");
         System.out.println("[1,3,5,2,1,3,1] -> 4: " + maximizeGreatnessOfAnArray.maximizeGreatness(new int[]{1,3,5,2,1,3,1}));
