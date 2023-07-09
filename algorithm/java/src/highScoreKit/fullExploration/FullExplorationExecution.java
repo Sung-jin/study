@@ -11,6 +11,7 @@ public class FullExplorationExecution {
         Carpet carpet = new Carpet();
         DividePower dividePower = new DividePower();
         VowelDictionary vowelDictionary = new VowelDictionary();
+        PlacingIntegersInASpiral placingIntegersInASpiral = new PlacingIntegersInASpiral();
 
         System.out.println(
                 "leastRectangle > [[60, 50], [30, 70], [60, 30], [80, 40]] -> 4000: " +
@@ -63,5 +64,8 @@ public class FullExplorationExecution {
         System.out.println("vowelDictionary > AAAE -> 10: " + vowelDictionary.solution("AAAE"));
         System.out.println("vowelDictionary > I -> 1563: " + vowelDictionary.solution("I"));
         System.out.println("vowelDictionary > EIO -> 1189: " + vowelDictionary.solution("EIO"));
+        System.out.println("------");
+        System.out.println("placing integers in a spiral > 4 -> [[1, 2, 3, 4], [12, 13, 14, 5], [11, 16, 15, 6], [10, 9, 8, 7]]: " + Arrays.deepToString(placingIntegersInASpiral.solution(4)));
+        System.out.println("placing integers in a spiral > 5 -> [[1, 2, 3, 4, 5], [16, 17, 18, 19, 6], [15, 24, 25, 20, 7], [14, 23, 22, 21, 8], [13, 12, 11, 10, 9]]: " + Arrays.deepToString(placingIntegersInASpiral.solution(5)));
     }
 }

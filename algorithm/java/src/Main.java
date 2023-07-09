@@ -27,6 +27,7 @@ public class Main {
         // brute force
         TwoSum twoSum = new TwoSum();
         RomanToInteger romanToInteger = new RomanToInteger();
+        Subsets2 subsets2 = new Subsets2();
         SingleNumber2 singleNumber2 = new SingleNumber2();
         BuddyStrings buddyStrings = new BuddyStrings();
         DeleteTheMiddleNodeOfALinkedList deleteTheMiddleNodeOfALinkedList = new DeleteTheMiddleNodeOfALinkedList();
@@ -41,6 +42,12 @@ public class Main {
         System.out.println("III -> 3: " + romanToInteger.romanToInt("III"));
         System.out.println("LVIII -> 58: " + romanToInteger.romanToInt("LVIII"));
         System.out.println("MCMXCIV -> 1994: " + romanToInteger.romanToInt("MCMXCIV"));
+        System.out.println("------\n");
+        System.out.println("Q.90 Subsets 2");
+//        System.out.println("[1,2,2] -> [[],[1],[1,2],[1,2,2],[2],[2,2]]: " + subsets2.subsetsWithDup(new int[]{1,2,2}));
+//        System.out.println("[1,2,3] -> [[],[1],[1,2],[1,2,3],[1,3],[2],[2,3],[3]]: " + subsets2.subsetsWithDup(new int[]{1,2,3}));
+        System.out.println("[4,4,4,1,4] -> [[],[4],[4,4],[4,4,4],[4,4,4,1],[4,4,4,1,4],[4,4,1,4],[4,1,4],[4,4,4,4],[4,4,1],[4,1],[1,4],[1]]: " + subsets2.subsetsWithDup(new int[]{4,4,4,1,4}));
+        System.out.println("[0] -> [[],[0]]: " + subsets2.subsetsWithDup(new int[]{0}));
         System.out.println("------\n");
         System.out.println("Q.137 single number 2");
         System.out.println("[2,2,3,2] -> 3: " + singleNumber2.singleNumber(new int[]{2, 2, 3, 2}));
