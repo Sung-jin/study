@@ -1,5 +1,6 @@
 import leetcode.ListNode;
 import leetcode.TreeNode;
+import leetcode.bfs.MinimumDepthOfBinaryTree;
 import leetcode.bfs.SameTree;
 import leetcode.bfs.SymmetricTree;
 import leetcode.binarySearch.MissingNumber;
@@ -44,8 +45,8 @@ public class Main {
         System.out.println("MCMXCIV -> 1994: " + romanToInteger.romanToInt("MCMXCIV"));
         System.out.println("------\n");
         System.out.println("Q.90 Subsets 2");
-//        System.out.println("[1,2,2] -> [[],[1],[1,2],[1,2,2],[2],[2,2]]: " + subsets2.subsetsWithDup(new int[]{1,2,2}));
-//        System.out.println("[1,2,3] -> [[],[1],[1,2],[1,2,3],[1,3],[2],[2,3],[3]]: " + subsets2.subsetsWithDup(new int[]{1,2,3}));
+        System.out.println("[1,2,2] -> [[],[1],[1,2],[1,2,2],[2],[2,2]]: " + subsets2.subsetsWithDup(new int[]{1,2,2}));
+        System.out.println("[1,2,3] -> [[],[1],[1,2],[1,2,3],[1,3],[2],[2,3],[3]]: " + subsets2.subsetsWithDup(new int[]{1,2,3}));
         System.out.println("[4,4,4,1,4] -> [[],[4],[4,4],[4,4,4],[4,4,4,1],[4,4,4,1,4],[4,4,1,4],[4,1,4],[4,4,4,4],[4,4,1],[4,1],[1,4],[1]]: " + subsets2.subsetsWithDup(new int[]{4,4,4,1,4}));
         System.out.println("[0] -> [[],[0]]: " + subsets2.subsetsWithDup(new int[]{0}));
         System.out.println("------\n");
@@ -173,6 +174,7 @@ public class Main {
         // bfs
         SameTree sameTree = new SameTree();
         SymmetricTree symmetricTree = new SymmetricTree();
+        MinimumDepthOfBinaryTree minimumDepthOfBinaryTree = new MinimumDepthOfBinaryTree();
 
         System.out.println("bfs");
         System.out.println("Q.100 Same Tree");
@@ -182,6 +184,11 @@ public class Main {
         System.out.println("Q.101 Symmetric Tree");
         System.out.println("[1,2,2,3,4,4,3] -> true: " + symmetricTree.isSymmetric(TreeNode.generateNode(new Integer[]{1,2,2,3,4,4,3})));
         System.out.println("[1,2,2,3,4,4,3] -> true: " + symmetricTree.isSymmetric(TreeNode.generateNode(new Integer[]{1,2,2,null,3,null,3})));
+        System.out.println("------\n");
+        System.out.println("Q.111 Minimum Depth of Binary Tree");
+        System.out.println("[3,9,20,null,null,15,7] -> 2: " + minimumDepthOfBinaryTree.minDepth(TreeNode.generateNode(new Integer[]{3,9,20,null,null,15,7})));
+        System.out.println("[2,null,3,null,4,null,5,null,6] -> 5: " + minimumDepthOfBinaryTree.minDepth(TreeNode.generateNode(new Integer[]{2,null,3,null,4,null,5,null,6})));
+        System.out.println("[1,2,3,4,5] -> 2: " + minimumDepthOfBinaryTree.minDepth(TreeNode.generateNode(new Integer[]{1,2,3,4,5})));
 
         System.out.println("----------\n\n");
 
