@@ -7,6 +7,7 @@ import leetcode.binarySearch.MissingNumber;
 import leetcode.binarySearch.SearchInsertPosition;
 import leetcode.binarySearch.Sqrt;
 import leetcode.bruteForce.*;
+import leetcode.dfs.AllNodesDistanceKInBinaryTree;
 import leetcode.dfs.BinaryTreeInorderTraversal;
 import leetcode.dfs.FairDistributionOfCookies;
 import leetcode.dfs.MaximumNumberOfAchievableTransferRequests;
@@ -145,6 +146,7 @@ public class Main {
 
         // dfs
         BinaryTreeInorderTraversal binaryTreeInorderTraversal = new BinaryTreeInorderTraversal();
+        AllNodesDistanceKInBinaryTree allNodesDistanceKInBinaryTree = new AllNodesDistanceKInBinaryTree();
         MaximumNumberOfAchievableTransferRequests maximumNumberOfAchievableTransferRequests = new MaximumNumberOfAchievableTransferRequests();
         FairDistributionOfCookies fairDistributionOfCookies = new FairDistributionOfCookies();
 
@@ -153,6 +155,15 @@ public class Main {
         System.out.println("[1,null,2,3] -> [1,3,2]: " + binaryTreeInorderTraversal.inorderTraversal(TreeNode.generateNode(new Integer[]{1,null,2,3})));
         System.out.println("[] -> []: " + binaryTreeInorderTraversal.inorderTraversal(TreeNode.generateNode(new Integer[]{})));
         System.out.println("[1] -> [1]: " + binaryTreeInorderTraversal.inorderTraversal(TreeNode.generateNode(new Integer[]{1})));
+        System.out.println("------\n");
+        System.out.println("Q.863 All Nodes Distance K in Binary Tree");
+        System.out.println("[3,5,1,6,2,0,8,null,null,7,4], 5, 2 -> [7,4,1]: " + allNodesDistanceKInBinaryTree.distanceK(TreeNode.generateNode(new Integer[]{3,5,1,6,2,0,8,null,null,7,4}), new TreeNode(5), 2));
+        System.out.println("[1], 1, 3 -> []: " + allNodesDistanceKInBinaryTree.distanceK(TreeNode.generateNode(new Integer[]{1}), new TreeNode(1), 3));
+        System.out.println("[0,null,1,null,2,null,3], 1, 2 -> [3]: " + allNodesDistanceKInBinaryTree.distanceK(TreeNode.generateNode(new Integer[]{0,null,1,null,2,null,3}), new TreeNode(1), 2));
+        System.out.println("[0,1,null,3,2], 2, 1 -> [1]: " + allNodesDistanceKInBinaryTree.distanceK(TreeNode.generateNode(new Integer[]{0,1,null,3,2}), new TreeNode(2), 1));
+        System.out.println("[0,1,null,null,2,null,3,null,4], 3, 0 -> [3]: " + allNodesDistanceKInBinaryTree.distanceK(TreeNode.generateNode(new Integer[]{0,1,null,null,2,null,3,null,4}), new TreeNode(3), 0));
+        System.out.println("[0,null,1,null,2,null,3,null,4], 0, 2 -> [2]: " + allNodesDistanceKInBinaryTree.distanceK(TreeNode.generateNode(new Integer[]{0,null,1,null,2,null,3,null,4}), new TreeNode(0), 2));
+        System.out.println("[0,null,1,2,5,null,3,null,null,null,4], 2, 2 -> [4,5,0]: " + allNodesDistanceKInBinaryTree.distanceK(TreeNode.generateNode(new Integer[]{0,null,1,2,5,null,3,null,null,null,4}), new TreeNode(2), 2));
         System.out.println("------\n");
         System.out.println("Q.1601 Maximum Number of Achievable Transfer Requests");
         System.out.println(
