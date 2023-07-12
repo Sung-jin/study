@@ -1,5 +1,6 @@
 import leetcode.ListNode;
 import leetcode.TreeNode;
+import leetcode.bfs.FindEventualSafeStates;
 import leetcode.bfs.MinimumDepthOfBinaryTree;
 import leetcode.bfs.SameTree;
 import leetcode.bfs.SymmetricTree;
@@ -186,6 +187,7 @@ public class Main {
         SameTree sameTree = new SameTree();
         SymmetricTree symmetricTree = new SymmetricTree();
         MinimumDepthOfBinaryTree minimumDepthOfBinaryTree = new MinimumDepthOfBinaryTree();
+        FindEventualSafeStates findEventualSafeStates = new FindEventualSafeStates();
 
         System.out.println("bfs");
         System.out.println("Q.100 Same Tree");
@@ -200,6 +202,13 @@ public class Main {
         System.out.println("[3,9,20,null,null,15,7] -> 2: " + minimumDepthOfBinaryTree.minDepth(TreeNode.generateNode(new Integer[]{3,9,20,null,null,15,7})));
         System.out.println("[2,null,3,null,4,null,5,null,6] -> 5: " + minimumDepthOfBinaryTree.minDepth(TreeNode.generateNode(new Integer[]{2,null,3,null,4,null,5,null,6})));
         System.out.println("[1,2,3,4,5] -> 2: " + minimumDepthOfBinaryTree.minDepth(TreeNode.generateNode(new Integer[]{1,2,3,4,5})));
+        System.out.println("------\n");
+        System.out.println("Q.802 Find Eventual Safe States");
+        System.out.println("[[1,2],[2,3],[5],[0],[5],[],[]] -> [2,4,5,6]: " + findEventualSafeStates.eventualSafeNodes(new int[][]{{1,2},{2,3},{5},{0},{5},{},{}}));
+        System.out.println("[[1,2,3,4],[1,2],[3,4],[0,4],[]] -> [4]: " + findEventualSafeStates.eventualSafeNodes(new int[][]{{1,2,3,4},{1,2},{3,4},{0,4},{}}));
+        System.out.println("[[0],[2,3,4],[3,4],[0,4],[]] -> [0,1,2,3,4]: " + findEventualSafeStates.eventualSafeNodes(new int[][]{{0},{2,3,4},{3,4},{0,4}, {}}));
+        System.out.println("[[],[0,2,3,4],[3],[4],[]] -> [0,1,2,3,4]: " + findEventualSafeStates.eventualSafeNodes(new int[][]{{},{0,2,3,4},{3},{4},{}}));
+        System.out.println("[[4,9],[3,5,7],[0,3,4,5,6,8],[7,8,9],[5,6,7,8],[6,7,8,9],[7,9],[8,9],[9],[]] -> [0,1,2,3,4,5,6,7,8,9]: " + findEventualSafeStates.eventualSafeNodes(new int[][]{{4,9},{3,5,7},{0,3,4,5,6,8},{7,8,9},{5,6,7,8},{6,7,8,9},{7,9},{8,9},{9},{}}));
 
         System.out.println("----------\n\n");
 
