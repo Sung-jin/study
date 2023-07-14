@@ -8,16 +8,11 @@ import leetcode.binarySearch.MissingNumber;
 import leetcode.binarySearch.SearchInsertPosition;
 import leetcode.binarySearch.Sqrt;
 import leetcode.bruteForce.*;
-import leetcode.dfs.AllNodesDistanceKInBinaryTree;
-import leetcode.dfs.BinaryTreeInorderTraversal;
-import leetcode.dfs.FairDistributionOfCookies;
-import leetcode.dfs.MaximumNumberOfAchievableTransferRequests;
+import leetcode.dfs.*;
+import leetcode.dynamicProgramming.LongestArithmeticSubsequenceOfGivenDifference;
 import leetcode.dynamicProgramming.LongestSubArray;
 import leetcode.dynamicProgramming.NumberOfGoodWaysToSplitAString;
-import leetcode.greedy.LongestPalindrome;
-import leetcode.greedy.MaximizeGreatnessOfAnArray;
-import leetcode.greedy.MaximumAreaOfAPieceOfCakeAfterHorizontalAndVerticalCuts;
-import leetcode.greedy.TwoCityScheduling;
+import leetcode.greedy.*;
 import leetcode.slidingWindow.MaximizeTheConfusionOfAnExam;
 import leetcode.slidingWindow.MaximumNumberOfVowelsInASubstringOfGivenLength;
 import leetcode.slidingWindow.MinimumSizeSubArraySum;
@@ -148,6 +143,7 @@ public class Main {
 
         // dfs
         BinaryTreeInorderTraversal binaryTreeInorderTraversal = new BinaryTreeInorderTraversal();
+        MakingALargeIsland makingALargeIsland = new MakingALargeIsland();
         AllNodesDistanceKInBinaryTree allNodesDistanceKInBinaryTree = new AllNodesDistanceKInBinaryTree();
         MaximumNumberOfAchievableTransferRequests maximumNumberOfAchievableTransferRequests = new MaximumNumberOfAchievableTransferRequests();
         FairDistributionOfCookies fairDistributionOfCookies = new FairDistributionOfCookies();
@@ -158,6 +154,11 @@ public class Main {
         System.out.println("[] -> []: " + binaryTreeInorderTraversal.inorderTraversal(TreeNode.generateNode(new Integer[]{})));
         System.out.println("[1] -> [1]: " + binaryTreeInorderTraversal.inorderTraversal(TreeNode.generateNode(new Integer[]{1})));
         System.out.println("------\n");
+        System.out.println("Q.827 Making A Large Island");
+        System.out.println("[[1,0],[0,1]] -> 3: " + makingALargeIsland.largestIsland(new int[][]{{1,0},{0,1}}));
+        System.out.println("[[1,1],[1,0]] -> 4: " + makingALargeIsland.largestIsland(new int[][]{{1,1},{1,0}}));
+        System.out.println("[[1,1],[1,1]] -> 4: " + makingALargeIsland.largestIsland(new int[][]{{1,1},{1,1}}));
+        System.out.println("[[0,0,0,0,0,0,0],[0,1,1,1,1,0,0],[0,1,0,0,1,0,0],[1,0,1,0,1,0,0],[0,1,0,0,1,0,0],[0,1,0,0,1,0,0],[0,1,1,1,1,0,0]] -> 18: " + makingALargeIsland.largestIsland(new int[][]{{0,0,0,0,0,0,0},{0,1,1,1,1,0,0},{0,1,0,0,1,0,0},{1,0,1,0,1,0,0},{0,1,0,0,1,0,0},{0,1,0,0,1,0,0},{0,1,1,1,1,0,0}}));
         System.out.println("Q.863 All Nodes Distance K in Binary Tree");
         System.out.println("[3,5,1,6,2,0,8,null,null,7,4], 5, 2 -> [7,4,1]: " + allNodesDistanceKInBinaryTree.distanceK(TreeNode.generateNode(new Integer[]{3,5,1,6,2,0,8,null,null,7,4}), new TreeNode(5), 2));
         System.out.println("[1], 1, 3 -> []: " + allNodesDistanceKInBinaryTree.distanceK(TreeNode.generateNode(new Integer[]{1}), new TreeNode(1), 3));
@@ -214,10 +215,16 @@ public class Main {
         System.out.println("----------\n\n");
 
         // dynamic programming
+        LongestArithmeticSubsequenceOfGivenDifference longestArithmeticSubsequenceOfGivenDifference = new LongestArithmeticSubsequenceOfGivenDifference();
         LongestSubArray longestSubArray = new LongestSubArray();
         NumberOfGoodWaysToSplitAString numberOfGoodWaysToSplitAString = new NumberOfGoodWaysToSplitAString();
 
         System.out.println("dynamic programming");
+        System.out.println("Q.1218 Longest Arithmetic Subsequence of Given Difference");
+        System.out.println("[1,2,3,4], 1 -> 4: " + longestArithmeticSubsequenceOfGivenDifference.longestSubsequence(new int[]{1,2,3,4}, 1));
+        System.out.println("[1,3,5,7], 1 -> 1: " + longestArithmeticSubsequenceOfGivenDifference.longestSubsequence(new int[]{1,3,5,7}, 1));
+        System.out.println("[1,5,7,8,5,3,4,2,1], -2 -> 4: " + longestArithmeticSubsequenceOfGivenDifference.longestSubsequence(new int[]{1,5,7,8,5,3,4,2,1}, -2));
+        System.out.println("------\n");
         System.out.println("Q.1493 Longest Subarray of 1's After Deleting One Element");
         System.out.println("[1,1,0,1] -> 3: " + longestSubArray.longestSubarray(new int[]{1,1,0,1}));
         System.out.println("[0,1,1,1,0,1,1,0,1] -> 5: " + longestSubArray.longestSubarray(new int[]{0,1,1,1,0,1,1,0,1}));
