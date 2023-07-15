@@ -146,6 +146,8 @@ public class Main {
         MakingALargeIsland makingALargeIsland = new MakingALargeIsland();
         AllNodesDistanceKInBinaryTree allNodesDistanceKInBinaryTree = new AllNodesDistanceKInBinaryTree();
         MaximumNumberOfAchievableTransferRequests maximumNumberOfAchievableTransferRequests = new MaximumNumberOfAchievableTransferRequests();
+        MaximumNumberOfEventsThatCanBeAttendedII maximumNumberOfEventsThatCanBeAttendedII = new MaximumNumberOfEventsThatCanBeAttendedII();
+        LexicographicallySmallestStringAfterApplyingOperations lexicographicallySmallestStringAfterApplyingOperations =  new LexicographicallySmallestStringAfterApplyingOperations();
         FairDistributionOfCookies fairDistributionOfCookies = new FairDistributionOfCookies();
 
         System.out.println("dfs");
@@ -169,14 +171,16 @@ public class Main {
         System.out.println("[0,null,1,2,5,null,3,null,null,null,4], 2, 2 -> [4,5,0]: " + allNodesDistanceKInBinaryTree.distanceK(TreeNode.generateNode(new Integer[]{0,null,1,2,5,null,3,null,null,null,4}), new TreeNode(2), 2));
         System.out.println("------\n");
         System.out.println("Q.1601 Maximum Number of Achievable Transfer Requests");
-        System.out.println(
-                "5, [[0,1],[1,0],[0,1],[1,2],[2,0],[3,4]] -> 5: " +
-                        maximumNumberOfAchievableTransferRequests.maximumRequests(5, new int[][]{{0,1},{1,0},{0,1},{1,2},{2,0},{3,4}})
-        );
-        System.out.println(
-                "4, [[0,3],[3,1],[1,2],[2,0]] -> 4: " +
-                        maximumNumberOfAchievableTransferRequests.maximumRequests(4, new int[][]{{0,3},{3,1},{1,2},{2,0}})
-        );
+        System.out.println("5, [[0,1],[1,0],[0,1],[1,2],[2,0],[3,4]] -> 5: " + maximumNumberOfAchievableTransferRequests.maximumRequests(5, new int[][]{{0,1},{1,0},{0,1},{1,2},{2,0},{3,4}}));
+        System.out.println("4, [[0,3],[3,1],[1,2],[2,0]] -> 4: " + maximumNumberOfAchievableTransferRequests.maximumRequests(4, new int[][]{{0,3},{3,1},{1,2},{2,0}}));
+        System.out.println("------\n");
+        System.out.println("Q.1625 Lexicographically Smallest String After Applying Operations");
+        System.out.println("5525, 9, 2 -> 2050: " + lexicographicallySmallestStringAfterApplyingOperations.findLexSmallestString("5525", 9, 2));
+        System.out.println("74, 5, 1 -> 24: " + lexicographicallySmallestStringAfterApplyingOperations.findLexSmallestString("74", 5, 1));
+        System.out.println("0011, 4, 2 -> 0011: " + lexicographicallySmallestStringAfterApplyingOperations.findLexSmallestString("0011", 4, 2));
+        System.out.println("------\n");
+        System.out.println("Q.1751 Maximum Number of Events That Can Be Attended II");
+        System.out.println("[[1,2,4],[3,4,3],[2,3,1]], 2 -> 7: " + maximumNumberOfEventsThatCanBeAttendedII.maxValue(new int[][]{{1,2,4},{3,4,3},{2,3,1}}, 2));
         System.out.println("------\n");
         System.out.println("Q.2305 Fair Distribution of Cookies");
         System.out.println("[8,15,10,20,8], 2 -> 31: " + fairDistributionOfCookies.distributeCookies(new int[]{8,15,10,20,8}, 2));
