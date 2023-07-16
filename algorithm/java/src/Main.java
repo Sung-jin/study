@@ -18,6 +18,7 @@ import leetcode.slidingWindow.MaximumNumberOfVowelsInASubstringOfGivenLength;
 import leetcode.slidingWindow.MinimumSizeSubArraySum;
 import leetcode.sorting.MergeSortedArray;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Main {
@@ -145,6 +146,7 @@ public class Main {
         BinaryTreeInorderTraversal binaryTreeInorderTraversal = new BinaryTreeInorderTraversal();
         MakingALargeIsland makingALargeIsland = new MakingALargeIsland();
         AllNodesDistanceKInBinaryTree allNodesDistanceKInBinaryTree = new AllNodesDistanceKInBinaryTree();
+        SmallestSufficientTeam smallestSufficientTeam = new SmallestSufficientTeam();
         MaximumNumberOfAchievableTransferRequests maximumNumberOfAchievableTransferRequests = new MaximumNumberOfAchievableTransferRequests();
         MaximumNumberOfEventsThatCanBeAttendedII maximumNumberOfEventsThatCanBeAttendedII = new MaximumNumberOfEventsThatCanBeAttendedII();
         LexicographicallySmallestStringAfterApplyingOperations lexicographicallySmallestStringAfterApplyingOperations =  new LexicographicallySmallestStringAfterApplyingOperations();
@@ -169,6 +171,9 @@ public class Main {
         System.out.println("[0,1,null,null,2,null,3,null,4], 3, 0 -> [3]: " + allNodesDistanceKInBinaryTree.distanceK(TreeNode.generateNode(new Integer[]{0,1,null,null,2,null,3,null,4}), new TreeNode(3), 0));
         System.out.println("[0,null,1,null,2,null,3,null,4], 0, 2 -> [2]: " + allNodesDistanceKInBinaryTree.distanceK(TreeNode.generateNode(new Integer[]{0,null,1,null,2,null,3,null,4}), new TreeNode(0), 2));
         System.out.println("[0,null,1,2,5,null,3,null,null,null,4], 2, 2 -> [4,5,0]: " + allNodesDistanceKInBinaryTree.distanceK(TreeNode.generateNode(new Integer[]{0,null,1,2,5,null,3,null,null,null,4}), new TreeNode(2), 2));
+        System.out.println("------\n");
+        System.out.println("Q.1125 Smallest Sufficient Team");
+        System.out.println("[java,nodejs,reactjs], [[java],[nodejs],[nodejs,reactjs]] -> [0,2]: " + Arrays.toString(smallestSufficientTeam.smallestSufficientTeam(new String[]{"java", "nodejs", "reactjs"}, smallestSufficientTeam.createPeople(new String[][]{{"java"}, {"nodejs"}, {"nodejs", "reactjs"}}))));
         System.out.println("------\n");
         System.out.println("Q.1601 Maximum Number of Achievable Transfer Requests");
         System.out.println("5, [[0,1],[1,0],[0,1],[1,2],[2,0],[3,4]] -> 5: " + maximumNumberOfAchievableTransferRequests.maximumRequests(5, new int[][]{{0,1},{1,0},{0,1},{1,2},{2,0},{3,4}}));
