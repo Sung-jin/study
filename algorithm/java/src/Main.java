@@ -4,6 +4,7 @@ import leetcode.bfs.FindEventualSafeStates;
 import leetcode.bfs.MinimumDepthOfBinaryTree;
 import leetcode.bfs.SameTree;
 import leetcode.bfs.SymmetricTree;
+import leetcode.binarySearch.GuessNumberHigherOrLower;
 import leetcode.binarySearch.MissingNumber;
 import leetcode.binarySearch.SearchInsertPosition;
 import leetcode.binarySearch.Sqrt;
@@ -12,13 +13,15 @@ import leetcode.dfs.*;
 import leetcode.dynamicProgramming.LongestArithmeticSubsequenceOfGivenDifference;
 import leetcode.dynamicProgramming.LongestSubArray;
 import leetcode.dynamicProgramming.NumberOfGoodWaysToSplitAString;
-import leetcode.greedy.*;
+import leetcode.greedy.LongestPalindrome;
+import leetcode.greedy.MaximizeGreatnessOfAnArray;
+import leetcode.greedy.MaximumAreaOfAPieceOfCakeAfterHorizontalAndVerticalCuts;
+import leetcode.greedy.TwoCityScheduling;
 import leetcode.slidingWindow.MaximizeTheConfusionOfAnExam;
 import leetcode.slidingWindow.MaximumNumberOfVowelsInASubstringOfGivenLength;
 import leetcode.slidingWindow.MinimumSizeSubArraySum;
 import leetcode.sorting.MergeSortedArray;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Main {
@@ -119,6 +122,7 @@ public class Main {
         SearchInsertPosition searchInsertPosition = new SearchInsertPosition();
         Sqrt sqrt = new Sqrt();
         MissingNumber missingNumber = new MissingNumber();
+        GuessNumberHigherOrLower guessNumberHigherOrLower = new GuessNumberHigherOrLower();
 
         System.out.println("binary search");
         System.out.println("Q.35 Search Insert Position");
@@ -145,6 +149,13 @@ public class Main {
         System.out.println("[0,1,2,3,5,6,7] -> 4: " + missingNumber.missingNumber(new int[]{0,1,2,3,5,6,7}));
         System.out.println("[1,2] -> 0: " + missingNumber.missingNumber(new int[]{1,2}));
         System.out.println("[9,3,7,1,5,4,8,0,2] -> 6: " + missingNumber.missingNumber(new int[]{9,3,7,1,5,4,8,0,2}));
+        System.out.println("------\n");
+        System.out.println("Q.374 Guess Number Higher or Lower");
+//        System.out.println("10, 6 -> 6: " + guessNumberHigherOrLower.start(10, 6));
+//        System.out.println("1, 1 -> 1: " + guessNumberHigherOrLower.start(1, 1));
+//        System.out.println("2, 1 -> 1: " + guessNumberHigherOrLower.start(2, 1));
+        System.out.println("2126753390, 1702766719 -> 1702766719: " + guessNumberHigherOrLower.start(2126753390, 1702766719));
+
 
         System.out.println("----------\n\n");
 
