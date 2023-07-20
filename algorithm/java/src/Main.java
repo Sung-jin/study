@@ -13,10 +13,8 @@ import leetcode.dfs.*;
 import leetcode.dynamicProgramming.LongestArithmeticSubsequenceOfGivenDifference;
 import leetcode.dynamicProgramming.LongestSubArray;
 import leetcode.dynamicProgramming.NumberOfGoodWaysToSplitAString;
-import leetcode.greedy.LongestPalindrome;
-import leetcode.greedy.MaximizeGreatnessOfAnArray;
-import leetcode.greedy.MaximumAreaOfAPieceOfCakeAfterHorizontalAndVerticalCuts;
-import leetcode.greedy.TwoCityScheduling;
+import leetcode.greedy.*;
+import leetcode.slidingWindow.AsteroidCollision;
 import leetcode.slidingWindow.MaximizeTheConfusionOfAnExam;
 import leetcode.slidingWindow.MaximumNumberOfVowelsInASubstringOfGivenLength;
 import leetcode.slidingWindow.MinimumSizeSubArraySum;
@@ -79,6 +77,7 @@ public class Main {
 
         // sliding window
         MinimumSizeSubArraySum minimumSizeSubArraySum = new MinimumSizeSubArraySum();
+        AsteroidCollision asteroidCollision = new AsteroidCollision();
         MaximumNumberOfVowelsInASubstringOfGivenLength maximumNumberOfVowelsInASubstringOfGivenLength = new MaximumNumberOfVowelsInASubstringOfGivenLength();
         MaximizeTheConfusionOfAnExam maximizeTheConfusionOfAnExam = new MaximizeTheConfusionOfAnExam();
 
@@ -89,6 +88,11 @@ public class Main {
         System.out.println("11, [1,1,1,1,1,1,1,1] -> 0: " + minimumSizeSubArraySum.minSubArrayLen(11, new int[]{1,1,1,1,1,1,1,1}));
         System.out.println("11, [1,2,3,4,5] -> 3: " + minimumSizeSubArraySum.minSubArrayLen(11, new int[]{1,2,3,4,5}));
         System.out.println("11, [1,2,3,4,5] -> 3: " + minimumSizeSubArraySum.minSubArrayLen(11, new int[]{1,2,3,4,5}));
+        System.out.println("------\n");
+        System.out.println("Q.735 Asteroid Collision");
+        System.out.println("[5,10,-5] -> [5,10]: " + Arrays.toString(asteroidCollision.asteroidCollision(new int[]{5, 10, -5})));
+        System.out.println("[8,-8] -> []: " + Arrays.toString(asteroidCollision.asteroidCollision(new int[]{8,-8})));
+        System.out.println("[10,2,-5] -> [10]: " + Arrays.toString(asteroidCollision.asteroidCollision(new int[]{10,2,-5})));
         System.out.println("------\n");
         System.out.println("Q.1456 Maximum Number of Vowels in a Substring of Given Length");
         System.out.println("abciiidef, 3 -> 3: " + maximumNumberOfVowelsInASubstringOfGivenLength.maxVowels("abciiidef", 3));
@@ -267,6 +271,7 @@ public class Main {
 
         // greedy
         LongestPalindrome longestPalindrome = new LongestPalindrome();
+        NonOverlappingIntervals nonOverlappingIntervals = new NonOverlappingIntervals();
         TwoCityScheduling twoCityScheduling = new TwoCityScheduling();
         MaximumAreaOfAPieceOfCakeAfterHorizontalAndVerticalCuts maximumAreaOfAPieceOfCakeAfterHorizontalAndVerticalCuts = new MaximumAreaOfAPieceOfCakeAfterHorizontalAndVerticalCuts();
         MaximizeGreatnessOfAnArray maximizeGreatnessOfAnArray = new MaximizeGreatnessOfAnArray();
@@ -276,6 +281,11 @@ public class Main {
         System.out.println("abccccdd -> 7: " + longestPalindrome.longestPalindrome("abccccdd"));
         System.out.println("a -> 1: " + longestPalindrome.longestPalindrome("a"));
         System.out.println("civilwartestingwhetherthatnaptionoranynartionsoconceivedandsodedicatedcanlongendureWeareqmetonagreatbattlefiemldoftzhatwarWehavecometodedicpateaportionofthatfieldasafinalrestingplaceforthosewhoheregavetheirlivesthatthatnationmightliveItisaltogetherfangandproperthatweshoulddothisButinalargersensewecannotdedicatewecannotconsecratewecannothallowthisgroundThebravelmenlivinganddeadwhostruggledherehaveconsecrateditfaraboveourpoorponwertoaddordetractTgheworldadswfilllittlenotlenorlongrememberwhatwesayherebutitcanneverforgetwhattheydidhereItisforusthelivingrathertobededicatedheretotheulnfinishedworkwhichtheywhofoughtherehavethusfarsonoblyadvancedItisratherforustobeherededicatedtothegreattdafskremainingbeforeusthatfromthesehonoreddeadwetakeincreaseddevotiontothatcauseforwhichtheygavethelastpfullmeasureofdevotionthatweherehighlyresolvethatthesedeadshallnothavediedinvainthatthisnationunsderGodshallhaveanewbirthoffreedomandthatgovernmentofthepeoplebythepeopleforthepeopleshallnotperishfromtheearth -> 983: " + longestPalindrome.longestPalindrome("civilwartestingwhetherthatnaptionoranynartionsoconceivedandsodedicatedcanlongendureWeareqmetonagreatbattlefiemldoftzhatwarWehavecometodedicpateaportionofthatfieldasafinalrestingplaceforthosewhoheregavetheirlivesthatthatnationmightliveItisaltogetherfangandproperthatweshoulddothisButinalargersensewecannotdedicatewecannotconsecratewecannothallowthisgroundThebravelmenlivinganddeadwhostruggledherehaveconsecrateditfaraboveourpoorponwertoaddordetractTgheworldadswfilllittlenotlenorlongrememberwhatwesayherebutitcanneverforgetwhattheydidhereItisforusthelivingrathertobededicatedheretotheulnfinishedworkwhichtheywhofoughtherehavethusfarsonoblyadvancedItisratherforustobeherededicatedtothegreattdafskremainingbeforeusthatfromthesehonoreddeadwetakeincreaseddevotiontothatcauseforwhichtheygavethelastpfullmeasureofdevotionthatweherehighlyresolvethatthesedeadshallnothavediedinvainthatthisnationunsderGodshallhaveanewbirthoffreedomandthatgovernmentofthepeoplebythepeopleforthepeopleshallnotperishfromtheearth"));
+        System.out.println("------\n");
+        System.out.println("Q.435 Non-overlapping Intervals");
+        System.out.println("[[1,2],[2,3],[3,4],[1,3]] -> 1: " + nonOverlappingIntervals.eraseOverlapIntervals(new int[][]{{1,2},{2,3},{3,4},{1,3}}));
+        System.out.println("[[1,2],[1,2],[1,2]] -> 2: " + nonOverlappingIntervals.eraseOverlapIntervals(new int[][]{{1,2},{1,2},{1,2}}));
+        System.out.println("[[1,2],[2,3]] -> 0: " + nonOverlappingIntervals.eraseOverlapIntervals(new int[][]{{1,2},{2,3}}));
         System.out.println("------\n");
         System.out.println("Q.1029 Two City Scheduling");
         System.out.println("[[259,770],[448,54],[926,667],[184,139],[840,118],[577,469]] -> 1859: " + twoCityScheduling.twoCitySchedCost(new int[][]{{259,770},{448,54},{926,667},{184,139},{840,118},{577,469}}));
