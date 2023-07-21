@@ -155,9 +155,9 @@ public class Main {
         System.out.println("[9,3,7,1,5,4,8,0,2] -> 6: " + missingNumber.missingNumber(new int[]{9,3,7,1,5,4,8,0,2}));
         System.out.println("------\n");
         System.out.println("Q.374 Guess Number Higher or Lower");
-//        System.out.println("10, 6 -> 6: " + guessNumberHigherOrLower.start(10, 6));
-//        System.out.println("1, 1 -> 1: " + guessNumberHigherOrLower.start(1, 1));
-//        System.out.println("2, 1 -> 1: " + guessNumberHigherOrLower.start(2, 1));
+        System.out.println("10, 6 -> 6: " + guessNumberHigherOrLower.start(10, 6));
+        System.out.println("1, 1 -> 1: " + guessNumberHigherOrLower.start(1, 1));
+        System.out.println("2, 1 -> 1: " + guessNumberHigherOrLower.start(2, 1));
         System.out.println("2126753390, 1702766719 -> 1702766719: " + guessNumberHigherOrLower.start(2126753390, 1702766719));
 
 
@@ -165,6 +165,7 @@ public class Main {
 
         // dfs
         BinaryTreeInorderTraversal binaryTreeInorderTraversal = new BinaryTreeInorderTraversal();
+        NumberOfLongestIncreasingSubsequence numberOfLongestIncreasingSubsequence = new NumberOfLongestIncreasingSubsequence();
         MakingALargeIsland makingALargeIsland = new MakingALargeIsland();
         AllNodesDistanceKInBinaryTree allNodesDistanceKInBinaryTree = new AllNodesDistanceKInBinaryTree();
         SmallestSufficientTeam smallestSufficientTeam = new SmallestSufficientTeam();
@@ -178,6 +179,10 @@ public class Main {
         System.out.println("[1,null,2,3] -> [1,3,2]: " + binaryTreeInorderTraversal.inorderTraversal(TreeNode.generateNode(new Integer[]{1,null,2,3})));
         System.out.println("[] -> []: " + binaryTreeInorderTraversal.inorderTraversal(TreeNode.generateNode(new Integer[]{})));
         System.out.println("[1] -> [1]: " + binaryTreeInorderTraversal.inorderTraversal(TreeNode.generateNode(new Integer[]{1})));
+        System.out.println("------\n");
+        System.out.println("Q.673 Number of Longest Increasing Subsequence");
+        System.out.println("[1,3,5,4,7] -> 2: " + numberOfLongestIncreasingSubsequence.findNumberOfLIS(new int[]{1,3,5,4,7}));
+        System.out.println("[2,2,2,2,2] -> 5: " + numberOfLongestIncreasingSubsequence.findNumberOfLIS(new int[]{2,2,2,2,2}));
         System.out.println("------\n");
         System.out.println("Q.827 Making A Large Island");
         System.out.println("[[1,0],[0,1]] -> 3: " + makingALargeIsland.largestIsland(new int[][]{{1,0},{0,1}}));
