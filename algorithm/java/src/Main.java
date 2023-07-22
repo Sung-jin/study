@@ -10,6 +10,7 @@ import leetcode.binarySearch.SearchInsertPosition;
 import leetcode.binarySearch.Sqrt;
 import leetcode.bruteForce.*;
 import leetcode.dfs.*;
+import leetcode.dynamicProgramming.KnightProbabilityInChessboard;
 import leetcode.dynamicProgramming.LongestArithmeticSubsequenceOfGivenDifference;
 import leetcode.dynamicProgramming.LongestSubArray;
 import leetcode.dynamicProgramming.NumberOfGoodWaysToSplitAString;
@@ -250,11 +251,15 @@ public class Main {
         System.out.println("----------\n\n");
 
         // dynamic programming
+        KnightProbabilityInChessboard knightProbabilityInChessboard = new KnightProbabilityInChessboard();
         LongestArithmeticSubsequenceOfGivenDifference longestArithmeticSubsequenceOfGivenDifference = new LongestArithmeticSubsequenceOfGivenDifference();
         LongestSubArray longestSubArray = new LongestSubArray();
         NumberOfGoodWaysToSplitAString numberOfGoodWaysToSplitAString = new NumberOfGoodWaysToSplitAString();
 
         System.out.println("dynamic programming");
+        System.out.println("Q.688 Knight Probability in Chessboard");
+        System.out.println("3, 2, 0, 0 -> 0.06250: " + knightProbabilityInChessboard.knightProbability(3, 2, 0, 0));
+        System.out.println("------\n");
         System.out.println("Q.1218 Longest Arithmetic Subsequence of Given Difference");
         System.out.println("[1,2,3,4], 1 -> 4: " + longestArithmeticSubsequenceOfGivenDifference.longestSubsequence(new int[]{1,2,3,4}, 1));
         System.out.println("[1,3,5,7], 1 -> 1: " + longestArithmeticSubsequenceOfGivenDifference.longestSubsequence(new int[]{1,3,5,7}, 1));
