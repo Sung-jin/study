@@ -10,10 +10,7 @@ import leetcode.binarySearch.SearchInsertPosition;
 import leetcode.binarySearch.Sqrt;
 import leetcode.bruteForce.*;
 import leetcode.dfs.*;
-import leetcode.dynamicProgramming.KnightProbabilityInChessboard;
-import leetcode.dynamicProgramming.LongestArithmeticSubsequenceOfGivenDifference;
-import leetcode.dynamicProgramming.LongestSubArray;
-import leetcode.dynamicProgramming.NumberOfGoodWaysToSplitAString;
+import leetcode.dynamicProgramming.*;
 import leetcode.greedy.*;
 import leetcode.slidingWindow.AsteroidCollision;
 import leetcode.slidingWindow.MaximizeTheConfusionOfAnExam;
@@ -251,12 +248,19 @@ public class Main {
         System.out.println("----------\n\n");
 
         // dynamic programming
+        Pow pow = new Pow();
         KnightProbabilityInChessboard knightProbabilityInChessboard = new KnightProbabilityInChessboard();
         LongestArithmeticSubsequenceOfGivenDifference longestArithmeticSubsequenceOfGivenDifference = new LongestArithmeticSubsequenceOfGivenDifference();
         LongestSubArray longestSubArray = new LongestSubArray();
         NumberOfGoodWaysToSplitAString numberOfGoodWaysToSplitAString = new NumberOfGoodWaysToSplitAString();
 
         System.out.println("dynamic programming");
+        System.out.println("Q.50 Pow");
+        System.out.println("2.00000, n = 10 -> 1024.00000: " + pow.myPow(2.00000, 10));
+        System.out.println("2.10000, n = 3 -> 9.26100: " + pow.myPow(2.10000, 3));
+        System.out.println("2.00000, n = -2 -> 0.25000: " + pow.myPow(2.0000, -2));
+        System.out.println("2.00000, n = -3 -> 0.12500: " + pow.myPow(2.0000, -3));
+        System.out.println("------\n");
         System.out.println("Q.688 Knight Probability in Chessboard");
         System.out.println("3, 2, 0, 0 -> 0.06250: " + knightProbabilityInChessboard.knightProbability(3, 2, 0, 0));
         System.out.println("------\n");
