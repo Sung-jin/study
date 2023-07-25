@@ -4,10 +4,7 @@ import leetcode.bfs.FindEventualSafeStates;
 import leetcode.bfs.MinimumDepthOfBinaryTree;
 import leetcode.bfs.SameTree;
 import leetcode.bfs.SymmetricTree;
-import leetcode.binarySearch.GuessNumberHigherOrLower;
-import leetcode.binarySearch.MissingNumber;
-import leetcode.binarySearch.SearchInsertPosition;
-import leetcode.binarySearch.Sqrt;
+import leetcode.binarySearch.*;
 import leetcode.bruteForce.*;
 import leetcode.dfs.*;
 import leetcode.dynamicProgramming.*;
@@ -125,6 +122,7 @@ public class Main {
         Sqrt sqrt = new Sqrt();
         MissingNumber missingNumber = new MissingNumber();
         GuessNumberHigherOrLower guessNumberHigherOrLower = new GuessNumberHigherOrLower();
+        PeakIndexInAMountainArray peakIndexInAMountainArray = new PeakIndexInAMountainArray();
 
         System.out.println("binary search");
         System.out.println("Q.35 Search Insert Position");
@@ -157,6 +155,13 @@ public class Main {
         System.out.println("1, 1 -> 1: " + guessNumberHigherOrLower.start(1, 1));
         System.out.println("2, 1 -> 1: " + guessNumberHigherOrLower.start(2, 1));
         System.out.println("2126753390, 1702766719 -> 1702766719: " + guessNumberHigherOrLower.start(2126753390, 1702766719));
+        System.out.println("------\n");
+        System.out.println("Q.852 Peak Index in a Mountain Array");
+        System.out.println("[0,1,0] -> 1: " + peakIndexInAMountainArray.peakIndexInMountainArray(new int[]{0,1,0}));
+        System.out.println("[0,2,1,0] -> 1: " + peakIndexInAMountainArray.peakIndexInMountainArray(new int[]{0,2,1,0}));
+        System.out.println("[0,10,5,2] -> 1: " + peakIndexInAMountainArray.peakIndexInMountainArray(new int[]{0,10,5,2}));
+        System.out.println("[3,5,3,2,0] -> 1: " + peakIndexInAMountainArray.peakIndexInMountainArray(new int[]{3,5,3,2,0}));
+        System.out.println("[3,4,5,1] -> 2: " + peakIndexInAMountainArray.peakIndexInMountainArray(new int[]{3,4,5,1}));
 
 
         System.out.println("----------\n\n");
