@@ -123,6 +123,7 @@ public class Main {
         MissingNumber missingNumber = new MissingNumber();
         GuessNumberHigherOrLower guessNumberHigherOrLower = new GuessNumberHigherOrLower();
         PeakIndexInAMountainArray peakIndexInAMountainArray = new PeakIndexInAMountainArray();
+        MinimumSpeedToArriveOnTime minimumSpeedToArriveOnTime = new MinimumSpeedToArriveOnTime();
 
         System.out.println("binary search");
         System.out.println("Q.35 Search Insert Position");
@@ -162,7 +163,11 @@ public class Main {
         System.out.println("[0,10,5,2] -> 1: " + peakIndexInAMountainArray.peakIndexInMountainArray(new int[]{0,10,5,2}));
         System.out.println("[3,5,3,2,0] -> 1: " + peakIndexInAMountainArray.peakIndexInMountainArray(new int[]{3,5,3,2,0}));
         System.out.println("[3,4,5,1] -> 2: " + peakIndexInAMountainArray.peakIndexInMountainArray(new int[]{3,4,5,1}));
-
+        System.out.println("------\n");
+        System.out.println("Q.1870. Minimum Speed to Arrive on Time");
+        System.out.println("[1,3,2], 6 -> 1: " + minimumSpeedToArriveOnTime.minSpeedOnTime(new int[]{1,3,2}, 6));
+        System.out.println("[1,3,2], 2.7 -> 3: " + minimumSpeedToArriveOnTime.minSpeedOnTime(new int[]{1,3,2}, 2.7));
+        System.out.println("[1,3,2], 1.9 -> -1: " + minimumSpeedToArriveOnTime.minSpeedOnTime(new int[]{1,3,2}, 1.9));
 
         System.out.println("----------\n\n");
 
