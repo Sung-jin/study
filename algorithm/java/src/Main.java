@@ -298,6 +298,7 @@ public class Main {
         NonOverlappingIntervals nonOverlappingIntervals = new NonOverlappingIntervals();
         TwoCityScheduling twoCityScheduling = new TwoCityScheduling();
         MaximumAreaOfAPieceOfCakeAfterHorizontalAndVerticalCuts maximumAreaOfAPieceOfCakeAfterHorizontalAndVerticalCuts = new MaximumAreaOfAPieceOfCakeAfterHorizontalAndVerticalCuts();
+        MaximumRunningTimeOfNComputers maximumRunningTimeOfNComputers = new MaximumRunningTimeOfNComputers();
         MaximizeGreatnessOfAnArray maximizeGreatnessOfAnArray = new MaximizeGreatnessOfAnArray();
 
         System.out.println("greedy");
@@ -320,6 +321,10 @@ public class Main {
         System.out.println("5, 4, [3,1], [1] -> 6: " + maximumAreaOfAPieceOfCakeAfterHorizontalAndVerticalCuts.maxArea(5, 4, new int[]{3,1}, new int[]{1}));
         System.out.println("5, 4, [3], [3] -> 9: " + maximumAreaOfAPieceOfCakeAfterHorizontalAndVerticalCuts.maxArea(5, 4, new int[]{3}, new int[]{3}));
         System.out.println("1000000000, 1000000000, [2], [2] -> 81: " + maximumAreaOfAPieceOfCakeAfterHorizontalAndVerticalCuts.maxArea(1000000000, 1000000000, new int[]{2}, new int[]{2}));
+        System.out.println("------\n");
+        System.out.println("Q.2141. Maximum Running Time of N Computers");
+        System.out.println("2, [3,3,3] -> 4: " + maximumRunningTimeOfNComputers.maxRunTime(2, new int[]{3,3,3}));
+        System.out.println("2, [1,1,1,1] -> 2: " + maximumRunningTimeOfNComputers.maxRunTime(2, new int[]{1,1,1,1}));
         System.out.println("------\n");
         System.out.println("Q.2592 Maximize Greatness of an Array");
         System.out.println("[1,3,5,2,1,3,1] -> 4: " + maximizeGreatnessOfAnArray.maximizeGreatness(new int[]{1,3,5,2,1,3,1}));
