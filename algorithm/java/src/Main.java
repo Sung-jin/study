@@ -173,6 +173,7 @@ public class Main {
 
         // dfs
         BinaryTreeInorderTraversal binaryTreeInorderTraversal = new BinaryTreeInorderTraversal();
+        PredictTheWinner predictTheWinner = new PredictTheWinner();
         NumberOfLongestIncreasingSubsequence numberOfLongestIncreasingSubsequence = new NumberOfLongestIncreasingSubsequence();
         MakingALargeIsland makingALargeIsland = new MakingALargeIsland();
         AllNodesDistanceKInBinaryTree allNodesDistanceKInBinaryTree = new AllNodesDistanceKInBinaryTree();
@@ -187,6 +188,12 @@ public class Main {
         System.out.println("[1,null,2,3] -> [1,3,2]: " + binaryTreeInorderTraversal.inorderTraversal(TreeNode.generateNode(new Integer[]{1,null,2,3})));
         System.out.println("[] -> []: " + binaryTreeInorderTraversal.inorderTraversal(TreeNode.generateNode(new Integer[]{})));
         System.out.println("[1] -> [1]: " + binaryTreeInorderTraversal.inorderTraversal(TreeNode.generateNode(new Integer[]{1})));
+        System.out.println("------\n");
+        System.out.println("Q.486. Predict the Winner");
+        System.out.println("[1,5,2] -> false: " + predictTheWinner.PredictTheWinner(new int[]{1,5,2}));
+//        System.out.println("[1,5,233,7] -> true: " + predictTheWinner.PredictTheWinner(new int[]{1,5,233,7}));
+//        System.out.println("[1,1,1] -> true: " + predictTheWinner.PredictTheWinner(new int[]{1,1,1}));
+//        System.out.println("[1,2] -> true: " + predictTheWinner.PredictTheWinner(new int[]{1,2}));
         System.out.println("------\n");
         System.out.println("Q.673 Number of Longest Increasing Subsequence");
         System.out.println("[1,3,5,4,7] -> 2: " + numberOfLongestIncreasingSubsequence.findNumberOfLIS(new int[]{1,3,5,4,7}));
