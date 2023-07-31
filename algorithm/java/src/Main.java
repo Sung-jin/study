@@ -9,10 +9,7 @@ import leetcode.bruteForce.*;
 import leetcode.dfs.*;
 import leetcode.dynamicProgramming.*;
 import leetcode.greedy.*;
-import leetcode.slidingWindow.AsteroidCollision;
-import leetcode.slidingWindow.MaximizeTheConfusionOfAnExam;
-import leetcode.slidingWindow.MaximumNumberOfVowelsInASubstringOfGivenLength;
-import leetcode.slidingWindow.MinimumSizeSubArraySum;
+import leetcode.slidingWindow.*;
 import leetcode.sorting.MergeSortedArray;
 
 import java.util.Arrays;
@@ -71,12 +68,17 @@ public class Main {
         System.out.println("----------\n\n");
 
         // sliding window
+        PartitionList partitionList = new PartitionList();
         MinimumSizeSubArraySum minimumSizeSubArraySum = new MinimumSizeSubArraySum();
         AsteroidCollision asteroidCollision = new AsteroidCollision();
         MaximumNumberOfVowelsInASubstringOfGivenLength maximumNumberOfVowelsInASubstringOfGivenLength = new MaximumNumberOfVowelsInASubstringOfGivenLength();
         MaximizeTheConfusionOfAnExam maximizeTheConfusionOfAnExam = new MaximizeTheConfusionOfAnExam();
 
         System.out.println("sliding window");
+        System.out.println("------\n");
+        System.out.println("Q.86 Partition List");
+//        System.out.println("[1,4,3,2,5,2], 3 -> [1,2,2,4,3,5]: " + partitionList.partition(ListNode.generateNode(new Integer[]{1,4,3,2,5,2}), 3).getAllNode());
+        System.out.println("[2,1], 2 -> [1,2]: " + partitionList.partition(ListNode.generateNode(new Integer[]{2,1}), 2).getAllNode());
         System.out.println("Q.209 Minimum Size Subarray Sum");
         System.out.println("7, [2,3,1,2,4,3] -> 2: " + minimumSizeSubArraySum.minSubArrayLen(7, new int[]{2,3,1,2,4,3}));
         System.out.println("4, [1,4,4] -> 1: " + minimumSizeSubArraySum.minSubArrayLen(4, new int[]{1,4,4}));
