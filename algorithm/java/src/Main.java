@@ -303,6 +303,7 @@ public class Main {
         System.out.println("----------\n\n");
 
         // greedy
+        LetterCombinationsOfAPhoneNumber letterCombinationsOfAPhoneNumber = new LetterCombinationsOfAPhoneNumber();
         LongestPalindrome longestPalindrome = new LongestPalindrome();
         NonOverlappingIntervals nonOverlappingIntervals = new NonOverlappingIntervals();
         TwoCityScheduling twoCityScheduling = new TwoCityScheduling();
@@ -311,6 +312,11 @@ public class Main {
         MaximizeGreatnessOfAnArray maximizeGreatnessOfAnArray = new MaximizeGreatnessOfAnArray();
 
         System.out.println("greedy");
+        System.out.println("Q.17 Letter Combinations of a Phone Number");
+        System.out.println("23 -> [ad,ae,af,bd,be,bf,cd,ce,cf]: " + letterCombinationsOfAPhoneNumber.letterCombinations("23"));
+        System.out.println(" -> []: " + letterCombinationsOfAPhoneNumber.letterCombinations(""));
+        System.out.println("2 -> [a,b,c]: " + letterCombinationsOfAPhoneNumber.letterCombinations("2"));
+        System.out.println("------\n");
         System.out.println("Q.409 Longest Palindrome");
         System.out.println("abccccdd -> 7: " + longestPalindrome.longestPalindrome("abccccdd"));
         System.out.println("a -> 1: " + longestPalindrome.longestPalindrome("a"));
