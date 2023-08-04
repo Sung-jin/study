@@ -12,6 +12,7 @@ import leetcode.greedy.*;
 import leetcode.slidingWindow.*;
 import leetcode.sorting.MergeSortedArray;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Main {
@@ -304,6 +305,7 @@ public class Main {
 
         // greedy
         LetterCombinationsOfAPhoneNumber letterCombinationsOfAPhoneNumber = new LetterCombinationsOfAPhoneNumber();
+        WordBreak wordBreak = new WordBreak();
         LongestPalindrome longestPalindrome = new LongestPalindrome();
         NonOverlappingIntervals nonOverlappingIntervals = new NonOverlappingIntervals();
         TwoCityScheduling twoCityScheduling = new TwoCityScheduling();
@@ -316,6 +318,11 @@ public class Main {
         System.out.println("23 -> [ad,ae,af,bd,be,bf,cd,ce,cf]: " + letterCombinationsOfAPhoneNumber.letterCombinations("23"));
         System.out.println(" -> []: " + letterCombinationsOfAPhoneNumber.letterCombinations(""));
         System.out.println("2 -> [a,b,c]: " + letterCombinationsOfAPhoneNumber.letterCombinations("2"));
+        System.out.println("------\n");
+        System.out.println("Q.139 Word Break");
+        System.out.println(wordBreak.wordBreak("leetcode", Arrays.asList("leet", "code")));
+        System.out.println(wordBreak.wordBreak("applepenapple", Arrays.asList("apple", "pen")));
+        System.out.println(wordBreak.wordBreak("catsandog", Arrays.asList("cats", "dog", "sand", "and", "cat")));
         System.out.println("------\n");
         System.out.println("Q.409 Longest Palindrome");
         System.out.println("abccccdd -> 7: " + longestPalindrome.longestPalindrome("abccccdd"));
