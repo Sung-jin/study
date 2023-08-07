@@ -123,6 +123,7 @@ public class Main {
         // binary search
         SearchInsertPosition searchInsertPosition = new SearchInsertPosition();
         Sqrt sqrt = new Sqrt();
+        SearchA2DMatrix searchA2DMatrix = new SearchA2DMatrix();
         MissingNumber missingNumber = new MissingNumber();
         GuessNumberHigherOrLower guessNumberHigherOrLower = new GuessNumberHigherOrLower();
         PeakIndexInAMountainArray peakIndexInAMountainArray = new PeakIndexInAMountainArray();
@@ -143,6 +144,12 @@ public class Main {
         System.out.println("4 -> 2: " + sqrt.mySqrt(4));
         System.out.println("8 -> 2: " + sqrt.mySqrt(8));
         System.out.println("2147395599 -> 2: " + sqrt.mySqrt(2147395599));
+        System.out.println("------\n");
+        System.out.println("Q.74 Search a 2D Matrix");
+        System.out.println("[[1,3,5,7],[10,11,16,20],[23,30,34,60]], 3 -> true: " + searchA2DMatrix.searchMatrix(new int[][]{{1,3,5,7}, {10,11,16,20}, {23,30,34,60}}, 3));
+        System.out.println("[[1,3,5,7],[10,11,16,20],[23,30,34,60]], 13 -> false: " + searchA2DMatrix.searchMatrix(new int[][]{{1,3,5,7}, {10,11,16,20}, {23,30,34,60}}, 13));
+        System.out.println("[[1]], 1 -> true: " + searchA2DMatrix.searchMatrix(new int[][]{{1}}, 1));
+        System.out.println("[[1,1]], 1 -> true: " + searchA2DMatrix.searchMatrix(new int[][]{{1,1}}, 2));
         System.out.println("------\n");
         System.out.println("Q.268 Missing Number");
         System.out.println("[3,0,1] -> 2: " + missingNumber.missingNumber(new int[]{3,0,1}));
