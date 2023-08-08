@@ -121,6 +121,7 @@ public class Main {
         System.out.println("----------\n\n");
 
         // binary search
+        SearchInRotatedSortedArray searchInRotatedSortedArray = new SearchInRotatedSortedArray();
         SearchInsertPosition searchInsertPosition = new SearchInsertPosition();
         Sqrt sqrt = new Sqrt();
         SearchA2DMatrix searchA2DMatrix = new SearchA2DMatrix();
@@ -130,6 +131,16 @@ public class Main {
         MinimumSpeedToArriveOnTime minimumSpeedToArriveOnTime = new MinimumSpeedToArriveOnTime();
 
         System.out.println("binary search");
+        System.out.println("Q.33 Search in Rotated Sorted Array");
+        System.out.println("[4,5,6,7,0,1,2], 0 -> 4: " + searchInRotatedSortedArray.search(new int[]{4,5,6,7,0,1,2}, 0));
+        System.out.println("[4,5,6,7,0,1,2], 3 -> -1: " + searchInRotatedSortedArray.search(new int[]{4,5,6,7,0,1,2}, 3));
+        System.out.println("[1], 0 -> -1: " + searchInRotatedSortedArray.search(new int[]{1}, 0));
+        System.out.println("[3,1], 1 -> 1: " + searchInRotatedSortedArray.search(new int[]{3,1}, 1));
+        System.out.println("[3,0,1], 1 -> 2: " + searchInRotatedSortedArray.search(new int[]{3,0,1}, 1));
+        System.out.println("[1,3,5], 5 -> 2: " + searchInRotatedSortedArray.search(new int[]{1,3,5}, 5));
+        System.out.println("[5,1,3], 1 -> 1: " + searchInRotatedSortedArray.search(new int[]{5,1,3}, 1));
+        System.out.println("[5,1,2,3,4], 1 -> 1: " + searchInRotatedSortedArray.search(new int[]{5,1,2,3,4}, 1));
+        System.out.println("------\n");
         System.out.println("Q.35 Search Insert Position");
         System.out.println("[1,3,5,6], 5 -> 2: " + searchInsertPosition.searchInsert(new int[]{1,3,5,6}, 5));
         System.out.println("[1,3,5,6], 2 -> 1: " + searchInsertPosition.searchInsert(new int[]{1,3,5,6}, 2));
@@ -146,10 +157,10 @@ public class Main {
         System.out.println("2147395599 -> 2: " + sqrt.mySqrt(2147395599));
         System.out.println("------\n");
         System.out.println("Q.74 Search a 2D Matrix");
-        System.out.println("[[1,3,5,7],[10,11,16,20],[23,30,34,60]], 3 -> true: " + searchA2DMatrix.searchMatrix(new int[][]{{1,3,5,7}, {10,11,16,20}, {23,30,34,60}}, 3));
-        System.out.println("[[1,3,5,7],[10,11,16,20],[23,30,34,60]], 13 -> false: " + searchA2DMatrix.searchMatrix(new int[][]{{1,3,5,7}, {10,11,16,20}, {23,30,34,60}}, 13));
-        System.out.println("[[1]], 1 -> true: " + searchA2DMatrix.searchMatrix(new int[][]{{1}}, 1));
-        System.out.println("[[1,1]], 1 -> true: " + searchA2DMatrix.searchMatrix(new int[][]{{1,1}}, 2));
+//        System.out.println("[[1,3,5,7],[10,11,16,20],[23,30,34,60]], 3 -> true: " + searchA2DMatrix.searchMatrix(new int[][]{{1,3,5,7}, {10,11,16,20}, {23,30,34,60}}, 3));
+//        System.out.println("[[1,3,5,7],[10,11,16,20],[23,30,34,60]], 13 -> false: " + searchA2DMatrix.searchMatrix(new int[][]{{1,3,5,7}, {10,11,16,20}, {23,30,34,60}}, 13));
+//        System.out.println("[[1]], 1 -> true: " + searchA2DMatrix.searchMatrix(new int[][]{{1}}, 1));
+//        System.out.println("[[1,1]], 1 -> true: " + searchA2DMatrix.searchMatrix(new int[][]{{1,1}}, 2));
         System.out.println("------\n");
         System.out.println("Q.268 Missing Number");
         System.out.println("[3,0,1] -> 2: " + missingNumber.missingNumber(new int[]{3,0,1}));
