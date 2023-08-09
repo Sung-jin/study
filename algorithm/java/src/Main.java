@@ -330,6 +330,7 @@ public class Main {
         MaximumAreaOfAPieceOfCakeAfterHorizontalAndVerticalCuts maximumAreaOfAPieceOfCakeAfterHorizontalAndVerticalCuts = new MaximumAreaOfAPieceOfCakeAfterHorizontalAndVerticalCuts();
         MaximumRunningTimeOfNComputers maximumRunningTimeOfNComputers = new MaximumRunningTimeOfNComputers();
         MaximizeGreatnessOfAnArray maximizeGreatnessOfAnArray = new MaximizeGreatnessOfAnArray();
+        MinimizeTheMaximumDifferenceOfPairs minimizeTheMaximumDifferenceOfPairs = new MinimizeTheMaximumDifferenceOfPairs();
 
         System.out.println("greedy");
         System.out.println("Q.17 Letter Combinations of a Phone Number");
@@ -369,6 +370,9 @@ public class Main {
         System.out.println("Q.2592 Maximize Greatness of an Array");
         System.out.println("[1,3,5,2,1,3,1] -> 4: " + maximizeGreatnessOfAnArray.maximizeGreatness(new int[]{1,3,5,2,1,3,1}));
         System.out.println("[1,2,3,4] -> 3: " + maximizeGreatnessOfAnArray.maximizeGreatness(new int[]{1,2,3,4}));
+        System.out.println("------\n");
+        System.out.println("Q.2616 Minimize the Maximum Difference of Pairs\n");
+        System.out.println("[10,1,2,7,1,3], 2 -> 1: " + minimizeTheMaximumDifferenceOfPairs.minimizeMax(new int[]{10,1,2,7,1,3}, 2));
     }
 
 //    public static void main(String[] args) {
