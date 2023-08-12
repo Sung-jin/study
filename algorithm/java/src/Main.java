@@ -193,6 +193,7 @@ public class Main {
         System.out.println("----------\n\n");
 
         // dfs
+        UniquePathsII uniquePathsII = new UniquePathsII();
         BinaryTreeInorderTraversal binaryTreeInorderTraversal = new BinaryTreeInorderTraversal();
         PredictTheWinner predictTheWinner = new PredictTheWinner();
         NumberOfLongestIncreasingSubsequence numberOfLongestIncreasingSubsequence = new NumberOfLongestIncreasingSubsequence();
@@ -205,6 +206,11 @@ public class Main {
         FairDistributionOfCookies fairDistributionOfCookies = new FairDistributionOfCookies();
 
         System.out.println("dfs");
+        System.out.println("Q.63 unique paths II");
+        System.out.println("[[0,0,0],[0,1,0],[0,0,0]] -> 2: " + uniquePathsII.uniquePathsWithObstacles(new int[][]{{0, 0, 0}, {0,1,0}, {0,0,0}}));
+        System.out.println("[[0,1],[0,0]] -> 1: " + uniquePathsII.uniquePathsWithObstacles(new int[][]{{0, 1}, {0,0}}));
+        System.out.println("[[1,0]] -> 0: " + uniquePathsII.uniquePathsWithObstacles(new int[][]{{1, 0}}));
+        System.out.println("------\n");
         System.out.println("Q.94 Binary Tree Inorder Traversal");
         System.out.println("[1,null,2,3] -> [1,3,2]: " + binaryTreeInorderTraversal.inorderTraversal(TreeNode.generateNode(new Integer[]{1,null,2,3})));
         System.out.println("[] -> []: " + binaryTreeInorderTraversal.inorderTraversal(TreeNode.generateNode(new Integer[]{})));
