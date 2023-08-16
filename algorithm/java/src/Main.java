@@ -71,6 +71,7 @@ public class Main {
         // sliding window
         PartitionList partitionList = new PartitionList();
         MinimumSizeSubArraySum minimumSizeSubArraySum = new MinimumSizeSubArraySum();
+        SlidingWindowMaximum slidingWindowMaximum = new SlidingWindowMaximum();
         AsteroidCollision asteroidCollision = new AsteroidCollision();
         MaximumNumberOfVowelsInASubstringOfGivenLength maximumNumberOfVowelsInASubstringOfGivenLength = new MaximumNumberOfVowelsInASubstringOfGivenLength();
         MaximizeTheConfusionOfAnExam maximizeTheConfusionOfAnExam = new MaximizeTheConfusionOfAnExam();
@@ -86,6 +87,10 @@ public class Main {
         System.out.println("11, [1,1,1,1,1,1,1,1] -> 0: " + minimumSizeSubArraySum.minSubArrayLen(11, new int[]{1,1,1,1,1,1,1,1}));
         System.out.println("11, [1,2,3,4,5] -> 3: " + minimumSizeSubArraySum.minSubArrayLen(11, new int[]{1,2,3,4,5}));
         System.out.println("11, [1,2,3,4,5] -> 3: " + minimumSizeSubArraySum.minSubArrayLen(11, new int[]{1,2,3,4,5}));
+        System.out.println("------\n");
+        System.out.println("Q.239 Sliding Window Maximum");
+        System.out.println("[1,3,-1,-3,5,3,6,7], 3 -> [3,3,5,5,6,7]: " + Arrays.toString(slidingWindowMaximum.maxSlidingWindow(new int[]{1, 3, -1, -3, 5, 3, 6, 7}, 3)));
+        System.out.println("[1], 1 -> [1]: " + Arrays.toString(slidingWindowMaximum.maxSlidingWindow(new int[]{1}, 1)));
         System.out.println("------\n");
         System.out.println("Q.735 Asteroid Collision");
         System.out.println("[5,10,-5] -> [5,10]: " + Arrays.toString(asteroidCollision.asteroidCollision(new int[]{5, 10, -5})));
