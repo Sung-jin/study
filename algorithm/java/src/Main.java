@@ -338,6 +338,7 @@ public class Main {
         KthLargestElementInAnArray kthLargestElementInAnArray = new KthLargestElementInAnArray();
         LongestPalindrome longestPalindrome = new LongestPalindrome();
         NonOverlappingIntervals nonOverlappingIntervals = new NonOverlappingIntervals();
+        RepeatedSubstringPattern repeatedSubstringPattern = new RepeatedSubstringPattern();
         TwoCityScheduling twoCityScheduling = new TwoCityScheduling();
         MaximumAreaOfAPieceOfCakeAfterHorizontalAndVerticalCuts maximumAreaOfAPieceOfCakeAfterHorizontalAndVerticalCuts = new MaximumAreaOfAPieceOfCakeAfterHorizontalAndVerticalCuts();
         MaximumRunningTimeOfNComputers maximumRunningTimeOfNComputers = new MaximumRunningTimeOfNComputers();
@@ -368,6 +369,11 @@ public class Main {
         System.out.println("[[1,2],[2,3],[3,4],[1,3]] -> 1: " + nonOverlappingIntervals.eraseOverlapIntervals(new int[][]{{1,2},{2,3},{3,4},{1,3}}));
         System.out.println("[[1,2],[1,2],[1,2]] -> 2: " + nonOverlappingIntervals.eraseOverlapIntervals(new int[][]{{1,2},{1,2},{1,2}}));
         System.out.println("[[1,2],[2,3]] -> 0: " + nonOverlappingIntervals.eraseOverlapIntervals(new int[][]{{1,2},{2,3}}));
+        System.out.println("------\n");
+        System.out.println("Q.459 Repeated Substring Pattern");
+        System.out.println("abab -> true: " + repeatedSubstringPattern.repeatedSubstringPattern("abab"));
+        System.out.println("aba -> false: " + repeatedSubstringPattern.repeatedSubstringPattern("aba"));
+        System.out.println("abcabcabcabc -> true: " + repeatedSubstringPattern.repeatedSubstringPattern("abcabcabcabc"));
         System.out.println("------\n");
         System.out.println("Q.1029 Two City Scheduling");
         System.out.println("[[259,770],[448,54],[926,667],[184,139],[840,118],[577,469]] -> 1859: " + twoCityScheduling.twoCitySchedCost(new int[][]{{259,770},{448,54},{926,667},{184,139},{840,118},{577,469}}));
