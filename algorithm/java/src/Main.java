@@ -335,6 +335,7 @@ public class Main {
         // greedy
         LetterCombinationsOfAPhoneNumber letterCombinationsOfAPhoneNumber = new LetterCombinationsOfAPhoneNumber();
         WordBreak wordBreak = new WordBreak();
+        ExcelSheetColumnTitle excelSheetColumnTitle = new ExcelSheetColumnTitle();
         KthLargestElementInAnArray kthLargestElementInAnArray = new KthLargestElementInAnArray();
         LongestPalindrome longestPalindrome = new LongestPalindrome();
         NonOverlappingIntervals nonOverlappingIntervals = new NonOverlappingIntervals();
@@ -355,6 +356,11 @@ public class Main {
         System.out.println(wordBreak.wordBreak("leetcode", Arrays.asList("leet", "code")));
         System.out.println(wordBreak.wordBreak("applepenapple", Arrays.asList("apple", "pen")));
         System.out.println(wordBreak.wordBreak("catsandog", Arrays.asList("cats", "dog", "sand", "and", "cat")));
+        System.out.println("------\n");
+        System.out.println("Q.168 Excel Sheet Column Title");
+//        System.out.println("1 -> A: " + excelSheetColumnTitle.convertToTitle(1));
+        System.out.println("28 -> AB: " + excelSheetColumnTitle.convertToTitle(28));
+        System.out.println("701 -> ZY: " + excelSheetColumnTitle.convertToTitle(701));
         System.out.println("------\n");
         System.out.println("Q.215");
         System.out.println("[3,2,1,5,6,4], 2 -> 5: " + kthLargestElementInAnArray.findKthLargest(new int[]{3,2,1,5,6,4}, 2));
