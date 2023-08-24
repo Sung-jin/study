@@ -1,9 +1,6 @@
 import leetcode.ListNode;
 import leetcode.TreeNode;
-import leetcode.bfs.FindEventualSafeStates;
-import leetcode.bfs.MinimumDepthOfBinaryTree;
-import leetcode.bfs.SameTree;
-import leetcode.bfs.SymmetricTree;
+import leetcode.bfs.*;
 import leetcode.binarySearch.*;
 import leetcode.bruteForce.*;
 import leetcode.dfs.*;
@@ -272,6 +269,7 @@ public class Main {
         SymmetricTree symmetricTree = new SymmetricTree();
         MinimumDepthOfBinaryTree minimumDepthOfBinaryTree = new MinimumDepthOfBinaryTree();
         FindEventualSafeStates findEventualSafeStates = new FindEventualSafeStates();
+        EvenOddTree evenOddTree = new EvenOddTree();
 
         System.out.println("bfs");
         System.out.println("Q.100 Same Tree");
@@ -293,6 +291,11 @@ public class Main {
         System.out.println("[[0],[2,3,4],[3,4],[0,4],[]] -> [0,1,2,3,4]: " + findEventualSafeStates.eventualSafeNodes(new int[][]{{0},{2,3,4},{3,4},{0,4}, {}}));
         System.out.println("[[],[0,2,3,4],[3],[4],[]] -> [0,1,2,3,4]: " + findEventualSafeStates.eventualSafeNodes(new int[][]{{},{0,2,3,4},{3},{4},{}}));
         System.out.println("[[4,9],[3,5,7],[0,3,4,5,6,8],[7,8,9],[5,6,7,8],[6,7,8,9],[7,9],[8,9],[9],[]] -> [0,1,2,3,4,5,6,7,8,9]: " + findEventualSafeStates.eventualSafeNodes(new int[][]{{4,9},{3,5,7},{0,3,4,5,6,8},{7,8,9},{5,6,7,8},{6,7,8,9},{7,9},{8,9},{9},{}}));
+        System.out.println("------\n");
+        System.out.println("Q.1609 Even Odd Tree");
+        System.out.println("[1,10,4,3,null,7,9,12,8,6,null,null,2] -> true: " + evenOddTree.isEvenOddTree(TreeNode.generateNode(new Integer[]{1,10,4,3,null,7,9,12,8,6,null,null,2})));
+        System.out.println("[5,4,2,3,3,7] -> false: " + evenOddTree.isEvenOddTree(TreeNode.generateNode(new Integer[]{5,4,2,3,3,7})));
+        System.out.println("[5,9,1,3,5,7] -> false: " + evenOddTree.isEvenOddTree(TreeNode.generateNode(new Integer[]{5,9,1,3,5,7})));
 
         System.out.println("----------\n\n");
 
