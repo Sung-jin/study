@@ -307,6 +307,7 @@ public class Main {
 
         // dynamic programming
         Pow pow = new Pow();
+        MaximumLengthOfPairChain maximumLengthOfPairChain = new MaximumLengthOfPairChain();
         KnightProbabilityInChessboard knightProbabilityInChessboard = new KnightProbabilityInChessboard();
         LongestArithmeticSubsequenceOfGivenDifference longestArithmeticSubsequenceOfGivenDifference = new LongestArithmeticSubsequenceOfGivenDifference();
         LongestSubArray longestSubArray = new LongestSubArray();
@@ -318,6 +319,10 @@ public class Main {
         System.out.println("2.10000, n = 3 -> 9.26100: " + pow.myPow(2.10000, 3));
         System.out.println("2.00000, n = -2 -> 0.25000: " + pow.myPow(2.0000, -2));
         System.out.println("2.00000, n = -3 -> 0.12500: " + pow.myPow(2.0000, -3));
+        System.out.println("------\n");
+        System.out.println("Q.646. Maximum Length of Pair Chain");
+        System.out.println("[[1,2],[2,3],[3,4]] -> 2: " + maximumLengthOfPairChain.findLongestChain(new int[][]{{1,2},{2,3},{3,4}}));
+        System.out.println("[[1,2],[7,8],[4,5]] -> 3: " + maximumLengthOfPairChain.findLongestChain(new int[][]{{1,2},{7,8},{4,5}}));
         System.out.println("------\n");
         System.out.println("Q.688 Knight Probability in Chessboard");
         System.out.println("3, 2, 0, 0 -> 0.06250: " + knightProbabilityInChessboard.knightProbability(3, 2, 0, 0));
