@@ -351,6 +351,7 @@ public class Main {
         WordBreak wordBreak = new WordBreak();
         ExcelSheetColumnTitle excelSheetColumnTitle = new ExcelSheetColumnTitle();
         KthLargestElementInAnArray kthLargestElementInAnArray = new KthLargestElementInAnArray();
+        FrogJump frogJump = new FrogJump();
         LongestPalindrome longestPalindrome = new LongestPalindrome();
         NonOverlappingIntervals nonOverlappingIntervals = new NonOverlappingIntervals();
         RepeatedSubstringPattern repeatedSubstringPattern = new RepeatedSubstringPattern();
@@ -379,6 +380,11 @@ public class Main {
         System.out.println("Q.215");
         System.out.println("[3,2,1,5,6,4], 2 -> 5: " + kthLargestElementInAnArray.findKthLargest(new int[]{3,2,1,5,6,4}, 2));
         System.out.println("[3,2,3,1,2,4,5,5,6], 4 -> 4: " + kthLargestElementInAnArray.findKthLargest(new int[]{3,2,3,1,2,4,5,5,6}, 4));
+        System.out.println("------\n");
+        System.out.println("Q.403 Frog Jump");
+        System.out.println("[0,1,3,5,6,8,12,17] -> true: " + frogJump.canCross(new int[]{0,1,3,5,6,8,12,17}));
+        System.out.println("[0,1,2,3,4,8,9,11] -> false: " + frogJump.canCross(new int[]{0,1,2,3,4,8,9,11}));
+        System.out.println("[0,1,3,6,10,15,16,21] -> true: " + frogJump.canCross(new int[]{0,1,3,6,10,15,16,21}));
         System.out.println("------\n");
         System.out.println("Q.409 Longest Palindrome");
         System.out.println("abccccdd -> 7: " + longestPalindrome.longestPalindrome("abccccdd"));
