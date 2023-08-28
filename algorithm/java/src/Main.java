@@ -9,7 +9,6 @@ import leetcode.greedy.*;
 import leetcode.slidingWindow.*;
 import leetcode.sorting.MergeSortedArray;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Main {
