@@ -306,6 +306,7 @@ public class Main {
 
         // dynamic programming
         Pow pow = new Pow();
+        UniquePaths uniquePaths = new UniquePaths();
         CountingBits countingBits = new CountingBits();
         MaximumLengthOfPairChain maximumLengthOfPairChain = new MaximumLengthOfPairChain();
         KnightProbabilityInChessboard knightProbabilityInChessboard = new KnightProbabilityInChessboard();
@@ -319,6 +320,10 @@ public class Main {
         System.out.println("2.10000, n = 3 -> 9.26100: " + pow.myPow(2.10000, 3));
         System.out.println("2.00000, n = -2 -> 0.25000: " + pow.myPow(2.0000, -2));
         System.out.println("2.00000, n = -3 -> 0.12500: " + pow.myPow(2.0000, -3));
+        System.out.println("------\n");
+        System.out.println("Q.62 Unique Paths");
+        System.out.println("3, 7 -> 28: " + uniquePaths.uniquePaths(3, 7));
+        System.out.println("3, 2 -> 3: " + uniquePaths.uniquePaths(3, 2));
         System.out.println("------\n");
         System.out.println("Q.338 Counting Bits");
         System.out.println("2 -> [0,1,1]: " + Arrays.toString(countingBits.countBits(2)));
