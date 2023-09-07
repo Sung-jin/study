@@ -8,6 +8,7 @@ import leetcode.dynamicProgramming.*;
 import leetcode.greedy.*;
 import leetcode.slidingWindow.*;
 import leetcode.sorting.MergeSortedArray;
+import leetcode.sorting.ReverseLinkedListII;
 
 import java.util.Arrays;
 
@@ -107,6 +108,7 @@ public class Main {
 
         // sorting
         MergeSortedArray mergeSortedArray = new MergeSortedArray();
+        ReverseLinkedListII reverseLinkedListII = new ReverseLinkedListII();
 
         System.out.println("sorting");
         System.out.println("Q.88 Merge Sorted Array");
@@ -118,6 +120,9 @@ public class Main {
         mergeSortedArray.merge(new int[]{0}, 0, new int[]{1}, 1);
         System.out.println("[4,5,6,0,0,0], 3, [1,2,3], 3 -> [1,2,3,4,5,6]: ");
         mergeSortedArray.merge(new int[]{4,5,6,0,0,0}, 3, new int[]{1,2,3}, 3);
+        System.out.println("------\n");
+        System.out.println("Q.92. Reverse Linked List I");
+        System.out.println("[1,2,3,4,5], 2, 4 -> [1,4,3,2,5]: " + reverseLinkedListII.reverseBetween(ListNode.generateNode(new Integer[]{1,2,3,4,5}), 2, 4).getAllNode());
 
         System.out.println("----------\n\n");
 
