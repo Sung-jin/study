@@ -312,6 +312,7 @@ public class Main {
         // dynamic programming
         Pow pow = new Pow();
         UniquePaths uniquePaths = new UniquePaths();
+        PascalTriangle pascalTriangle = new PascalTriangle();
         CountingBits countingBits = new CountingBits();
         MaximumLengthOfPairChain maximumLengthOfPairChain = new MaximumLengthOfPairChain();
         KnightProbabilityInChessboard knightProbabilityInChessboard = new KnightProbabilityInChessboard();
@@ -329,6 +330,10 @@ public class Main {
         System.out.println("Q.62 Unique Paths");
         System.out.println("3, 7 -> 28: " + uniquePaths.uniquePaths(3, 7));
         System.out.println("3, 2 -> 3: " + uniquePaths.uniquePaths(3, 2));
+        System.out.println("------\n");
+        System.out.println("Q.118 Pascal's Triangle");
+        System.out.println("5 -> [[1],[1,1],[1,2,1],[1,3,3,1],[1,4,6,4,1]]: " + pascalTriangle.generate(5));
+        System.out.println("5 -> [[1]]: " + pascalTriangle.generate(1));
         System.out.println("------\n");
         System.out.println("Q.338 Counting Bits");
         System.out.println("2 -> [0,1,1]: " + Arrays.toString(countingBits.countBits(2)));
