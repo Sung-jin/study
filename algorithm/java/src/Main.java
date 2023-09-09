@@ -313,6 +313,7 @@ public class Main {
         Pow pow = new Pow();
         UniquePaths uniquePaths = new UniquePaths();
         PascalTriangle pascalTriangle = new PascalTriangle();
+        CombinationSumIV combinationSumIV = new CombinationSumIV();
         CountingBits countingBits = new CountingBits();
         MaximumLengthOfPairChain maximumLengthOfPairChain = new MaximumLengthOfPairChain();
         KnightProbabilityInChessboard knightProbabilityInChessboard = new KnightProbabilityInChessboard();
@@ -334,6 +335,10 @@ public class Main {
         System.out.println("Q.118 Pascal's Triangle");
         System.out.println("5 -> [[1],[1,1],[1,2,1],[1,3,3,1],[1,4,6,4,1]]: " + pascalTriangle.generate(5));
         System.out.println("5 -> [[1]]: " + pascalTriangle.generate(1));
+        System.out.println("------\n");
+        System.out.println("Q.377 Combination Sum IV");
+        System.out.println("[1,2,3], 4 -> 7: " + combinationSumIV.combinationSum4(new int[]{1,2,3}, 4));
+        System.out.println("[9], 3 -> 0: " + combinationSumIV.combinationSum4(new int[]{9}, 3));
         System.out.println("------\n");
         System.out.println("Q.338 Counting Bits");
         System.out.println("2 -> [0,1,1]: " + Arrays.toString(countingBits.countBits(2)));
