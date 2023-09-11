@@ -380,6 +380,7 @@ public class Main {
         NonOverlappingIntervals nonOverlappingIntervals = new NonOverlappingIntervals();
         RepeatedSubstringPattern repeatedSubstringPattern = new RepeatedSubstringPattern();
         TwoCityScheduling twoCityScheduling = new TwoCityScheduling();
+        GroupThePeopleGivenTheGroupSizeTheyBelongTo groupThePeopleGivenTheGroupSizeTheyBelongTo = new GroupThePeopleGivenTheGroupSizeTheyBelongTo();
         MaximumAreaOfAPieceOfCakeAfterHorizontalAndVerticalCuts maximumAreaOfAPieceOfCakeAfterHorizontalAndVerticalCuts = new MaximumAreaOfAPieceOfCakeAfterHorizontalAndVerticalCuts();
         MaximumRunningTimeOfNComputers maximumRunningTimeOfNComputers = new MaximumRunningTimeOfNComputers();
         MaximizeGreatnessOfAnArray maximizeGreatnessOfAnArray = new MaximizeGreatnessOfAnArray();
@@ -428,6 +429,10 @@ public class Main {
         System.out.println("Q.1029 Two City Scheduling");
         System.out.println("[[259,770],[448,54],[926,667],[184,139],[840,118],[577,469]] -> 1859: " + twoCityScheduling.twoCitySchedCost(new int[][]{{259,770},{448,54},{926,667},{184,139},{840,118},{577,469}}));
         System.out.println("[[515,563],[451,713],[537,709],[343,819],[855,779],[457,60],[650,359],[631,42]] -> 3086: " + twoCityScheduling.twoCitySchedCost(new int[][]{{515,563},{451,713},{537,709},{343,819},{855,779},{457,60},{650,359},{631,42}}));
+        System.out.println("------\n");
+        System.out.println("Q.1282. Group the People Given the Group Size They Belong To");
+        System.out.println("[3,3,3,3,3,1,3] -> [[5],[0,1,2],[3,4,6]]: " + groupThePeopleGivenTheGroupSizeTheyBelongTo.groupThePeople(new int[]{3,3,3,3,3,1,3}));
+        System.out.println("[2,1,3,3,3,2] -> [[1],[0,5],[2,3,4]]: " + groupThePeopleGivenTheGroupSizeTheyBelongTo.groupThePeople(new int[]{2,1,3,3,3,2}));
         System.out.println("------\n");
         System.out.println("Q.1465 Maximum Area of a Piece of Cake After Horizontal and Vertical Cuts");
         System.out.println("5, 4, [1,2,4], [1,3] -> 4: " + maximumAreaOfAPieceOfCakeAfterHorizontalAndVerticalCuts.maxArea(5, 4, new int[]{1,2,4}, new int[]{1,3}));
