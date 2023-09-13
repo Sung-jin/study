@@ -373,6 +373,7 @@ public class Main {
         // greedy
         LetterCombinationsOfAPhoneNumber letterCombinationsOfAPhoneNumber = new LetterCombinationsOfAPhoneNumber();
         WordBreak wordBreak = new WordBreak();
+        Candy candy = new Candy();
         ExcelSheetColumnTitle excelSheetColumnTitle = new ExcelSheetColumnTitle();
         KthLargestElementInAnArray kthLargestElementInAnArray = new KthLargestElementInAnArray();
         FrogJump frogJump = new FrogJump();
@@ -396,6 +397,10 @@ public class Main {
         System.out.println(wordBreak.wordBreak("leetcode", Arrays.asList("leet", "code")));
         System.out.println(wordBreak.wordBreak("applepenapple", Arrays.asList("apple", "pen")));
         System.out.println(wordBreak.wordBreak("catsandog", Arrays.asList("cats", "dog", "sand", "and", "cat")));
+        System.out.println("------\n");
+        System.out.println("Q.135 Candy");
+        System.out.println("[1,0,2] -> 5: " + candy.candy(new int[]{1,0,2}));
+        System.out.println("[1,2,2] -> 4: " + candy.candy(new int[]{1,2,2}));
         System.out.println("------\n");
         System.out.println("Q.168 Excel Sheet Column Title");
 //        System.out.println("1 -> A: " + excelSheetColumnTitle.convertToTitle(1));
