@@ -10,6 +10,7 @@ import leetcode.slidingWindow.*;
 import leetcode.sorting.MergeSortedArray;
 import leetcode.sorting.ReverseLinkedListII;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Main {
@@ -202,6 +203,7 @@ public class Main {
         UniquePathsII uniquePathsII = new UniquePathsII();
         BinaryTreeInorderTraversal binaryTreeInorderTraversal = new BinaryTreeInorderTraversal();
         InterleavingString interleavingString = new InterleavingString();
+        ReconstructItinerary reconstructItinerary = new ReconstructItinerary();
         PredictTheWinner predictTheWinner = new PredictTheWinner();
         NumberOfLongestIncreasingSubsequence numberOfLongestIncreasingSubsequence = new NumberOfLongestIncreasingSubsequence();
         MakingALargeIsland makingALargeIsland = new MakingALargeIsland();
@@ -227,6 +229,32 @@ public class Main {
         System.out.println("aabcc, dbbca, aadbbcbcac -> true: " + interleavingString.isInterleave("aabcc", "dbbca", "aadbbcbcac"));
         System.out.println("aabcc, dbbca, aadbbbaccc -> true: " + interleavingString.isInterleave("aabcc", "dbbca", "aadbbbaccc"));
         System.out.println(", , -> true: " + interleavingString.isInterleave("", "", ""));
+        System.out.println("------\n");
+        System.out.println("Q.332. Reconstruct Itinerary");
+//        System.out.println("[[MUC,LHR],[JFK,MUC],[SFO,SJC],[LHR,SFO]] -> [JFK,MUC,LHR,SFO,SJC]: " + reconstructItinerary.findItinerary(
+//                Arrays.asList(
+//                        new ArrayList<>(Arrays.asList("MUC", "LHR")),
+//                        new ArrayList<>(Arrays.asList("JFK", "MUC")),
+//                        new ArrayList<>(Arrays.asList("SFO", "SJC")),
+//                        new ArrayList<>(Arrays.asList("LHR", "SFO"))
+//                ))
+//        );
+//        System.out.println("[[JFK,SFO],[JFK,ATL],[SFO,ATL],[ATL,JFK],[ATL,SFO]] -> [JFK,ATL,JFK,SFO,ATL,SFO]: " + reconstructItinerary.findItinerary(
+//                Arrays.asList(
+//                        new ArrayList<>(Arrays.asList("JFK", "SFO")),
+//                        new ArrayList<>(Arrays.asList("JFK", "ATL")),
+//                        new ArrayList<>(Arrays.asList("SFO", "ATL")),
+//                        new ArrayList<>(Arrays.asList("ATL", "JFK")),
+//                        new ArrayList<>(Arrays.asList("ATL", "SFO"))
+//                ))
+//        );
+        System.out.println("[[JFK,KUL],[JFK,NRT],[NRT,JFK]] -> [JFK,NRT,JFK,KUL]: " + reconstructItinerary.findItinerary(
+                Arrays.asList(
+                        new ArrayList<>(Arrays.asList("JFK", "KUL")),
+                        new ArrayList<>(Arrays.asList("JFK", "NRT")),
+                        new ArrayList<>(Arrays.asList("NRT", "JFK"))
+                ))
+        );
         System.out.println("------\n");
         System.out.println("Q.486. Predict the Winner");
         System.out.println("[1,5,2] -> false: " + predictTheWinner.PredictTheWinner(new int[]{1,5,2}));
