@@ -212,6 +212,7 @@ public class Main {
         MaximumNumberOfAchievableTransferRequests maximumNumberOfAchievableTransferRequests = new MaximumNumberOfAchievableTransferRequests();
         MaximumNumberOfEventsThatCanBeAttendedII maximumNumberOfEventsThatCanBeAttendedII = new MaximumNumberOfEventsThatCanBeAttendedII();
         LexicographicallySmallestStringAfterApplyingOperations lexicographicallySmallestStringAfterApplyingOperations =  new LexicographicallySmallestStringAfterApplyingOperations();
+        PathWithMinimumEffort pathWithMinimumEffort = new PathWithMinimumEffort();
         FairDistributionOfCookies fairDistributionOfCookies = new FairDistributionOfCookies();
 
         System.out.println("dfs");
@@ -231,23 +232,23 @@ public class Main {
         System.out.println(", , -> true: " + interleavingString.isInterleave("", "", ""));
         System.out.println("------\n");
         System.out.println("Q.332. Reconstruct Itinerary");
-//        System.out.println("[[MUC,LHR],[JFK,MUC],[SFO,SJC],[LHR,SFO]] -> [JFK,MUC,LHR,SFO,SJC]: " + reconstructItinerary.findItinerary(
-//                Arrays.asList(
-//                        new ArrayList<>(Arrays.asList("MUC", "LHR")),
-//                        new ArrayList<>(Arrays.asList("JFK", "MUC")),
-//                        new ArrayList<>(Arrays.asList("SFO", "SJC")),
-//                        new ArrayList<>(Arrays.asList("LHR", "SFO"))
-//                ))
-//        );
-//        System.out.println("[[JFK,SFO],[JFK,ATL],[SFO,ATL],[ATL,JFK],[ATL,SFO]] -> [JFK,ATL,JFK,SFO,ATL,SFO]: " + reconstructItinerary.findItinerary(
-//                Arrays.asList(
-//                        new ArrayList<>(Arrays.asList("JFK", "SFO")),
-//                        new ArrayList<>(Arrays.asList("JFK", "ATL")),
-//                        new ArrayList<>(Arrays.asList("SFO", "ATL")),
-//                        new ArrayList<>(Arrays.asList("ATL", "JFK")),
-//                        new ArrayList<>(Arrays.asList("ATL", "SFO"))
-//                ))
-//        );
+        System.out.println("[[MUC,LHR],[JFK,MUC],[SFO,SJC],[LHR,SFO]] -> [JFK,MUC,LHR,SFO,SJC]: " + reconstructItinerary.findItinerary(
+                Arrays.asList(
+                        new ArrayList<>(Arrays.asList("MUC", "LHR")),
+                        new ArrayList<>(Arrays.asList("JFK", "MUC")),
+                        new ArrayList<>(Arrays.asList("SFO", "SJC")),
+                        new ArrayList<>(Arrays.asList("LHR", "SFO"))
+                ))
+        );
+        System.out.println("[[JFK,SFO],[JFK,ATL],[SFO,ATL],[ATL,JFK],[ATL,SFO]] -> [JFK,ATL,JFK,SFO,ATL,SFO]: " + reconstructItinerary.findItinerary(
+                Arrays.asList(
+                        new ArrayList<>(Arrays.asList("JFK", "SFO")),
+                        new ArrayList<>(Arrays.asList("JFK", "ATL")),
+                        new ArrayList<>(Arrays.asList("SFO", "ATL")),
+                        new ArrayList<>(Arrays.asList("ATL", "JFK")),
+                        new ArrayList<>(Arrays.asList("ATL", "SFO"))
+                ))
+        );
         System.out.println("[[JFK,KUL],[JFK,NRT],[NRT,JFK]] -> [JFK,NRT,JFK,KUL]: " + reconstructItinerary.findItinerary(
                 Arrays.asList(
                         new ArrayList<>(Arrays.asList("JFK", "KUL")),
@@ -291,6 +292,11 @@ public class Main {
         System.out.println("5525, 9, 2 -> 2050: " + lexicographicallySmallestStringAfterApplyingOperations.findLexSmallestString("5525", 9, 2));
         System.out.println("74, 5, 1 -> 24: " + lexicographicallySmallestStringAfterApplyingOperations.findLexSmallestString("74", 5, 1));
         System.out.println("0011, 4, 2 -> 0011: " + lexicographicallySmallestStringAfterApplyingOperations.findLexSmallestString("0011", 4, 2));
+        System.out.println("------\n");
+        System.out.println("Q.1631. Path With Minimum Effort");
+        System.out.println("[[1,2,2],[3,8,2],[5,3,5]] -> 2: " + pathWithMinimumEffort.minimumEffortPath(new int[][]{{1,2,2},{3,8,2},{5,3,5}}));
+        System.out.println("[[1,2,3],[3,8,4],[5,3,5]] -> 1: " + pathWithMinimumEffort.minimumEffortPath(new int[][]{{1,2,3},{3,8,4},{5,3,5}}));
+        System.out.println("[[1,2,1,1,1],[1,2,1,2,1],[1,2,1,2,1],[1,2,1,2,1],[1,1,1,2,1]] -> 0: " + pathWithMinimumEffort.minimumEffortPath(new int[][]{{1,2,1,1,1},{1,2,1,2,1},{1,2,1,2,1},{1,2,1,2,1},{1,1,1,2,1}}));
         System.out.println("------\n");
         System.out.println("Q.1751 Maximum Number of Events That Can Be Attended II");
         System.out.println("[[1,2,4],[3,4,3],[2,3,1]], 2 -> 7: " + maximumNumberOfEventsThatCanBeAttendedII.maxValue(new int[][]{{1,2,4},{3,4,3},{2,3,1}}, 2));
