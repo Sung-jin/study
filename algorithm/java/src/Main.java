@@ -9,6 +9,7 @@ import leetcode.greedy.*;
 import leetcode.slidingWindow.*;
 import leetcode.sorting.MergeSortedArray;
 import leetcode.sorting.ReverseLinkedListII;
+import leetcode.sorting.TheKWeakestRowsInAMatrix;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -110,6 +111,7 @@ public class Main {
         // sorting
         MergeSortedArray mergeSortedArray = new MergeSortedArray();
         ReverseLinkedListII reverseLinkedListII = new ReverseLinkedListII();
+        TheKWeakestRowsInAMatrix theKWeakestRowsInAMatrix = new TheKWeakestRowsInAMatrix();
 
         System.out.println("sorting");
         System.out.println("Q.88 Merge Sorted Array");
@@ -124,6 +126,10 @@ public class Main {
         System.out.println("------\n");
         System.out.println("Q.92. Reverse Linked List I");
         System.out.println("[1,2,3,4,5], 2, 4 -> [1,4,3,2,5]: " + reverseLinkedListII.reverseBetween(ListNode.generateNode(new Integer[]{1,2,3,4,5}), 2, 4).getAllNode());
+        System.out.println("------\n");
+        System.out.println("Q.1337 The K Weakest Rows in a Matrix");
+        System.out.println("[[1,1,0,0,0],[1,1,1,1,0],[1,0,0,0,0],[1,1,0,0,0],[1,1,1,1,1]], 3 -> [2,0,3]: " + Arrays.toString(theKWeakestRowsInAMatrix.kWeakestRows(new int[][]{{1, 1, 0, 0, 0}, {1, 1, 1, 1, 0}, {1, 0, 0, 0, 0}, {1, 1, 0, 0, 0}, {1, 1, 1, 1, 1}}, 3)));
+        System.out.println("[[1,0,0,0],[1,1,1,1],[1,0,0,0],[1,0,0,0]], 2 -> [0,2]: " + Arrays.toString(theKWeakestRowsInAMatrix.kWeakestRows(new int[][]{{1,0,0,0},{1,1,1,1},{1,0,0,0},{1,0,0,0}}, 2)));
 
         System.out.println("----------\n\n");
 

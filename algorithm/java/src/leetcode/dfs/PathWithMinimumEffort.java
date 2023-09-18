@@ -10,7 +10,7 @@ Return the minimum effort required to travel from the top-left cell to the botto
  */
 public class PathWithMinimumEffort {
     private int MIN_EFFORT;
-    private int[][] MOVE = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
+    private static final int[][] MOVE = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
     // right, down, left, top
 
     public int minimumEffortPath(int[][] heights) {
