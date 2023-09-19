@@ -139,6 +139,7 @@ public class Main {
         Sqrt sqrt = new Sqrt();
         SearchA2DMatrix searchA2DMatrix = new SearchA2DMatrix();
         MissingNumber missingNumber = new MissingNumber();
+        FindTheDuplicateNumber findTheDuplicateNumber = new FindTheDuplicateNumber();
         GuessNumberHigherOrLower guessNumberHigherOrLower = new GuessNumberHigherOrLower();
         PeakIndexInAMountainArray peakIndexInAMountainArray = new PeakIndexInAMountainArray();
         MinimumSpeedToArriveOnTime minimumSpeedToArriveOnTime = new MinimumSpeedToArriveOnTime();
@@ -184,6 +185,10 @@ public class Main {
         System.out.println("[0,1,2,3,5,6,7] -> 4: " + missingNumber.missingNumber(new int[]{0,1,2,3,5,6,7}));
         System.out.println("[1,2] -> 0: " + missingNumber.missingNumber(new int[]{1,2}));
         System.out.println("[9,3,7,1,5,4,8,0,2] -> 6: " + missingNumber.missingNumber(new int[]{9,3,7,1,5,4,8,0,2}));
+        System.out.println("------\n");
+        System.out.println("Q.287. Find the Duplicate Number");
+        System.out.println("[1,3,4,2,2] -> 2: " + findTheDuplicateNumber.findDuplicate(new int[]{1,3,4,2,2}));
+        System.out.println("[3,1,3,4,2] -> 3: " + findTheDuplicateNumber.findDuplicate(new int[]{3,1,3,4,2}));
         System.out.println("------\n");
         System.out.println("Q.374 Guess Number Higher or Lower");
         System.out.println("10, 6 -> 6: " + guessNumberHigherOrLower.start(10, 6));
