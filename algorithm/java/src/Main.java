@@ -73,6 +73,7 @@ public class Main {
         SlidingWindowMaximum slidingWindowMaximum = new SlidingWindowMaximum();
         AsteroidCollision asteroidCollision = new AsteroidCollision();
         MaximumNumberOfVowelsInASubstringOfGivenLength maximumNumberOfVowelsInASubstringOfGivenLength = new MaximumNumberOfVowelsInASubstringOfGivenLength();
+        MinimumOperationsToReduceXToZero minimumOperationsToReduceXToZero = new MinimumOperationsToReduceXToZero();
         MaximizeTheConfusionOfAnExam maximizeTheConfusionOfAnExam = new MaximizeTheConfusionOfAnExam();
 
         System.out.println("sliding window");
@@ -100,6 +101,13 @@ public class Main {
         System.out.println("abciiidef, 3 -> 3: " + maximumNumberOfVowelsInASubstringOfGivenLength.maxVowels("abciiidef", 3));
         System.out.println("aeiou, 2 -> 2: " + maximumNumberOfVowelsInASubstringOfGivenLength.maxVowels("aeiou", 2));
         System.out.println("leetcode, 3 -> 2: " + maximumNumberOfVowelsInASubstringOfGivenLength.maxVowels("leetcode", 3));
+        System.out.println("------\n");
+        System.out.println("Q.1658. Minimum Operations to Reduce X to Zero");
+//        System.out.println("[1,1,4,2,3], 5 -> 2: " + minimumOperationsToReduceXToZero.minOperations(new int[]{1,1,4,2,3}, 5));
+//        System.out.println("[5,6,7,8,9], 4 -> -1: " + minimumOperationsToReduceXToZero.minOperations(new int[]{5,6,7,8,9}, 4));
+//        System.out.println("[3,2,20,1,1,3], 10 -> 5: " + minimumOperationsToReduceXToZero.minOperations(new int[]{3,2,20,1,1,3}, 10));
+//        System.out.println("[1,1,3,2,5], 5 -> 1: " + minimumOperationsToReduceXToZero.minOperations(new int[]{1,1,3,2,5}, 5));
+        System.out.println("[6016,5483,541,4325,8149,3515,7865,2209,9623,9763,4052,6540,2123,2074,765,7520,4941,5290,5868,6150,6006,6077,2856,7826,9119], 31841 -> 6: " + minimumOperationsToReduceXToZero.minOperations(new int[]{6016,5483,541,4325,8149,3515,7865,2209,9623,9763,4052,6540,2123,2074,765,7520,4941,5290,5868,6150,6006,6077,2856,7826,9119}, 31841));
         System.out.println("------\n");
         System.out.println("Q.2024 Maximize the Confusion of an Exam");
         System.out.println("TTFF, 2 -> 4: " + maximizeTheConfusionOfAnExam.maxConsecutiveAnswers("TTFF", 2));
