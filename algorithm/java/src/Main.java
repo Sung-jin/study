@@ -22,6 +22,7 @@ public class Main {
         RomanToInteger romanToInteger = new RomanToInteger();
         Subsets2 subsets2 = new Subsets2();
         SingleNumber2 singleNumber2 = new SingleNumber2();
+        FindTheDifference findTheDifference = new FindTheDifference();
         AddTwoNumbersII addTwoNumbersII = new AddTwoNumbersII();
         BuddyStrings buddyStrings = new BuddyStrings();
         DeleteTheMiddleNodeOfALinkedList deleteTheMiddleNodeOfALinkedList = new DeleteTheMiddleNodeOfALinkedList();
@@ -48,6 +49,10 @@ public class Main {
         System.out.println("[0,1,0,1,0,1,99] -> 99: " + singleNumber2.singleNumber(new int[]{0,1,0,1,0,1,99}));
         System.out.println("[1,2,3,1,2,4,3,1,2,3] -> 4: " + singleNumber2.singleNumber(new int[]{1,2,3,1,2,4,3,1,2,3}));
         System.out.println("[30000,500,100,30000,100,30000,100] -> 500: " + singleNumber2.singleNumber(new int[]{30000,500,100,30000,100,30000,100}));
+        System.out.println("------\n");
+        System.out.println("Q.389 Find the Difference");
+        System.out.println("abcd, abcde: e -> " + findTheDifference.findTheDifference("abcd", "abcde"));
+        System.out.println(", y: y -> " + findTheDifference.findTheDifference("", "y"));
         System.out.println("------\n");
         System.out.println("Q.445 Add Two Numbers II");
         System.out.println("[7,2,4,3], [5,6,4] -> [7,8,0,7]: " + addTwoNumbersII.addTwoNumbers(ListNode.generateNode(new Integer[]{7,2,4,3}), ListNode.generateNode(new Integer[]{5,6,4})).getAllNode());
