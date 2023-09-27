@@ -25,6 +25,7 @@ public class Main {
         FindTheDifference findTheDifference = new FindTheDifference();
         AddTwoNumbersII addTwoNumbersII = new AddTwoNumbersII();
         BuddyStrings buddyStrings = new BuddyStrings();
+        DecodedStringAtIndex decodedStringAtIndex = new DecodedStringAtIndex();
         DeleteTheMiddleNodeOfALinkedList deleteTheMiddleNodeOfALinkedList = new DeleteTheMiddleNodeOfALinkedList();
 
         System.out.println("brute force");
@@ -66,6 +67,11 @@ public class Main {
         System.out.println("ccccda, acccdc -> true: " + buddyStrings.buddyStrings("ccccda", "acccdc"));
         System.out.println("ccccda, accccd -> false: " + buddyStrings.buddyStrings("ccccda", "accccd"));
         System.out.println("ab, ca -> false: " + buddyStrings.buddyStrings("ab", "ca"));
+        System.out.println("------\n");
+        System.out.println("Q.880. Decoded String at Index");
+        System.out.println("leet2code3, 10 -> o :" +decodedStringAtIndex.decodeAtIndex("leet2code3", 10));
+        System.out.println("ha22, 5 -> h :" +decodedStringAtIndex.decodeAtIndex("ha22", 5));
+        System.out.println("a2345678999999999999999, 1 -> a :" +decodedStringAtIndex.decodeAtIndex("a2345678999999999999999", 1));
         System.out.println("------\n");
         System.out.println("Q.2095 Delete the Middle Node of a Linked List");
         System.out.println("[1,3,4,7,1,2,6] -> [1,3,4,1,2,6]: " + deleteTheMiddleNodeOfALinkedList.deleteMiddle(ListNode.generateNode(new Integer[]{1,3,4,7,1,2,6})).getAllNode());
