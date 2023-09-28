@@ -9,6 +9,7 @@ import leetcode.greedy.*;
 import leetcode.slidingWindow.*;
 import leetcode.sorting.MergeSortedArray;
 import leetcode.sorting.ReverseLinkedListII;
+import leetcode.sorting.SortArrayByParity;
 import leetcode.sorting.TheKWeakestRowsInAMatrix;
 
 import java.util.ArrayList;
@@ -135,6 +136,7 @@ public class Main {
         // sorting
         MergeSortedArray mergeSortedArray = new MergeSortedArray();
         ReverseLinkedListII reverseLinkedListII = new ReverseLinkedListII();
+        SortArrayByParity sortArrayByParity = new SortArrayByParity();
         TheKWeakestRowsInAMatrix theKWeakestRowsInAMatrix = new TheKWeakestRowsInAMatrix();
 
         System.out.println("sorting");
@@ -150,6 +152,11 @@ public class Main {
         System.out.println("------\n");
         System.out.println("Q.92. Reverse Linked List I");
         System.out.println("[1,2,3,4,5], 2, 4 -> [1,4,3,2,5]: " + reverseLinkedListII.reverseBetween(ListNode.generateNode(new Integer[]{1,2,3,4,5}), 2, 4).getAllNode());
+        System.out.println("------\n");
+        System.out.println("Q.905. Sort Array By Parity");
+        System.out.println("Regardless of the order, as long as even numbers are on the left and odd numbers are on the right.");
+        System.out.println("[3,1,2,4] -> [2,4,3,1]: " + Arrays.toString(sortArrayByParity.sortArrayByParity(new int[]{3, 1, 2, 4})));
+        System.out.println("[0] -> [0]: " + Arrays.toString(sortArrayByParity.sortArrayByParity(new int[]{0})));
         System.out.println("------\n");
         System.out.println("Q.1337 The K Weakest Rows in a Matrix");
         System.out.println("[[1,1,0,0,0],[1,1,1,1,0],[1,0,0,0,0],[1,1,0,0,0],[1,1,1,1,1]], 3 -> [2,0,3]: " + Arrays.toString(theKWeakestRowsInAMatrix.kWeakestRows(new int[][]{{1, 1, 0, 0, 0}, {1, 1, 1, 1, 0}, {1, 0, 0, 0, 0}, {1, 1, 0, 0, 0}, {1, 1, 1, 1, 1}}, 3)));
