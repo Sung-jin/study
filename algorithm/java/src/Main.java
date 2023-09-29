@@ -85,6 +85,7 @@ public class Main {
         SlidingWindowMaximum slidingWindowMaximum = new SlidingWindowMaximum();
         IsSubsequence isSubsequence = new IsSubsequence();
         AsteroidCollision asteroidCollision = new AsteroidCollision();
+        MonotonicArray monotonicArray = new MonotonicArray();
         MaximumNumberOfVowelsInASubstringOfGivenLength maximumNumberOfVowelsInASubstringOfGivenLength = new MaximumNumberOfVowelsInASubstringOfGivenLength();
         MinimumOperationsToReduceXToZero minimumOperationsToReduceXToZero = new MinimumOperationsToReduceXToZero();
         MaximizeTheConfusionOfAnExam maximizeTheConfusionOfAnExam = new MaximizeTheConfusionOfAnExam();
@@ -113,6 +114,11 @@ public class Main {
         System.out.println("[5,10,-5] -> [5,10]: " + Arrays.toString(asteroidCollision.asteroidCollision(new int[]{5, 10, -5})));
         System.out.println("[8,-8] -> []: " + Arrays.toString(asteroidCollision.asteroidCollision(new int[]{8,-8})));
         System.out.println("[10,2,-5] -> [10]: " + Arrays.toString(asteroidCollision.asteroidCollision(new int[]{10,2,-5})));
+        System.out.println("------\n");
+        System.out.println("Q.896. Monotonic Array");
+        System.out.println("[1,2,2,3] -> true: " + monotonicArray.isMonotonic(new int[]{1,2,2,3}));
+        System.out.println("[6,5,4,4] -> true: " + monotonicArray.isMonotonic(new int[]{6,5,4,4}));
+        System.out.println("[1,3,2] -> false: " + monotonicArray.isMonotonic(new int[]{1,3,2}));
         System.out.println("------\n");
         System.out.println("Q.1456 Maximum Number of Vowels in a Substring of Given Length");
         System.out.println("abciiidef, 3 -> 3: " + maximumNumberOfVowelsInASubstringOfGivenLength.maxVowels("abciiidef", 3));
