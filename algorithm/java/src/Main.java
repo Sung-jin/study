@@ -178,6 +178,7 @@ public class Main {
         MissingNumber missingNumber = new MissingNumber();
         FindTheDuplicateNumber findTheDuplicateNumber = new FindTheDuplicateNumber();
         GuessNumberHigherOrLower guessNumberHigherOrLower = new GuessNumberHigherOrLower();
+        Find132Pattern find132Pattern = new Find132Pattern();
         PeakIndexInAMountainArray peakIndexInAMountainArray = new PeakIndexInAMountainArray();
         MinimumSpeedToArriveOnTime minimumSpeedToArriveOnTime = new MinimumSpeedToArriveOnTime();
 
@@ -232,6 +233,11 @@ public class Main {
         System.out.println("1, 1 -> 1: " + guessNumberHigherOrLower.start(1, 1));
         System.out.println("2, 1 -> 1: " + guessNumberHigherOrLower.start(2, 1));
         System.out.println("2126753390, 1702766719 -> 1702766719: " + guessNumberHigherOrLower.start(2126753390, 1702766719));
+        System.out.println("------\n");
+        System.out.println("Q.456. 132 Pattern");
+//        System.out.println("[1,2,3,4] -> false: " + find132Pattern.find132pattern(new int[]{1,2,3,4}));
+//        System.out.println("[3,1,4,2] -> true: " + find132Pattern.find132pattern(new int[]{3,1,4,2}));
+//        System.out.println("[-1,3,2,0] -> true: " + find132Pattern.find132pattern(new int[]{-1,3,2,0}));
         System.out.println("------\n");
         System.out.println("Q.852 Peak Index in a Mountain Array");
         System.out.println("[0,1,0] -> 1: " + peakIndexInAMountainArray.peakIndexInMountainArray(new int[]{0,1,0}));
