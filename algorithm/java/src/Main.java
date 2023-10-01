@@ -84,6 +84,7 @@ public class Main {
         MinimumSizeSubArraySum minimumSizeSubArraySum = new MinimumSizeSubArraySum();
         SlidingWindowMaximum slidingWindowMaximum = new SlidingWindowMaximum();
         IsSubsequence isSubsequence = new IsSubsequence();
+        ReverseWordsInAStringIII reverseWordsInAStringIII = new ReverseWordsInAStringIII();
         AsteroidCollision asteroidCollision = new AsteroidCollision();
         MonotonicArray monotonicArray = new MonotonicArray();
         MaximumNumberOfVowelsInASubstringOfGivenLength maximumNumberOfVowelsInASubstringOfGivenLength = new MaximumNumberOfVowelsInASubstringOfGivenLength();
@@ -109,6 +110,10 @@ public class Main {
         System.out.println("Q.392. Is Subsequence");
         System.out.println("abc, ahbgdc -> true: " + isSubsequence.isSubsequence("abc", "ahbgdc"));
         System.out.println("axc, ahbgdc -> false: " + isSubsequence.isSubsequence("axc", "ahbgdc"));
+        System.out.println("------\n");
+        System.out.println("Q.557. Reverse Words in a String III");
+        System.out.println("Let's take LeetCode contest -> s'teL ekat edoCteeL tsetnoc: " + reverseWordsInAStringIII.reverseWords("Let's take LeetCode contest"));
+        System.out.println("God Ding -> doG gniD: " + reverseWordsInAStringIII.reverseWords("God Ding"));
         System.out.println("------\n");
         System.out.println("Q.735 Asteroid Collision");
         System.out.println("[5,10,-5] -> [5,10]: " + Arrays.toString(asteroidCollision.asteroidCollision(new int[]{5, 10, -5})));
