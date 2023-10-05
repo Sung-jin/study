@@ -7,10 +7,7 @@ import leetcode.dfs.*;
 import leetcode.dynamicProgramming.*;
 import leetcode.greedy.*;
 import leetcode.slidingWindow.*;
-import leetcode.sorting.MergeSortedArray;
-import leetcode.sorting.ReverseLinkedListII;
-import leetcode.sorting.SortArrayByParity;
-import leetcode.sorting.TheKWeakestRowsInAMatrix;
+import leetcode.sorting.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -147,6 +144,7 @@ public class Main {
         // sorting
         MergeSortedArray mergeSortedArray = new MergeSortedArray();
         ReverseLinkedListII reverseLinkedListII = new ReverseLinkedListII();
+        MajorityElementII majorityElementII = new MajorityElementII();
         SortArrayByParity sortArrayByParity = new SortArrayByParity();
         TheKWeakestRowsInAMatrix theKWeakestRowsInAMatrix = new TheKWeakestRowsInAMatrix();
 
@@ -163,6 +161,12 @@ public class Main {
         System.out.println("------\n");
         System.out.println("Q.92. Reverse Linked List I");
         System.out.println("[1,2,3,4,5], 2, 4 -> [1,4,3,2,5]: " + reverseLinkedListII.reverseBetween(ListNode.generateNode(new Integer[]{1,2,3,4,5}), 2, 4).getAllNode());
+        System.out.println("------\n");
+        System.out.println("Q.229. Majority Element II");
+        System.out.println("[3,2,3] -> [3]: " + majorityElementII.majorityElement(new int[]{3,2,3}));
+        System.out.println("[1] -> [1]: " + majorityElementII.majorityElement(new int[]{1}));
+        System.out.println("[1,2] -> [1,2]: " + majorityElementII.majorityElement(new int[]{1,2}));
+        System.out.println("[2,2] -> [2]: " + majorityElementII.majorityElement(new int[]{2,2}));
         System.out.println("------\n");
         System.out.println("Q.905. Sort Array By Parity");
         System.out.println("Regardless of the order, as long as even numbers are on the left and odd numbers are on the right.");
