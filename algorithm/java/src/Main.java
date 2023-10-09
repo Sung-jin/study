@@ -181,6 +181,7 @@ public class Main {
 
         // binary search
         SearchInRotatedSortedArray searchInRotatedSortedArray = new SearchInRotatedSortedArray();
+        FindFirstAndLastPositionOfElementInSortedArray findFirstAndLastPositionOfElementInSortedArray = new FindFirstAndLastPositionOfElementInSortedArray();
         SearchInsertPosition searchInsertPosition = new SearchInsertPosition();
         Sqrt sqrt = new Sqrt();
         SearchA2DMatrix searchA2DMatrix = new SearchA2DMatrix();
@@ -201,6 +202,11 @@ public class Main {
         System.out.println("[1,3,5], 5 -> 2: " + searchInRotatedSortedArray.search(new int[]{1,3,5}, 5));
         System.out.println("[5,1,3], 1 -> 1: " + searchInRotatedSortedArray.search(new int[]{5,1,3}, 1));
         System.out.println("[5,1,2,3,4], 1 -> 1: " + searchInRotatedSortedArray.search(new int[]{5,1,2,3,4}, 1));
+        System.out.println("------\n");
+        System.out.println("34. Find First and Last Position of Element in Sorted Array");
+        System.out.println("[5,7,7,8,8,10], 8 -> [3,4]: " + Arrays.toString(findFirstAndLastPositionOfElementInSortedArray.searchRange(new int[]{5,7,7,8,8,10}, 8)));
+        System.out.println("[5,7,7,8,8,10], 6 -> [-1,-1]: " + Arrays.toString(findFirstAndLastPositionOfElementInSortedArray.searchRange(new int[]{5,7,7,8,8,10}, 6)));
+        System.out.println("[], 0 -> [-1,-1]: " + Arrays.toString(findFirstAndLastPositionOfElementInSortedArray.searchRange(new int[]{}, 0)));
         System.out.println("------\n");
         System.out.println("Q.35 Search Insert Position");
         System.out.println("[1,3,5,6], 5 -> 2: " + searchInsertPosition.searchInsert(new int[]{1,3,5,6}, 5));
