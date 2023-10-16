@@ -275,6 +275,7 @@ public class Main {
         ReconstructItinerary reconstructItinerary = new ReconstructItinerary();
         PredictTheWinner predictTheWinner = new PredictTheWinner();
         NumberOfLongestIncreasingSubsequence numberOfLongestIncreasingSubsequence = new NumberOfLongestIncreasingSubsequence();
+        MinCostClimbingStairs minCostClimbingStairs = new MinCostClimbingStairs();
         MakingALargeIsland makingALargeIsland = new MakingALargeIsland();
         AllNodesDistanceKInBinaryTree allNodesDistanceKInBinaryTree = new AllNodesDistanceKInBinaryTree();
         SmallestSufficientTeam smallestSufficientTeam = new SmallestSufficientTeam();
@@ -335,6 +336,10 @@ public class Main {
         System.out.println("Q.673 Number of Longest Increasing Subsequence");
         System.out.println("[1,3,5,4,7] -> 2: " + numberOfLongestIncreasingSubsequence.findNumberOfLIS(new int[]{1,3,5,4,7}));
         System.out.println("[2,2,2,2,2] -> 5: " + numberOfLongestIncreasingSubsequence.findNumberOfLIS(new int[]{2,2,2,2,2}));
+        System.out.println("------\n");
+        System.out.println("Q.746. Min Cost Climbing Stairs");
+        System.out.println("[10,15,20] -> 15: " + minCostClimbingStairs.minCostClimbingStairs(new int[]{10,15,20}));
+        System.out.println("[1,100,1,1,1,100,1,1,100,1] -> 6: " + minCostClimbingStairs.minCostClimbingStairs(new int[]{1,100,1,1,1,100,1,1,100,1}));
         System.out.println("------\n");
         System.out.println("Q.827 Making A Large Island");
         System.out.println("[[1,0],[0,1]] -> 3: " + makingALargeIsland.largestIsland(new int[][]{{1,0},{0,1}}));
@@ -416,6 +421,7 @@ public class Main {
         Pow pow = new Pow();
         UniquePaths uniquePaths = new UniquePaths();
         PascalTriangle pascalTriangle = new PascalTriangle();
+        PascalTriangleII pascalTriangleII = new PascalTriangleII();
         CombinationSumIV combinationSumIV = new CombinationSumIV();
         CountingBits countingBits = new CountingBits();
         MaximumLengthOfPairChain maximumLengthOfPairChain = new MaximumLengthOfPairChain();
@@ -438,6 +444,12 @@ public class Main {
         System.out.println("Q.118 Pascal's Triangle");
         System.out.println("5 -> [[1],[1,1],[1,2,1],[1,3,3,1],[1,4,6,4,1]]: " + pascalTriangle.generate(5));
         System.out.println("5 -> [[1]]: " + pascalTriangle.generate(1));
+        System.out.println("------\n");
+        System.out.println("119. Pascal's Triangle II");
+        System.out.println("3 -> [1,3,3,1]: " + pascalTriangleII.getRow(3));
+        System.out.println("0 -> [1]: " + pascalTriangleII.getRow(0));
+        System.out.println("1 -> [1,1]: " + pascalTriangleII.getRow(1));
+        System.out.println("4 -> [1,4,6,4,1]: " + pascalTriangleII.getRow(4));
         System.out.println("------\n");
         System.out.println("Q.377 Combination Sum IV");
         System.out.println("[1,2,3], 4 -> 7: " + combinationSumIV.combinationSum4(new int[]{1,2,3}, 4));
