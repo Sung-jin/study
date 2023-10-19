@@ -8,6 +8,7 @@ import leetcode.dynamicProgramming.*;
 import leetcode.greedy.*;
 import leetcode.slidingWindow.*;
 import leetcode.sorting.*;
+import sun.swing.BakedArrayList;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -83,6 +84,7 @@ public class Main {
         IsSubsequence isSubsequence = new IsSubsequence();
         ReverseWordsInAStringIII reverseWordsInAStringIII = new ReverseWordsInAStringIII();
         AsteroidCollision asteroidCollision = new AsteroidCollision();
+        BackspaceStringCompare backspaceStringCompare = new BackspaceStringCompare();
         MonotonicArray monotonicArray = new MonotonicArray();
         MaximumNumberOfVowelsInASubstringOfGivenLength maximumNumberOfVowelsInASubstringOfGivenLength = new MaximumNumberOfVowelsInASubstringOfGivenLength();
         MinimumOperationsToReduceXToZero minimumOperationsToReduceXToZero = new MinimumOperationsToReduceXToZero();
@@ -116,6 +118,12 @@ public class Main {
         System.out.println("[5,10,-5] -> [5,10]: " + Arrays.toString(asteroidCollision.asteroidCollision(new int[]{5, 10, -5})));
         System.out.println("[8,-8] -> []: " + Arrays.toString(asteroidCollision.asteroidCollision(new int[]{8,-8})));
         System.out.println("[10,2,-5] -> [10]: " + Arrays.toString(asteroidCollision.asteroidCollision(new int[]{10,2,-5})));
+        System.out.println("------\n");
+        System.out.println("Q.844. Backspace String Compare");
+//        System.out.println("ab#c, ad#c -> true: " + backspaceStringCompare.backspaceCompare("ab#c", "ad#c"));
+//        System.out.println("ab##, c#d# -> true: " + backspaceStringCompare.backspaceCompare("ab##", "c#d#"));
+//        System.out.println("a#c, b -> false: " + backspaceStringCompare.backspaceCompare("a#c", "b"));
+        System.out.println("y#fo##f, y#f#o##f -> true: " + backspaceStringCompare.backspaceCompare("y#fo##f", "y#f#o##f"));
         System.out.println("------\n");
         System.out.println("Q.896. Monotonic Array");
         System.out.println("[1,2,2,3] -> true: " + monotonicArray.isMonotonic(new int[]{1,2,2,3}));
