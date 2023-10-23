@@ -21,6 +21,7 @@ public class Main {
         RomanToInteger romanToInteger = new RomanToInteger();
         Subsets2 subsets2 = new Subsets2();
         SingleNumber2 singleNumber2 = new SingleNumber2();
+        PowerOfFour powerOfFour = new PowerOfFour();
         FindTheDifference findTheDifference = new FindTheDifference();
         AddTwoNumbersII addTwoNumbersII = new AddTwoNumbersII();
         BuddyStrings buddyStrings = new BuddyStrings();
@@ -49,6 +50,11 @@ public class Main {
         System.out.println("[0,1,0,1,0,1,99] -> 99: " + singleNumber2.singleNumber(new int[]{0,1,0,1,0,1,99}));
         System.out.println("[1,2,3,1,2,4,3,1,2,3] -> 4: " + singleNumber2.singleNumber(new int[]{1,2,3,1,2,4,3,1,2,3}));
         System.out.println("[30000,500,100,30000,100,30000,100] -> 500: " + singleNumber2.singleNumber(new int[]{30000,500,100,30000,100,30000,100}));
+        System.out.println("------\n");
+        System.out.println("Q.342. Power of Four");
+        System.out.println("16 -> true: " + powerOfFour.isPowerOfFour(16));
+        System.out.println("5 -> false: " + powerOfFour.isPowerOfFour(5));
+        System.out.println("1 -> true: " + powerOfFour.isPowerOfFour(1));
         System.out.println("------\n");
         System.out.println("Q.389 Find the Difference");
         System.out.println("abcd, abcde: e -> " + findTheDifference.findTheDifference("abcd", "abcde"));
