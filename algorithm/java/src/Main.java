@@ -400,6 +400,7 @@ public class Main {
         SameTree sameTree = new SameTree();
         SymmetricTree symmetricTree = new SymmetricTree();
         MinimumDepthOfBinaryTree minimumDepthOfBinaryTree = new MinimumDepthOfBinaryTree();
+        FindLargestValueInEachTreeRow findLargestValueInEachTreeRow = new FindLargestValueInEachTreeRow();
         FindEventualSafeStates findEventualSafeStates = new FindEventualSafeStates();
         EvenOddTree evenOddTree = new EvenOddTree();
 
@@ -416,6 +417,10 @@ public class Main {
         System.out.println("[3,9,20,null,null,15,7] -> 2: " + minimumDepthOfBinaryTree.minDepth(TreeNode.generateNode(new Integer[]{3,9,20,null,null,15,7})));
         System.out.println("[2,null,3,null,4,null,5,null,6] -> 5: " + minimumDepthOfBinaryTree.minDepth(TreeNode.generateNode(new Integer[]{2,null,3,null,4,null,5,null,6})));
         System.out.println("[1,2,3,4,5] -> 2: " + minimumDepthOfBinaryTree.minDepth(TreeNode.generateNode(new Integer[]{1,2,3,4,5})));
+        System.out.println("------\n");
+        System.out.println("Q.515. Find Largest Value in Each Tree Row");
+        System.out.println("[1,3,2,5,3,null,9] -> [1,3,9]: " + findLargestValueInEachTreeRow.largestValues(TreeNode.generateNode(new Integer[]{1,3,2,5,3,null,9})));
+        System.out.println("[1,2,3] -> [1,3]: " + findLargestValueInEachTreeRow.largestValues(TreeNode.generateNode(new Integer[]{1,2,3})));
         System.out.println("------\n");
         System.out.println("Q.802 Find Eventual Safe States");
         System.out.println("[[1,2],[2,3],[5],[0],[5],[],[]] -> [2,4,5,6]: " + findEventualSafeStates.eventualSafeNodes(new int[][]{{1,2},{2,3},{5},{0},{5},{},{}}));
