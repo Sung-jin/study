@@ -24,6 +24,7 @@ public class Main {
         PowerOfFour powerOfFour = new PowerOfFour();
         FindTheDifference findTheDifference = new FindTheDifference();
         AddTwoNumbersII addTwoNumbersII = new AddTwoNumbersII();
+        KthSymbolInGrammar kthSymbolInGrammar = new KthSymbolInGrammar();
         BuddyStrings buddyStrings = new BuddyStrings();
         DecodedStringAtIndex decodedStringAtIndex = new DecodedStringAtIndex();
         DeleteTheMiddleNodeOfALinkedList deleteTheMiddleNodeOfALinkedList = new DeleteTheMiddleNodeOfALinkedList();
@@ -64,6 +65,13 @@ public class Main {
         System.out.println("[7,2,4,3], [5,6,4] -> [7,8,0,7]: " + addTwoNumbersII.addTwoNumbers(ListNode.generateNode(new Integer[]{7,2,4,3}), ListNode.generateNode(new Integer[]{5,6,4})).getAllNode());
         System.out.println("[2,4,3], [5,6,4] -> [8,0,7]: " + addTwoNumbersII.addTwoNumbers(ListNode.generateNode(new Integer[]{2,4,3}), ListNode.generateNode(new Integer[]{5,6,4})).getAllNode());
         System.out.println("[0], [0] -> [0]: " + addTwoNumbersII.addTwoNumbers(ListNode.generateNode(new Integer[]{0}), ListNode.generateNode(new Integer[]{0})).getAllNode());
+        System.out.println("------\n");
+        System.out.println("Q.779. K-th Symbol in Grammar");
+        System.out.println("1, 1 -> 0: " + kthSymbolInGrammar.kthGrammar(1, 1));
+        System.out.println("2, 1 -> 0: " + kthSymbolInGrammar.kthGrammar(2, 1));
+        System.out.println("2, 2 -> 1: " + kthSymbolInGrammar.kthGrammar(2, 2));
+        System.out.println("4, 7 -> 0: " + kthSymbolInGrammar.kthGrammar(4, 7));
+        System.out.println("3, 3 -> 1: " + kthSymbolInGrammar.kthGrammar(3, 3));
         System.out.println("------\n");
         System.out.println("Q.859 buddy Strings");
         System.out.println("ab, ba -> true: " + buddyStrings.buddyStrings("ab", "ba"));
