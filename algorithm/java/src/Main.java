@@ -532,6 +532,7 @@ public class Main {
         GroupThePeopleGivenTheGroupSizeTheyBelongTo groupThePeopleGivenTheGroupSizeTheyBelongTo = new GroupThePeopleGivenTheGroupSizeTheyBelongTo();
         MaximumAreaOfAPieceOfCakeAfterHorizontalAndVerticalCuts maximumAreaOfAPieceOfCakeAfterHorizontalAndVerticalCuts = new MaximumAreaOfAPieceOfCakeAfterHorizontalAndVerticalCuts();
         MaximumRunningTimeOfNComputers maximumRunningTimeOfNComputers = new MaximumRunningTimeOfNComputers();
+        FindTheOriginalArrayOfPrefixXor findTheOriginalArrayOfPrefixXor = new FindTheOriginalArrayOfPrefixXor();
         MaximizeGreatnessOfAnArray maximizeGreatnessOfAnArray = new MaximizeGreatnessOfAnArray();
         MinimizeTheMaximumDifferenceOfPairs minimizeTheMaximumDifferenceOfPairs = new MinimizeTheMaximumDifferenceOfPairs();
 
@@ -600,6 +601,10 @@ public class Main {
         System.out.println("Q.2141. Maximum Running Time of N Computers");
         System.out.println("2, [3,3,3] -> 4: " + maximumRunningTimeOfNComputers.maxRunTime(2, new int[]{3,3,3}));
         System.out.println("2, [1,1,1,1] -> 2: " + maximumRunningTimeOfNComputers.maxRunTime(2, new int[]{1,1,1,1}));
+        System.out.println("------\n");
+        System.out.println("Q.2433. Find The Original Array of Prefix Xor");
+        System.out.println("[5,2,0,3,1] -> [5,7,2,3,2]: " + Arrays.toString(findTheOriginalArrayOfPrefixXor.findArray(new int[]{5, 2, 0, 3, 1})));
+        System.out.println("[13] -> [13]: " + Arrays.toString(findTheOriginalArrayOfPrefixXor.findArray(new int[]{13})));
         System.out.println("------\n");
         System.out.println("Q.2592 Maximize Greatness of an Array");
         System.out.println("[1,3,5,2,1,3,1] -> 4: " + maximizeGreatnessOfAnArray.maximizeGreatness(new int[]{1,3,5,2,1,3,1}));
