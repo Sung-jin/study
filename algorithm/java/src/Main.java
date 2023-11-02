@@ -310,6 +310,7 @@ public class Main {
         MaximumNumberOfEventsThatCanBeAttendedII maximumNumberOfEventsThatCanBeAttendedII = new MaximumNumberOfEventsThatCanBeAttendedII();
         LexicographicallySmallestStringAfterApplyingOperations lexicographicallySmallestStringAfterApplyingOperations =  new LexicographicallySmallestStringAfterApplyingOperations();
         PathWithMinimumEffort pathWithMinimumEffort = new PathWithMinimumEffort();
+        CountNodesEqualToAverageOfSubtree countNodesEqualToAverageOfSubtree = new CountNodesEqualToAverageOfSubtree();
         FairDistributionOfCookies fairDistributionOfCookies = new FairDistributionOfCookies();
 
         System.out.println("dfs");
@@ -401,6 +402,10 @@ public class Main {
         System.out.println("------\n");
         System.out.println("Q.1751 Maximum Number of Events That Can Be Attended II");
         System.out.println("[[1,2,4],[3,4,3],[2,3,1]], 2 -> 7: " + maximumNumberOfEventsThatCanBeAttendedII.maxValue(new int[][]{{1,2,4},{3,4,3},{2,3,1}}, 2));
+        System.out.println("------\n");
+        System.out.println("Q.2265. Count Nodes Equal to Average of Subtree");
+        System.out.println("[4,8,5,0,1,null,6] -> 5: " + countNodesEqualToAverageOfSubtree.averageOfSubtree(TreeNode.generateNode(new Integer[]{4,8,5,0,1,null,6})));
+        System.out.println("[1] -> 1: " + countNodesEqualToAverageOfSubtree.averageOfSubtree(TreeNode.generateNode(new Integer[]{1})));
         System.out.println("------\n");
         System.out.println("Q.2305 Fair Distribution of Cookies");
         System.out.println("[8,15,10,20,8], 2 -> 31: " + fairDistributionOfCookies.distributeCookies(new int[]{8,15,10,20,8}, 2));
