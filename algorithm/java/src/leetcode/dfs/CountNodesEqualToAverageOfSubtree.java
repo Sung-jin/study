@@ -34,7 +34,7 @@ public class CountNodesEqualToAverageOfSubtree {
     private Map<TreeNode, Integer> nodeCount;
     private int answer;
     public int averageOfSubtree(TreeNode root) {
-        answer = Integer.MIN_VALUE;
+        answer = 0;
         nodeCount = new HashMap<>();
         helper(root);
 
@@ -48,8 +48,6 @@ public class CountNodesEqualToAverageOfSubtree {
         int leftTotalVal = helper(left);
         int rightTotalVal = helper(right);
 
-        if (leftTotalVal == -1 || rightTotalVal == -1) return -1;
-
         if (left == null && right == null) {
             nodeCount.put(node, 1);
         } else {
@@ -61,13 +59,38 @@ public class CountNodesEqualToAverageOfSubtree {
         int count = nodeCount.get(node);
         int totalVal = node.val + leftTotalVal + rightTotalVal;
 
-        int average = Math.floorDiv(count, totalVal);
-
-        if (average == node.val) {
-            this.answer = node.val;
-            return -1;
+        if (node.val == Math.floorDiv(totalVal, count)) {
+            this.answer++;
         }
 
         return totalVal;
     }
 }
+
+/*
+class Solution {
+    int res = 0;
+    public int averageOfSubtree(TreeNode root) {
+        dfs(root);
+        return res;
+    }
+
+    private int[] dfs(TreeNode node) {
+        if(node == null) {
+            return new int[] {0,0};
+        }
+
+        int[] left = dfs(node.left);
+        int[] right = dfs(node.right);
+
+        int currSum = left[0] + right[0] + node.val;
+        int currCount = left[1] + right[1] + 1;
+
+        if(currSum / currCount == node.val) {
+            res++;
+        }
+
+        return new int[] {currSum, currCount};
+    }
+}
+ */
