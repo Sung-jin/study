@@ -537,6 +537,7 @@ public class Main {
         GroupThePeopleGivenTheGroupSizeTheyBelongTo groupThePeopleGivenTheGroupSizeTheyBelongTo = new GroupThePeopleGivenTheGroupSizeTheyBelongTo();
         BuildAnArrayWithStackOperations buildAnArrayWithStackOperations = new BuildAnArrayWithStackOperations();
         MaximumAreaOfAPieceOfCakeAfterHorizontalAndVerticalCuts maximumAreaOfAPieceOfCakeAfterHorizontalAndVerticalCuts = new MaximumAreaOfAPieceOfCakeAfterHorizontalAndVerticalCuts();
+        EliminateMaximumNumberOfMonsters eliminateMaximumNumberOfMonsters = new EliminateMaximumNumberOfMonsters();
         MaximumRunningTimeOfNComputers maximumRunningTimeOfNComputers = new MaximumRunningTimeOfNComputers();
         FindTheOriginalArrayOfPrefixXor findTheOriginalArrayOfPrefixXor = new FindTheOriginalArrayOfPrefixXor();
         MaximizeGreatnessOfAnArray maximizeGreatnessOfAnArray = new MaximizeGreatnessOfAnArray();
@@ -608,6 +609,11 @@ public class Main {
         System.out.println("5, 4, [3,1], [1] -> 6: " + maximumAreaOfAPieceOfCakeAfterHorizontalAndVerticalCuts.maxArea(5, 4, new int[]{3,1}, new int[]{1}));
         System.out.println("5, 4, [3], [3] -> 9: " + maximumAreaOfAPieceOfCakeAfterHorizontalAndVerticalCuts.maxArea(5, 4, new int[]{3}, new int[]{3}));
         System.out.println("1000000000, 1000000000, [2], [2] -> 81: " + maximumAreaOfAPieceOfCakeAfterHorizontalAndVerticalCuts.maxArea(1000000000, 1000000000, new int[]{2}, new int[]{2}));
+        System.out.println("------\n");
+        System.out.println("Q.1921. Eliminate Maximum Number of Monsters");
+        System.out.println("[1,3,4], [1,1,1] -> 3: " + eliminateMaximumNumberOfMonsters.eliminateMaximum(new int[]{1,3,4}, new int[]{1,1,1}));
+        System.out.println("[1,1,2,3], [1,1,1,1] -> 1: " + eliminateMaximumNumberOfMonsters.eliminateMaximum(new int[]{1,1,2,3}, new int[]{1,1,1,1}));
+        System.out.println("[3,2,4], [5,3,2] -> 1: " + eliminateMaximumNumberOfMonsters.eliminateMaximum(new int[]{3,2,4}, new int[]{5,3,2}));
         System.out.println("------\n");
         System.out.println("Q.2141. Maximum Running Time of N Computers");
         System.out.println("2, [3,3,3] -> 4: " + maximumRunningTimeOfNComputers.maxRunTime(2, new int[]{3,3,3}));
