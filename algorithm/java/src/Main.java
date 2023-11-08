@@ -542,6 +542,7 @@ public class Main {
         FindTheOriginalArrayOfPrefixXor findTheOriginalArrayOfPrefixXor = new FindTheOriginalArrayOfPrefixXor();
         MaximizeGreatnessOfAnArray maximizeGreatnessOfAnArray = new MaximizeGreatnessOfAnArray();
         MinimizeTheMaximumDifferenceOfPairs minimizeTheMaximumDifferenceOfPairs = new MinimizeTheMaximumDifferenceOfPairs();
+        DetermineIfACellIsReachableAtAGivenTime determineIfACellIsReachableAtAGivenTime = new DetermineIfACellIsReachableAtAGivenTime();
 
         System.out.println("greedy");
         System.out.println("Q.17 Letter Combinations of a Phone Number");
@@ -629,6 +630,11 @@ public class Main {
         System.out.println("------\n");
         System.out.println("Q.2616 Minimize the Maximum Difference of Pairs\n");
         System.out.println("[10,1,2,7,1,3], 2 -> 1: " + minimizeTheMaximumDifferenceOfPairs.minimizeMax(new int[]{10,1,2,7,1,3}, 2));
+        System.out.println("------\n");
+        System.out.println("Q.2849. Determine if a Cell Is Reachable at a Given Time");
+//        System.out.println("2, 4, 7, 7, 6: true -> " + determineIfACellIsReachableAtAGivenTime.isReachableAtTime(2,4,7,7,6));
+//        System.out.println("3, 1, 7, 3, 3: false -> " + determineIfACellIsReachableAtAGivenTime.isReachableAtTime(3,1,7,3,3));
+        System.out.println("1, 1, 1, 1, 3: true -> " + determineIfACellIsReachableAtAGivenTime.isReachableAtTime(1,1,1,1,3));
     }
 
 //    public static void main(String[] args) {
