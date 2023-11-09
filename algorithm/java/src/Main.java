@@ -537,6 +537,7 @@ public class Main {
         GroupThePeopleGivenTheGroupSizeTheyBelongTo groupThePeopleGivenTheGroupSizeTheyBelongTo = new GroupThePeopleGivenTheGroupSizeTheyBelongTo();
         BuildAnArrayWithStackOperations buildAnArrayWithStackOperations = new BuildAnArrayWithStackOperations();
         MaximumAreaOfAPieceOfCakeAfterHorizontalAndVerticalCuts maximumAreaOfAPieceOfCakeAfterHorizontalAndVerticalCuts = new MaximumAreaOfAPieceOfCakeAfterHorizontalAndVerticalCuts();
+        CountNumberOfHomogenousSubstrings countNumberOfHomogenousSubstrings = new CountNumberOfHomogenousSubstrings();
         EliminateMaximumNumberOfMonsters eliminateMaximumNumberOfMonsters = new EliminateMaximumNumberOfMonsters();
         MaximumRunningTimeOfNComputers maximumRunningTimeOfNComputers = new MaximumRunningTimeOfNComputers();
         FindTheOriginalArrayOfPrefixXor findTheOriginalArrayOfPrefixXor = new FindTheOriginalArrayOfPrefixXor();
@@ -611,6 +612,11 @@ public class Main {
         System.out.println("5, 4, [3], [3] -> 9: " + maximumAreaOfAPieceOfCakeAfterHorizontalAndVerticalCuts.maxArea(5, 4, new int[]{3}, new int[]{3}));
         System.out.println("1000000000, 1000000000, [2], [2] -> 81: " + maximumAreaOfAPieceOfCakeAfterHorizontalAndVerticalCuts.maxArea(1000000000, 1000000000, new int[]{2}, new int[]{2}));
         System.out.println("------\n");
+        System.out.println("Q.1759. Count Number of Homogenous Substrings");
+        System.out.println("abbcccaa -> 13: " + countNumberOfHomogenousSubstrings.countHomogenous("abbcccaa"));
+        System.out.println("xy -> 2: " + countNumberOfHomogenousSubstrings.countHomogenous("xy"));
+        System.out.println("zzzzz -> 15: " + countNumberOfHomogenousSubstrings.countHomogenous("zzzzz"));
+        System.out.println("------\n");
         System.out.println("Q.1921. Eliminate Maximum Number of Monsters");
         System.out.println("[1,3,4], [1,1,1] -> 3: " + eliminateMaximumNumberOfMonsters.eliminateMaximum(new int[]{1,3,4}, new int[]{1,1,1}));
         System.out.println("[1,1,2,3], [1,1,1,1] -> 1: " + eliminateMaximumNumberOfMonsters.eliminateMaximum(new int[]{1,1,2,3}, new int[]{1,1,1,1}));
@@ -632,8 +638,8 @@ public class Main {
         System.out.println("[10,1,2,7,1,3], 2 -> 1: " + minimizeTheMaximumDifferenceOfPairs.minimizeMax(new int[]{10,1,2,7,1,3}, 2));
         System.out.println("------\n");
         System.out.println("Q.2849. Determine if a Cell Is Reachable at a Given Time");
-//        System.out.println("2, 4, 7, 7, 6: true -> " + determineIfACellIsReachableAtAGivenTime.isReachableAtTime(2,4,7,7,6));
-//        System.out.println("3, 1, 7, 3, 3: false -> " + determineIfACellIsReachableAtAGivenTime.isReachableAtTime(3,1,7,3,3));
+        System.out.println("2, 4, 7, 7, 6: true -> " + determineIfACellIsReachableAtAGivenTime.isReachableAtTime(2,4,7,7,6));
+        System.out.println("3, 1, 7, 3, 3: false -> " + determineIfACellIsReachableAtAGivenTime.isReachableAtTime(3,1,7,3,3));
         System.out.println("1, 1, 1, 1, 3: true -> " + determineIfACellIsReachableAtAGivenTime.isReachableAtTime(1,1,1,1,3));
     }
 
