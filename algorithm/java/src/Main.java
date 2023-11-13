@@ -170,6 +170,7 @@ public class Main {
         SortArrayByParity sortArrayByParity = new SortArrayByParity();
         TheKWeakestRowsInAMatrix theKWeakestRowsInAMatrix = new TheKWeakestRowsInAMatrix();
         SortIntegersByTheNumberOf1Bits sortIntegersByTheNumberOf1Bits = new SortIntegersByTheNumberOf1Bits();
+        SortVowelsInAString sortVowelsInAString = new SortVowelsInAString();
 
         System.out.println("sorting");
         System.out.println("Q.88 Merge Sorted Array");
@@ -203,6 +204,10 @@ public class Main {
         System.out.println("Q.1356. Sort Integers by The Number of 1 Bits");
         System.out.println("[0,1,2,3,4,5,6,7,8] -> [0,1,2,4,8,3,5,6,7]: " + Arrays.toString(sortIntegersByTheNumberOf1Bits.sortByBits(new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8})));
         System.out.println("[1024,512,256,128,64,32,16,8,4,2,1] -> [1,2,4,8,16,32,64,128,256,512,1024]: " + Arrays.toString(sortIntegersByTheNumberOf1Bits.sortByBits(new int[]{1024,512,256,128,64,32,16,8,4,2,1})));
+        System.out.println("------\n");
+        System.out.println("Q.2785. Sort Vowels in a String");
+        System.out.println("lEetcOde -> lEOtcede: " + sortVowelsInAString.sortVowels("lEetcOde"));
+        System.out.println("lYmpH -> lYmpH: " + sortVowelsInAString.sortVowels("lYmpH"));
 
         System.out.println("----------\n\n");
 
