@@ -208,7 +208,7 @@ public class Main {
         System.out.println("------\n");
         System.out.println("Q.1846. Maximum Element After Decreasing and Rearranging");
         System.out.println("[2,2,1,2,1] -> 2: " + maximumElementAfterDecreasingAndRearranging.maximumElementAfterDecrementingAndRearranging(new int[]{2,2,1,2,1}));
-        System.out.println("[100,1,1000] -> 3: " + maximumElementAfterDecreasingAndRearranging.maximumElementAfterDecrementingAndRearranging(new int[]{100,1,1000-}));
+        System.out.println("[100,1,1000] -> 3: " + maximumElementAfterDecreasingAndRearranging.maximumElementAfterDecrementingAndRearranging(new int[]{100,1,1000}));
         System.out.println("[1,2,3,4,5] -> 5: " + maximumElementAfterDecreasingAndRearranging.maximumElementAfterDecrementingAndRearranging(new int[]{1,2,3,4,5}));
         System.out.println("------\n");
         System.out.println("Q.2785. Sort Vowels in a String");
@@ -550,6 +550,7 @@ public class Main {
         MaximumAreaOfAPieceOfCakeAfterHorizontalAndVerticalCuts maximumAreaOfAPieceOfCakeAfterHorizontalAndVerticalCuts = new MaximumAreaOfAPieceOfCakeAfterHorizontalAndVerticalCuts();
         CountNumberOfHomogenousSubstrings countNumberOfHomogenousSubstrings = new CountNumberOfHomogenousSubstrings();
         EliminateMaximumNumberOfMonsters eliminateMaximumNumberOfMonsters = new EliminateMaximumNumberOfMonsters();
+        FindUniqueBinaryString findUniqueBinaryString = new FindUniqueBinaryString();
         MaximumRunningTimeOfNComputers maximumRunningTimeOfNComputers = new MaximumRunningTimeOfNComputers();
         FindTheOriginalArrayOfPrefixXor findTheOriginalArrayOfPrefixXor = new FindTheOriginalArrayOfPrefixXor();
         MaximizeGreatnessOfAnArray maximizeGreatnessOfAnArray = new MaximizeGreatnessOfAnArray();
@@ -632,6 +633,11 @@ public class Main {
         System.out.println("[1,3,4], [1,1,1] -> 3: " + eliminateMaximumNumberOfMonsters.eliminateMaximum(new int[]{1,3,4}, new int[]{1,1,1}));
         System.out.println("[1,1,2,3], [1,1,1,1] -> 1: " + eliminateMaximumNumberOfMonsters.eliminateMaximum(new int[]{1,1,2,3}, new int[]{1,1,1,1}));
         System.out.println("[3,2,4], [5,3,2] -> 1: " + eliminateMaximumNumberOfMonsters.eliminateMaximum(new int[]{3,2,4}, new int[]{5,3,2}));
+        System.out.println("------\n");
+        System.out.println("Q.1980. Find Unique Binary String");
+        System.out.println("[01, 10] -> 11 or 00: " + findUniqueBinaryString.findDifferentBinaryString(new String[]{"01", "10"}));
+        System.out.println("[00, 01] -> 11 or 10: " + findUniqueBinaryString.findDifferentBinaryString(new String[]{"00", "01"}));
+        System.out.println("[111, 011, 001] -> 000 or 010 or 100 or 101 or 110: " + findUniqueBinaryString.findDifferentBinaryString(new String[]{"111", "011", "001"}));
         System.out.println("------\n");
         System.out.println("Q.2141. Maximum Running Time of N Computers");
         System.out.println("2, [3,3,3] -> 4: " + maximumRunningTimeOfNComputers.maxRunTime(2, new int[]{3,3,3}));
