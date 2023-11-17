@@ -171,6 +171,7 @@ public class Main {
         TheKWeakestRowsInAMatrix theKWeakestRowsInAMatrix = new TheKWeakestRowsInAMatrix();
         SortIntegersByTheNumberOf1Bits sortIntegersByTheNumberOf1Bits = new SortIntegersByTheNumberOf1Bits();
         MaximumElementAfterDecreasingAndRearranging maximumElementAfterDecreasingAndRearranging = new MaximumElementAfterDecreasingAndRearranging();
+        MinimizeMaximumPairSumInArray minimizeMaximumPairSumInArray = new MinimizeMaximumPairSumInArray();
         SortVowelsInAString sortVowelsInAString = new SortVowelsInAString();
 
         System.out.println("sorting");
@@ -210,6 +211,10 @@ public class Main {
         System.out.println("[2,2,1,2,1] -> 2: " + maximumElementAfterDecreasingAndRearranging.maximumElementAfterDecrementingAndRearranging(new int[]{2,2,1,2,1}));
         System.out.println("[100,1,1000] -> 3: " + maximumElementAfterDecreasingAndRearranging.maximumElementAfterDecrementingAndRearranging(new int[]{100,1,1000}));
         System.out.println("[1,2,3,4,5] -> 5: " + maximumElementAfterDecreasingAndRearranging.maximumElementAfterDecrementingAndRearranging(new int[]{1,2,3,4,5}));
+        System.out.println("------\n");
+        System.out.println("Q.1877. Minimize Maximum Pair Sum in Array");
+        System.out.println("[3,5,2,3] -> 7: " + minimizeMaximumPairSumInArray.minPairSum(new int[]{3,5,2,3}));
+        System.out.println("[3,5,4,2,4,6] -> 8: " + minimizeMaximumPairSumInArray.minPairSum(new int[]{3,5,4,2,4,6}));
         System.out.println("------\n");
         System.out.println("Q.2785. Sort Vowels in a String");
         System.out.println("lEetcOde -> lEOtcede: " + sortVowelsInAString.sortVowels("lEetcOde"));
