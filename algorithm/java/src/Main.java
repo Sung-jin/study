@@ -172,6 +172,7 @@ public class Main {
         SortIntegersByTheNumberOf1Bits sortIntegersByTheNumberOf1Bits = new SortIntegersByTheNumberOf1Bits();
         MaximumElementAfterDecreasingAndRearranging maximumElementAfterDecreasingAndRearranging = new MaximumElementAfterDecreasingAndRearranging();
         MinimizeMaximumPairSumInArray minimizeMaximumPairSumInArray = new MinimizeMaximumPairSumInArray();
+        ReductionOperationsToMakeTheArrayElementsEqual reductionOperationsToMakeTheArrayElementsEqual = new ReductionOperationsToMakeTheArrayElementsEqual();
         SortVowelsInAString sortVowelsInAString = new SortVowelsInAString();
 
         System.out.println("sorting");
@@ -215,6 +216,11 @@ public class Main {
         System.out.println("Q.1877. Minimize Maximum Pair Sum in Array");
         System.out.println("[3,5,2,3] -> 7: " + minimizeMaximumPairSumInArray.minPairSum(new int[]{3,5,2,3}));
         System.out.println("[3,5,4,2,4,6] -> 8: " + minimizeMaximumPairSumInArray.minPairSum(new int[]{3,5,4,2,4,6}));
+        System.out.println("------\n");
+        System.out.println("Q.1887. Reduction Operations to Make the Array Elements Equal");
+        System.out.println("[5,1,3] -> 3: " + reductionOperationsToMakeTheArrayElementsEqual.reductionOperations(new int[]{5,1,3}));
+        System.out.println("[1,1,1] -> 0: " + reductionOperationsToMakeTheArrayElementsEqual.reductionOperations(new int[]{1,1,1}));
+        System.out.println("[1,1,2,2,3] -> 4: " + reductionOperationsToMakeTheArrayElementsEqual.reductionOperations(new int[]{1,1,2,2,3}));
         System.out.println("------\n");
         System.out.println("Q.2785. Sort Vowels in a String");
         System.out.println("lEetcOde -> lEOtcede: " + sortVowelsInAString.sortVowels("lEetcOde"));
