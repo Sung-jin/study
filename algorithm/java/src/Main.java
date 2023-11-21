@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Main {
+    public static final int MOD = 1_000_000_007;
+
     public static void main(String[] args) {
         // leet-code
         // brute force
@@ -560,6 +562,7 @@ public class Main {
         BuildAnArrayWithStackOperations buildAnArrayWithStackOperations = new BuildAnArrayWithStackOperations();
         MaximumAreaOfAPieceOfCakeAfterHorizontalAndVerticalCuts maximumAreaOfAPieceOfCakeAfterHorizontalAndVerticalCuts = new MaximumAreaOfAPieceOfCakeAfterHorizontalAndVerticalCuts();
         CountNumberOfHomogenousSubstrings countNumberOfHomogenousSubstrings = new CountNumberOfHomogenousSubstrings();
+        CountNicePairsInAnArray countNicePairsInAnArray = new CountNicePairsInAnArray();
         EliminateMaximumNumberOfMonsters eliminateMaximumNumberOfMonsters = new EliminateMaximumNumberOfMonsters();
         FindUniqueBinaryString findUniqueBinaryString = new FindUniqueBinaryString();
         MaximumRunningTimeOfNComputers maximumRunningTimeOfNComputers = new MaximumRunningTimeOfNComputers();
@@ -639,6 +642,10 @@ public class Main {
         System.out.println("abbcccaa -> 13: " + countNumberOfHomogenousSubstrings.countHomogenous("abbcccaa"));
         System.out.println("xy -> 2: " + countNumberOfHomogenousSubstrings.countHomogenous("xy"));
         System.out.println("zzzzz -> 15: " + countNumberOfHomogenousSubstrings.countHomogenous("zzzzz"));
+        System.out.println("------\n");
+        System.out.println("Q.1814. Count Nice Pairs in an Array");
+        System.out.println("[42,11,1,97] -> 2: " + countNicePairsInAnArray.countNicePairs(new int[]{42,11,1,97}));
+        System.out.println("[13,10,35,24,76] -> 4: " + countNicePairsInAnArray.countNicePairs(new int[]{13,10,35,24,76}));
         System.out.println("------\n");
         System.out.println("Q.1921. Eliminate Maximum Number of Monsters");
         System.out.println("[1,3,4], [1,1,1] -> 3: " + eliminateMaximumNumberOfMonsters.eliminateMaximum(new int[]{1,3,4}, new int[]{1,1,1}));
