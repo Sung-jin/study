@@ -559,6 +559,7 @@ public class Main {
         RepeatedSubstringPattern repeatedSubstringPattern = new RepeatedSubstringPattern();
         TwoCityScheduling twoCityScheduling = new TwoCityScheduling();
         GroupThePeopleGivenTheGroupSizeTheyBelongTo groupThePeopleGivenTheGroupSizeTheyBelongTo = new GroupThePeopleGivenTheGroupSizeTheyBelongTo();
+        DiagonalTraverseII diagonalTraverseII = new DiagonalTraverseII();
         BuildAnArrayWithStackOperations buildAnArrayWithStackOperations = new BuildAnArrayWithStackOperations();
         MaximumAreaOfAPieceOfCakeAfterHorizontalAndVerticalCuts maximumAreaOfAPieceOfCakeAfterHorizontalAndVerticalCuts = new MaximumAreaOfAPieceOfCakeAfterHorizontalAndVerticalCuts();
         CountNumberOfHomogenousSubstrings countNumberOfHomogenousSubstrings = new CountNumberOfHomogenousSubstrings();
@@ -626,6 +627,24 @@ public class Main {
         System.out.println("Q.1282. Group the People Given the Group Size They Belong To");
         System.out.println("[3,3,3,3,3,1,3] -> [[5],[0,1,2],[3,4,6]]: " + groupThePeopleGivenTheGroupSizeTheyBelongTo.groupThePeople(new int[]{3,3,3,3,3,1,3}));
         System.out.println("[2,1,3,3,3,2] -> [[1],[0,5],[2,3,4]]: " + groupThePeopleGivenTheGroupSizeTheyBelongTo.groupThePeople(new int[]{2,1,3,3,3,2}));
+        System.out.println("------\n");
+        System.out.println("Q.1424. Diagonal Traverse II");
+        System.out.println("[[1,2,3],[4,5,6],[7,8,9]] -> [1,4,2,7,5,3,8,6,9]: " + Arrays.toString(diagonalTraverseII.findDiagonalOrder(
+                Arrays.asList(
+                        new ArrayList<>(Arrays.asList(1,2,3)),
+                        new ArrayList<>(Arrays.asList(4,5,6)),
+                        new ArrayList<>(Arrays.asList(7,8,9))
+                )))
+        );
+        System.out.println("[[1,2,3,4,5],[6,7],[8],[9,10,11],[12,13,14,15,16]] -> [1,6,2,8,7,3,9,4,12,10,5,13,11,14,15,16]: " + Arrays.toString(diagonalTraverseII.findDiagonalOrder(
+                Arrays.asList(
+                        new ArrayList<>(Arrays.asList(1,2,3,4,5)),
+                        new ArrayList<>(Arrays.asList(6,7)),
+                        new ArrayList<>(Arrays.asList(8)),
+                        new ArrayList<>(Arrays.asList(9,10,11)),
+                        new ArrayList<>(Arrays.asList(12,13,14,15,16))
+                )))
+        );
         System.out.println("------\n");
         System.out.println("Q.1441. Build an Array With Stack Operations");
         System.out.println("[1,3], 3 -> [Push,Push,Pop,Push]: " + buildAnArrayWithStackOperations.buildArray(new int[]{1,3}, 3));
