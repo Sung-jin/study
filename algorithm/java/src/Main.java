@@ -172,6 +172,7 @@ public class Main {
         SortArrayByParity sortArrayByParity = new SortArrayByParity();
         TheKWeakestRowsInAMatrix theKWeakestRowsInAMatrix = new TheKWeakestRowsInAMatrix();
         SortIntegersByTheNumberOf1Bits sortIntegersByTheNumberOf1Bits = new SortIntegersByTheNumberOf1Bits();
+        MaximumNumberOfCoinsYouCanGet maximumNumberOfCoinsYouCanGet = new MaximumNumberOfCoinsYouCanGet();
         MaximumElementAfterDecreasingAndRearranging maximumElementAfterDecreasingAndRearranging = new MaximumElementAfterDecreasingAndRearranging();
         MinimizeMaximumPairSumInArray minimizeMaximumPairSumInArray = new MinimizeMaximumPairSumInArray();
         ReductionOperationsToMakeTheArrayElementsEqual reductionOperationsToMakeTheArrayElementsEqual = new ReductionOperationsToMakeTheArrayElementsEqual();
@@ -209,6 +210,11 @@ public class Main {
         System.out.println("Q.1356. Sort Integers by The Number of 1 Bits");
         System.out.println("[0,1,2,3,4,5,6,7,8] -> [0,1,2,4,8,3,5,6,7]: " + Arrays.toString(sortIntegersByTheNumberOf1Bits.sortByBits(new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8})));
         System.out.println("[1024,512,256,128,64,32,16,8,4,2,1] -> [1,2,4,8,16,32,64,128,256,512,1024]: " + Arrays.toString(sortIntegersByTheNumberOf1Bits.sortByBits(new int[]{1024,512,256,128,64,32,16,8,4,2,1})));
+        System.out.println("------\n");
+        System.out.println("Q.1561. Maximum Number of Coins You Can Get");
+        System.out.println("[2,4,1,2,7,8] -> 9: " + maximumNumberOfCoinsYouCanGet.maxCoins(new int[]{2,4,1,2,7,8}));
+        System.out.println("[2,4,5] -> 4: " + maximumNumberOfCoinsYouCanGet.maxCoins(new int[]{2,4,5}));
+        System.out.println("[9,8,7,6,5,1,2,3,4] -> 18: " + maximumNumberOfCoinsYouCanGet.maxCoins(new int[]{9,8,7,6,5,1,2,3,4}));
         System.out.println("------\n");
         System.out.println("Q.1846. Maximum Element After Decreasing and Rearranging");
         System.out.println("[2,2,1,2,1] -> 2: " + maximumElementAfterDecreasingAndRearranging.maximumElementAfterDecrementingAndRearranging(new int[]{2,2,1,2,1}));

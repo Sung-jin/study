@@ -19,7 +19,7 @@ public class DiagonalTraverseII {
             for (int y = Math.min(i, nums.size()); y >= 0; y--) {
                 int x = i - y;
 
-                if (x < nums.get(y).size()) {
+                if (y < nums.size() && x < nums.get(y).size()) {
                     answer[index] = nums.get(y).get(x);
                     index++;
                 }
