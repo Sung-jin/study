@@ -568,6 +568,7 @@ public class Main {
         DiagonalTraverseII diagonalTraverseII = new DiagonalTraverseII();
         BuildAnArrayWithStackOperations buildAnArrayWithStackOperations = new BuildAnArrayWithStackOperations();
         MaximumAreaOfAPieceOfCakeAfterHorizontalAndVerticalCuts maximumAreaOfAPieceOfCakeAfterHorizontalAndVerticalCuts = new MaximumAreaOfAPieceOfCakeAfterHorizontalAndVerticalCuts();
+        SumOfAbsoluteDifferencesInASortedArray sumOfAbsoluteDifferencesInASortedArray = new SumOfAbsoluteDifferencesInASortedArray();
         CountNumberOfHomogenousSubstrings countNumberOfHomogenousSubstrings = new CountNumberOfHomogenousSubstrings();
         CountNicePairsInAnArray countNicePairsInAnArray = new CountNicePairsInAnArray();
         EliminateMaximumNumberOfMonsters eliminateMaximumNumberOfMonsters = new EliminateMaximumNumberOfMonsters();
@@ -662,6 +663,10 @@ public class Main {
         System.out.println("5, 4, [3,1], [1] -> 6: " + maximumAreaOfAPieceOfCakeAfterHorizontalAndVerticalCuts.maxArea(5, 4, new int[]{3,1}, new int[]{1}));
         System.out.println("5, 4, [3], [3] -> 9: " + maximumAreaOfAPieceOfCakeAfterHorizontalAndVerticalCuts.maxArea(5, 4, new int[]{3}, new int[]{3}));
         System.out.println("1000000000, 1000000000, [2], [2] -> 81: " + maximumAreaOfAPieceOfCakeAfterHorizontalAndVerticalCuts.maxArea(1000000000, 1000000000, new int[]{2}, new int[]{2}));
+        System.out.println("------\n");
+        System.out.println("Q.1685. Sum of Absolute Differences in a Sorted Array");
+        System.out.println("[2,3,5] -> [4,3,5]: " + Arrays.toString(sumOfAbsoluteDifferencesInASortedArray.getSumAbsoluteDifferences(new int[]{2, 3, 5})));
+        System.out.println("[1,4,6,8,10] -> [24,15,13,15,21]: " + Arrays.toString(sumOfAbsoluteDifferencesInASortedArray.getSumAbsoluteDifferences(new int[]{1,4,6,8,10})));
         System.out.println("------\n");
         System.out.println("Q.1759. Count Number of Homogenous Substrings");
         System.out.println("abbcccaa -> 13: " + countNumberOfHomogenousSubstrings.countHomogenous("abbcccaa"));
