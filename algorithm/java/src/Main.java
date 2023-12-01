@@ -29,6 +29,7 @@ public class Main {
         KthSymbolInGrammar kthSymbolInGrammar = new KthSymbolInGrammar();
         BuddyStrings buddyStrings = new BuddyStrings();
         DecodedStringAtIndex decodedStringAtIndex = new DecodedStringAtIndex();
+        CheckIfTwoStringArraysAreEquivalent checkIfTwoStringArraysAreEquivalent = new CheckIfTwoStringArraysAreEquivalent();
         DeleteTheMiddleNodeOfALinkedList deleteTheMiddleNodeOfALinkedList = new DeleteTheMiddleNodeOfALinkedList();
 
         System.out.println("brute force");
@@ -87,6 +88,11 @@ public class Main {
         System.out.println("leet2code3, 10 -> o :" +decodedStringAtIndex.decodeAtIndex("leet2code3", 10));
         System.out.println("ha22, 5 -> h :" +decodedStringAtIndex.decodeAtIndex("ha22", 5));
         System.out.println("a2345678999999999999999, 1 -> a :" +decodedStringAtIndex.decodeAtIndex("a2345678999999999999999", 1));
+        System.out.println("------\n");
+        System.out.println("Q.1662. Check If Two String Arrays are Equivalent");
+        System.out.println("[ab, c], [a, bc] -> true: " + checkIfTwoStringArraysAreEquivalent.arrayStringsAreEqual(new String[]{"ab", "c"}, new String[]{"a", "bc"}));
+        System.out.println("[a, cb], [ab, c] -> false: " + checkIfTwoStringArraysAreEquivalent.arrayStringsAreEqual(new String[]{"a", "cb"}, new String[]{"ab", "c"}));
+        System.out.println("[abc, d, defg], [abcddefg] -> true: " + checkIfTwoStringArraysAreEquivalent.arrayStringsAreEqual(new String[]{"abc", "d", "defg"}, new String[]{"abcddefg"}));
         System.out.println("------\n");
         System.out.println("Q.2095 Delete the Middle Node of a Linked List");
         System.out.println("[1,3,4,7,1,2,6] -> [1,3,4,1,2,6]: " + deleteTheMiddleNodeOfALinkedList.deleteMiddle(ListNode.generateNode(new Integer[]{1,3,4,7,1,2,6})).getAllNode());
