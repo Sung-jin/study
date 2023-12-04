@@ -31,6 +31,7 @@ public class Main {
         DecodedStringAtIndex decodedStringAtIndex = new DecodedStringAtIndex();
         CheckIfTwoStringArraysAreEquivalent checkIfTwoStringArraysAreEquivalent = new CheckIfTwoStringArraysAreEquivalent();
         DeleteTheMiddleNodeOfALinkedList deleteTheMiddleNodeOfALinkedList = new DeleteTheMiddleNodeOfALinkedList();
+        Largest3SameDigitNumberInString largest3SameDigitNumberInString = new Largest3SameDigitNumberInString();
 
         System.out.println("brute force");
         System.out.println("Q.1 two sum");
@@ -96,6 +97,11 @@ public class Main {
         System.out.println("------\n");
         System.out.println("Q.2095 Delete the Middle Node of a Linked List");
         System.out.println("[1,3,4,7,1,2,6] -> [1,3,4,1,2,6]: " + deleteTheMiddleNodeOfALinkedList.deleteMiddle(ListNode.generateNode(new Integer[]{1,3,4,7,1,2,6})).getAllNode());
+        System.out.println("------\n");
+        System.out.println("Q.2264. Largest 3-Same-Digit Number in String");
+        System.out.println("6777133339 -> 777: " + largest3SameDigitNumberInString.largestGoodInteger("6777133339"));
+        System.out.println("2300019 -> 000: " + largest3SameDigitNumberInString.largestGoodInteger("2300019"));
+        System.out.println("42352338 -> : " + largest3SameDigitNumberInString.largestGoodInteger("42352338"));
 
         System.out.println("----------\n\n");
 
