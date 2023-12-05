@@ -30,6 +30,7 @@ public class Main {
         BuddyStrings buddyStrings = new BuddyStrings();
         DecodedStringAtIndex decodedStringAtIndex = new DecodedStringAtIndex();
         CheckIfTwoStringArraysAreEquivalent checkIfTwoStringArraysAreEquivalent = new CheckIfTwoStringArraysAreEquivalent();
+        CountOfMatchesInTournament countOfMatchesInTournament = new CountOfMatchesInTournament();
         DeleteTheMiddleNodeOfALinkedList deleteTheMiddleNodeOfALinkedList = new DeleteTheMiddleNodeOfALinkedList();
         Largest3SameDigitNumberInString largest3SameDigitNumberInString = new Largest3SameDigitNumberInString();
 
@@ -94,6 +95,10 @@ public class Main {
         System.out.println("[ab, c], [a, bc] -> true: " + checkIfTwoStringArraysAreEquivalent.arrayStringsAreEqual(new String[]{"ab", "c"}, new String[]{"a", "bc"}));
         System.out.println("[a, cb], [ab, c] -> false: " + checkIfTwoStringArraysAreEquivalent.arrayStringsAreEqual(new String[]{"a", "cb"}, new String[]{"ab", "c"}));
         System.out.println("[abc, d, defg], [abcddefg] -> true: " + checkIfTwoStringArraysAreEquivalent.arrayStringsAreEqual(new String[]{"abc", "d", "defg"}, new String[]{"abcddefg"}));
+        System.out.println("------\n");
+        System.out.println("Q.1688. Count of Matches in Tournament");
+        System.out.println("7 -> 6: " + countOfMatchesInTournament.numberOfMatches(7));
+        System.out.println("14 -> 13: " + countOfMatchesInTournament.numberOfMatches(14));
         System.out.println("------\n");
         System.out.println("Q.2095 Delete the Middle Node of a Linked List");
         System.out.println("[1,3,4,7,1,2,6] -> [1,3,4,1,2,6]: " + deleteTheMiddleNodeOfALinkedList.deleteMiddle(ListNode.generateNode(new Integer[]{1,3,4,7,1,2,6})).getAllNode());
