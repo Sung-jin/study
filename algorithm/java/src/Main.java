@@ -586,6 +586,7 @@ public class Main {
         BuildAnArrayWithStackOperations buildAnArrayWithStackOperations = new BuildAnArrayWithStackOperations();
         MaximumAreaOfAPieceOfCakeAfterHorizontalAndVerticalCuts maximumAreaOfAPieceOfCakeAfterHorizontalAndVerticalCuts = new MaximumAreaOfAPieceOfCakeAfterHorizontalAndVerticalCuts();
         SumOfAbsoluteDifferencesInASortedArray sumOfAbsoluteDifferencesInASortedArray = new SumOfAbsoluteDifferencesInASortedArray();
+        CalculateMoneyInLeetcodeBank calculateMoneyInLeetcodeBank = new CalculateMoneyInLeetcodeBank();
         CountNumberOfHomogenousSubstrings countNumberOfHomogenousSubstrings = new CountNumberOfHomogenousSubstrings();
         CountNicePairsInAnArray countNicePairsInAnArray = new CountNicePairsInAnArray();
         EliminateMaximumNumberOfMonsters eliminateMaximumNumberOfMonsters = new EliminateMaximumNumberOfMonsters();
@@ -684,6 +685,11 @@ public class Main {
         System.out.println("Q.1685. Sum of Absolute Differences in a Sorted Array");
         System.out.println("[2,3,5] -> [4,3,5]: " + Arrays.toString(sumOfAbsoluteDifferencesInASortedArray.getSumAbsoluteDifferences(new int[]{2, 3, 5})));
         System.out.println("[1,4,6,8,10] -> [24,15,13,15,21]: " + Arrays.toString(sumOfAbsoluteDifferencesInASortedArray.getSumAbsoluteDifferences(new int[]{1,4,6,8,10})));
+        System.out.println("------\n");
+        System.out.println("Q.1716. Calculate Money in Leetcode Bank");
+        System.out.println("4 -> 10: " + calculateMoneyInLeetcodeBank.totalMoney(4));
+        System.out.println("10 -> 37: " + calculateMoneyInLeetcodeBank.totalMoney(10));
+        System.out.println("20 -> 96: " + calculateMoneyInLeetcodeBank.totalMoney(20));
         System.out.println("------\n");
         System.out.println("Q.1759. Count Number of Homogenous Substrings");
         System.out.println("abbcccaa -> 13: " + countNumberOfHomogenousSubstrings.countHomogenous("abbcccaa"));
