@@ -1,7 +1,6 @@
 package leetcode;
 
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.*;
 
 public class TreeNode {
     public int val;
@@ -13,6 +12,20 @@ public class TreeNode {
         this.val = val;
         this.left = left;
         this.right = right;
+    }
+
+    public List<Integer> inorderTraversal(TreeNode root) {
+        List<Integer> answer = new ArrayList<>();
+        inorder(root, answer);
+
+        return answer;
+    }
+
+    private void inorder(TreeNode next, List<Integer> res) {
+        if (next == null) return;
+        inorder(next.left, res);
+        res.add(next.val);
+        inorder(next.right, res);
     }
 
     public static TreeNode generateNode(Integer[] values) {
