@@ -580,6 +580,7 @@ public class Main {
         LongestPalindrome longestPalindrome = new LongestPalindrome();
         NonOverlappingIntervals nonOverlappingIntervals = new NonOverlappingIntervals();
         RepeatedSubstringPattern repeatedSubstringPattern = new RepeatedSubstringPattern();
+        TransposeMatrix transposeMatrix = new TransposeMatrix();
         TwoCityScheduling twoCityScheduling = new TwoCityScheduling();
         GroupThePeopleGivenTheGroupSizeTheyBelongTo groupThePeopleGivenTheGroupSizeTheyBelongTo = new GroupThePeopleGivenTheGroupSizeTheyBelongTo();
         DiagonalTraverseII diagonalTraverseII = new DiagonalTraverseII();
@@ -644,6 +645,10 @@ public class Main {
         System.out.println("abab -> true: " + repeatedSubstringPattern.repeatedSubstringPattern("abab"));
         System.out.println("aba -> false: " + repeatedSubstringPattern.repeatedSubstringPattern("aba"));
         System.out.println("abcabcabcabc -> true: " + repeatedSubstringPattern.repeatedSubstringPattern("abcabcabcabc"));
+        System.out.println("------\n");
+        System.out.println("Q.867. Transpose Matrix");
+        System.out.println("[[1,2,3],[4,5,6],[7,8,9]] -> [[1,4,7],[2,5,8],[3,6,9]]: " + Arrays.deepToString(transposeMatrix.transpose(new int[][]{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}})));
+        System.out.println("[[1,2,3],[4,5,6]] -> [[1,4],[2,5],[3,6]]: " + Arrays.deepToString(transposeMatrix.transpose(new int[][]{{1,2,3}, {4,5,6}})));
         System.out.println("------\n");
         System.out.println("Q.1029 Two City Scheduling");
         System.out.println("[[259,770],[448,54],[926,667],[184,139],[840,118],[577,469]] -> 1859: " + twoCityScheduling.twoCitySchedCost(new int[][]{{259,770},{448,54},{926,667},{184,139},{840,118},{577,469}}));
